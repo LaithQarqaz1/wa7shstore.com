@@ -1,0 +1,14 @@
+{
+  "id": "/?source=pwa",
+  "name": "Njad Store",
+  "short_name": "Njad",
+  "start_url": "/index.html?source=pwa#/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#0C0C0C",
+  "theme_color": "#0C0C0C",
+  "lang": "ar",
+  "dir": "rtl",
+  "prefer_related_applications": false
+}
