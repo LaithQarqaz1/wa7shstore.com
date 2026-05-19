@@ -3,6 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function(){
+      try {
+        var path = String(location.pathname || "").replace(/\/+$/, "");
+        var search = String(location.search || "");
+        var hash = String(location.hash || "");
+        var map = {
+          "/__/auth/handler.html": "/__/auth/handler",
+          "/__/auth/handler/index.html": "/__/auth/handler",
+          "/__/auth/iframe.html": "/__/auth/iframe",
+          "/__/auth/iframe/index.html": "/__/auth/iframe",
+          "/__/auth/links.html": "/__/auth/links"
+        };
+        if (map[path]) {
+          if (/^#\//.test(hash)) hash = "";
+          location.replace(map[path] + search + hash);
+        }
+      } catch (_) {}
+    })();
+  </script>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='24' fill='%230f172a'/%3E%3Ctext x='48' y='60' text-anchor='middle' fill='%23fff' font-family='Arial,sans-serif' font-size='34' font-weight='700'%3EZ%3C/text%3E%3C/svg%3E" type="image/svg+xml">
   <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='24' fill='%230f172a'/%3E%3Ctext x='48' y='60' text-anchor='middle' fill='%23fff' font-family='Arial,sans-serif' font-size='34' font-weight='700'%3EZ%3C/text%3E%3C/svg%3E" type="image/svg+xml">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='24' fill='%230f172a'/%3E%3Ctext x='48' y='60' text-anchor='middle' fill='%23fff' font-family='Arial,sans-serif' font-size='34' font-weight='700'%3EZ%3C/text%3E%3C/svg%3E">
@@ -59,9 +79,9 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet"></noscript>
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"></noscript>
-  <link rel="preload" href="header.css?v=20260408-27" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <script src="site-core.js"></script>
-  <script src="header.js?v=20260506-03"></script>
+  <link rel="preload" href="/header.css?v=20260509-02" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <script src="/site_settings.js?v=20260519-01" defer></script>
+  <script src="/site-bundle.js?v=20260519-07" defer></script>
   <style>
     :root{
       --bg1:#050910;

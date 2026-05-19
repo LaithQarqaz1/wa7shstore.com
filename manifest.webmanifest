@@ -1,8 +1,8 @@
 {
   "id": "/?source=pwa",
-  "name": "Njad Store",
-  "short_name": "Njad",
-  "start_url": "/index.html?source=pwa#/",
+  "name": "wa7shstore.com | \u0648\u062d\u0634 \u0633\u062a\u0648\u0631",
+  "short_name": "wa7sh",
+  "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
@@ -10,5 +10,15 @@
   "theme_color": "#0C0C0C",
   "lang": "ar",
   "dir": "rtl",
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "https://api.wa7shstore.com/site-icon.png?v=admin-20260519-01", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "https://api.wa7shstore.com/site-icon.png?v=admin-20260519-01", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "تسجيل الدخول", "short_name": "الدخول", "url": "/login" },
+    { "name": "الإعدادات", "short_name": "إعدادات", "url": "/settings" },
+    { "name": "طلباتي", "short_name": "طلباتي", "url": "/orders" },
+    { "name": "المحفظة", "short_name": "المحفظة", "url": "/wallet" }
+  ]
 }

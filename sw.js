@@ -1,27 +1,110 @@
-const SITE_PWA_CACHE = "wa7shstore-pwa-v20260506-50";
-const SITE_PWA_SHELL = [
-  "/",
-  "/index.html",
-  "/header.css?v=20260506-01",
-  "/site-core.js",
-  "/header.js?v=20260506-26",
-  "/manifest.webmanifest"
-];
+const SITE_PWA_BUILD = "20260519-05";
+try { importScripts("/site_settings.js?v=20260519-01"); } catch (_) {}
+const SITE_SETTINGS = (self.__getSiteSettings ? self.__getSiteSettings() : self.__SITE_SETTINGS__) || {};
+const SITE_FIREBASE_HELPER_ORIGIN = String(
+  (SITE_SETTINGS.auth && SITE_SETTINGS.auth.firebaseHelperOrigin) ||
+  self.__SITE_FIREBASE_HELPER_ORIGIN__ ||
+  ""
+).replace(/\/+$/, "");
+const SITE_FIREBASE_INIT_JSON = JSON.stringify((SITE_SETTINGS.firebase && typeof SITE_SETTINGS.firebase === "object") ? SITE_SETTINGS.firebase : {});
+const SITE_LEGACY_SW_CACHE_PREFIXES = Array.isArray(SITE_SETTINGS.pwa && SITE_SETTINGS.pwa.legacyCachePrefixes)
+  ? SITE_SETTINGS.pwa.legacyCachePrefixes
+  : [];
+
+function firebaseAuthHelperResponse(kind) {
+  let body = "";
+  if (kind === "handler") {
+    body = [
+      "<!DOCTYPE html><html><head>",
+      "<meta name=viewport content=\"width=device-width, initial-scale=1\">",
+      "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">",
+      "<script type=\"text/javascript\" src=\"/__/auth/experiments.js\"></script>",
+      "<script type=\"text/javascript\" src=\"/__/auth/handler.js\"></script>",
+      "<script type=\"text/javascript\" nonce=\"firebase-auth-helper\">",
+      "var POST_BODY = '{' + '{POST_BODY}' + '}';",
+      "fireauth.oauthhelper.widget.initialize();",
+      "</script>",
+      "</head><body></body></html>"
+    ].join("");
+  } else if (kind === "iframe") {
+    body = [
+      "<!DOCTYPE html><html><head>",
+      "<meta name=viewport content=\"width=device-width, initial-scale=1\">",
+      "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">",
+      "<script type=\"text/javascript\" src=\"/__/auth/iframe.js\"></script>",
+      "<script type=\"text/javascript\" nonce=\"firebase-auth-helper\">",
+      "fireauth.iframe.AuthRelay.initialize();",
+      "</script>",
+      "</head><body></body></html>"
+    ].join("");
+  } else if (kind === "links") {
+    body = [
+      "<!DOCTYPE html><html><head>",
+      "<meta name=viewport content=\"width=device-width, initial-scale=1\">",
+      "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">",
+      "<script type=\"text/javascript\" src=\"/__/auth/links.js\"></script>",
+      "</head><body></body></html>"
+    ].join("");
+  }
+  return new Response(body, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store"
+    }
+  });
+}
+
+function firebaseAuthHelperKind(pathname) {
+  const path = String(pathname || "").replace(/\/+$/, "");
+  if (path === "/__/auth/handler" || path === "/__/auth/handler.html" || path === "/__/auth/handler/index.html") return "handler";
+  if (path === "/__/auth/iframe" || path === "/__/auth/iframe.html" || path === "/__/auth/iframe/index.html") return "iframe";
+  if (path === "/__/auth/links" || path === "/__/auth/links.html" || path === "/__/auth/links/index.html") return "links";
+  return "";
+}
+
+function firebaseAuthRemoteScript(pathname) {
+  if (!SITE_FIREBASE_HELPER_ORIGIN) return "";
+  const path = String(pathname || "");
+  if (path === "/__/auth/experiments.js") return SITE_FIREBASE_HELPER_ORIGIN + "/__/auth/experiments.js";
+  if (path === "/__/auth/handler.js") return SITE_FIREBASE_HELPER_ORIGIN + "/__/auth/handler.js";
+  if (path === "/__/auth/iframe.js") return SITE_FIREBASE_HELPER_ORIGIN + "/__/auth/iframe.js";
+  if (path === "/__/auth/links.js") return SITE_FIREBASE_HELPER_ORIGIN + "/__/auth/links.js";
+  return "";
+}
+
+async function clearSiteCaches() {
+  if (typeof caches === "undefined") return;
+  try {
+    const keys = await caches.keys();
+    await Promise.all((keys || []).map((key) => {
+      const name = String(key || "");
+      if (SITE_LEGACY_SW_CACHE_PREFIXES.some((prefix) => prefix && name.indexOf(String(prefix)) === 0)) {
+        return caches.delete(key).catch(() => false);
+      }
+      return Promise.resolve(false);
+    }));
+  } catch (_) {}
+}
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
-  event.waitUntil(Promise.resolve());
+  event.waitUntil(clearSiteCaches());
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
+    await clearSiteCaches();
     try {
-      const keys = await caches.keys();
-      await Promise.all(keys.map((key) => {
-        if (key === SITE_PWA_CACHE || !/^(?:wa7shstore|njad|hack4store4)-pwa-/i.test(String(key || ""))) return Promise.resolve(false);
-        return caches.delete(key);
+      const clientsList = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+      await Promise.all(clientsList.map((client) => {
+        try {
+          client.postMessage({ type: "SITE_PWA_CACHE_DISABLED", build: SITE_PWA_BUILD });
+        } catch (_) {}
+        return Promise.resolve(true);
       }));
     } catch (_) {}
+    try { await self.registration.unregister(); } catch (_) {}
     try { await self.clients.claim(); } catch (_) {}
   })());
 });
@@ -37,65 +120,25 @@ self.addEventListener("fetch", (event) => {
   }
   if (!url || url.origin !== self.location.origin) return;
   const pathname = String(url.pathname || "");
-  const shouldHandle =
-    pathname === "/" ||
-    pathname === "/index.html" ||
-    pathname === "/header.css" ||
-    pathname === "/site-core.js" ||
-    pathname === "/header.js" ||
-    pathname === "/manifest.webmanifest";
-  if (!shouldHandle) return;
-  event.respondWith((async () => {
-    try {
-      const cache = await caches.open(SITE_PWA_CACHE);
-      if (pathname === "/" || pathname === "/index.html") {
-        const cached = await cache.match(request, { ignoreSearch: false })
-          || await cache.match("/index.html", { ignoreSearch: false })
-          || await cache.match("/", { ignoreSearch: false });
-        if (cached) {
-          event.waitUntil((async () => {
-            try {
-              const fresh = await fetch(request, { cache: "reload" });
-              if (fresh && fresh.ok) {
-                await cache.put(request, fresh.clone());
-                try { await cache.put("/index.html", fresh.clone()); } catch (_) {}
-              }
-            } catch (_) {}
-          })());
-          return cached;
-        }
-        try {
-          const fresh = await fetch(request, { cache: "reload" });
-          if (fresh && fresh.ok) {
-            try { await cache.put(request, fresh.clone()); } catch (_) {}
-            return fresh;
-          }
-        } catch (_) {}
+  const authHelperKind = firebaseAuthHelperKind(pathname);
+  if (authHelperKind) {
+    event.respondWith(Promise.resolve(firebaseAuthHelperResponse(authHelperKind)));
+    return;
+  }
+  if (pathname === "/__/firebase/init.json") {
+    event.respondWith(Promise.resolve(new Response(SITE_FIREBASE_INIT_JSON, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store"
       }
-      const cached = await cache.match(request, { ignoreSearch: false });
-      if (cached) {
-        if (pathname === "/header.css" || pathname === "/site-core.js" || pathname === "/header.js" || pathname === "/manifest.webmanifest") {
-          event.waitUntil((async () => {
-            try {
-              const response = await fetch(request, { cache: "reload" });
-              if (response && response.ok) await cache.put(request, response.clone());
-            } catch (_) {}
-          })());
-        }
-        return cached;
-      }
-      const response = await fetch(request, { cache: "reload" });
-      if (response && response.ok) {
-        try { await cache.put(request, response.clone()); } catch (_) {}
-      }
-      return response;
-    } catch (_) {
-      try {
-        const cache = await caches.open(SITE_PWA_CACHE);
-        const fallback = await cache.match(request, { ignoreSearch: false });
-        if (fallback) return fallback;
-      } catch (__){}
-      return new Response("", { status: 504, statusText: "Gateway Timeout" });
-    }
-  })());
+    })));
+    return;
+  }
+  const remoteAuthScript = firebaseAuthRemoteScript(pathname);
+  if (remoteAuthScript) {
+    event.respondWith(fetch(remoteAuthScript, { cache: "no-store", mode: "no-cors" }));
+    return;
+  }
+  event.respondWith(fetch(request, { cache: "no-store" }));
 });
