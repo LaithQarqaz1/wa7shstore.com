@@ -1,5 +1,5 @@
-const SITE_PWA_BUILD = "20260519-05";
-try { importScripts("/site_settings.js?v=20260519-01"); } catch (_) {}
+const SITE_PWA_BUILD = "20260605-wa7sh-01";
+try { importScripts("/site_settings.js?v=20260605-wa7sh-01"); } catch (_) {}
 const SITE_SETTINGS = (self.__getSiteSettings ? self.__getSiteSettings() : self.__SITE_SETTINGS__) || {};
 const SITE_FIREBASE_HELPER_ORIGIN = String(
   (SITE_SETTINGS.auth && SITE_SETTINGS.auth.firebaseHelperOrigin) ||

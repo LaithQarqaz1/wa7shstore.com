@@ -651,7 +651,7 @@
 
 ;
 /* Inline script 21, original index.html line 2767. */
-// حركة تبدأ من الحافة، تمر عبر الشريط، تخرج بالكامل، ثم تعاود من البداية
+// حركة تبدأ من الحافة، تمر عبر الشريء تخرج بالكامل، ثم تعاود من البداية
     (function(){
       var ticker = document.getElementById('homeTicker');
       var track  = ticker && ticker.querySelector('.ticker-track');
@@ -958,7 +958,7 @@
         return fallbackText && !LEGACY_RUNTIME_STORE_NAME_PATTERN.test(fallbackText) ? fallbackText : '';
       }
       function buildRuntimeSeoStoreTitle(value){
-        var name = normalizeRuntimeStoreName(value, DEFAULT_STORE_NAME) || DEFAULT_STORE_NAME || 'wa7shstore.com';
+        var name = normalizeRuntimeStoreName(value, DEFAULT_STORE_NAME) || DEFAULT_STORE_NAME || 'Wa7sh Store';
         return hasRuntimeArabicStoreName(name) ? name : (name + ' | ' + SITE_ARABIC_STORE_NAME);
       }
       function appendRuntimeArabicSeoName(value){
@@ -1232,7 +1232,7 @@
               "@type": "WebSite",
               "name": currentStoreName,
               "url": canonicalUrl,
-              "alternateName": [SITE_ARABIC_STORE_NAME, "wa7shstore.com", currentHost].filter(Boolean),
+              "alternateName": [SITE_ARABIC_STORE_NAME, "Wa7sh Store", currentHost].filter(Boolean),
               "inLanguage": "ar",
               "image": imageUrl,
               "potentialAction": {
@@ -1243,7 +1243,7 @@
               "publisher": {
                 "@type": "Organization",
                 "name": organizationName,
-                "alternateName": [SITE_ARABIC_STORE_NAME, "wa7shstore.com", currentHost].filter(Boolean),
+                "alternateName": [SITE_ARABIC_STORE_NAME, "Wa7sh Store", currentHost].filter(Boolean),
                 "logo": {
                   "@type": "ImageObject",
                   "url": logoUrl || imageUrl,
@@ -1277,7 +1277,7 @@
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": currentStoreName || currentHost,
-              "alternateName": [SITE_ARABIC_STORE_NAME, "wa7shstore.com", currentHost].filter(Boolean),
+              "alternateName": [SITE_ARABIC_STORE_NAME, "Wa7sh Store", currentHost].filter(Boolean),
               "url": canonicalUrl,
               "logo": logoUrl || imageUrl,
               "sameAs": canonicalUrl ? [canonicalUrl] : []
@@ -1541,7 +1541,7 @@
     lastRouteFlow: '',
     lastInlineAppClickAt: 0,
     suppressInlineMethodModalUntil: 0,
-    recoveryPromiseByFlow: { deposit: null },
+    recoveryPromiseByFlow: { deposit: null, withdraw: null },
   };
 
   document.addEventListener('click', function (event) {
@@ -1555,7 +1555,8 @@
   }, true);
 
   function normalizeInlineFlow(value) {
-    return 'deposit';
+    var raw = String(value || '').trim().toLowerCase();
+    return (raw === 'withdraw' || raw === 'sahb' || raw === 'سحب') ? 'withdraw' : 'deposit';
   }
   function getInlineFlowFromHash(hashValue) {
     try {
@@ -1567,7 +1568,7 @@
     }
   }
   function getInlineFlowPath(flow) {
-    return 'deposit';
+    return normalizeInlineFlow(flow) === 'withdraw' ? 'withdraw' : 'deposit';
   }
   function isLocalLikeInlineHost(hostname) {
     const host = String(hostname || '').trim().toLowerCase();
@@ -1933,7 +1934,8 @@ html[data-theme="dark"] #depositInlineApp .categories .card.depositTreeCard .off
   #depositInlineApp #grid.categories,
   #depositInlineApp .categories{
     grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
-    gap:10px !important;
+    gap:12px !important;
+    width:calc(100% - 16px) !important;
   }
   #depositInlineApp #grid.categories .card.depositTreeCard,
   #depositInlineApp .categories .card.depositTreeCard{
@@ -1971,6 +1973,34 @@ html[data-theme="dark"] #depositInlineApp .categories .card.depositTreeCard .off
       '#depositInlineApp #whereText{',
       '  color:var(--site-accent-runtime-light, var(--site-accent-runtime, var(--accent-theme, #64748b))) !important;',
       '  text-shadow:0 1px 12px rgba(var(--site-accent-rgb, 148, 163, 184), .18) !important;',
+      '  margin:0 auto var(--catalog-search-stack-gap, 6px) !important;',
+      '}',
+      'body.deposit-inline-active #inlinePage,',
+      '#depositInlineContainer,',
+      '#depositInlineApp,',
+      '#depositInlineApp main{',
+      '  width:100% !important;',
+      '  max-width:none !important;',
+      '  margin-inline:auto !important;',
+      '  padding-left:0 !important;',
+      '  padding-right:0 !important;',
+      '  box-sizing:border-box !important;',
+      '}',
+      '#depositInlineApp .search-container{',
+      '  width:min(calc(100vw - 16px), var(--home-section-width, 1000px)) !important;',
+      '  max-width:var(--home-section-width, 1000px) !important;',
+      '  margin:0 auto 0 !important;',
+      '  padding:0 !important;',
+      '  box-sizing:border-box !important;',
+      '}',
+      'body.deposit-inline-active #inlinePage #depositInlineApp .search-container,',
+      'body[data-inline-route="deposit"] #inlinePage #depositInlineApp .search-container,',
+      'body[data-inline-route="edaa"] #inlinePage #depositInlineApp .search-container{',
+      '  width:min(calc(100vw - 16px), var(--home-section-width, 1000px)) !important;',
+      '  max-width:var(--home-section-width, 1000px) !important;',
+      '  margin:0 auto 0 !important;',
+      '  padding:0 !important;',
+      '  box-sizing:border-box !important;',
       '}',
       '#depositInlineApp .search-container input[type="text"]{',
       '  border-color:var(--site-accent-runtime-light, var(--site-accent-runtime, var(--accent-theme, #64748b))) !important;',
@@ -1989,13 +2019,24 @@ html[data-theme="dark"] #depositInlineApp .categories .card.depositTreeCard .off
       '#depositInlineApp .categories{',
       '  display:grid !important;',
       '  grid-template-columns:repeat(5, minmax(0, 1fr)) !important;',
-      '  gap:16px !important;',
-      '  width:min(100%, var(--home-section-width, 1000px)) !important;',
+      '  gap:18px !important;',
+      '  width:min(calc(100vw - 16px), var(--home-section-width, 1000px)) !important;',
       '  max-width:var(--home-section-width, 1000px) !important;',
-      '  margin:0 auto !important;',
+      '  margin:var(--catalog-search-card-gap, 18px) auto 0 !important;',
       '  justify-content:center !important;',
       '  align-items:start !important;',
       '  align-content:start !important;',
+      '}',
+      'body.deposit-inline-active #inlinePage #depositInlineApp #grid.categories,',
+      'body.deposit-inline-active #inlinePage #depositInlineApp .categories,',
+      'body[data-inline-route="deposit"] #inlinePage #depositInlineApp #grid.categories,',
+      'body[data-inline-route="deposit"] #inlinePage #depositInlineApp .categories,',
+      'body[data-inline-route="edaa"] #inlinePage #depositInlineApp #grid.categories,',
+      'body[data-inline-route="edaa"] #inlinePage #depositInlineApp .categories{',
+      '  width:min(calc(100vw - 16px), var(--home-section-width, 1000px)) !important;',
+      '  max-width:var(--home-section-width, 1000px) !important;',
+      '  margin:var(--catalog-search-card-gap, 18px) auto 0 !important;',
+      '  box-sizing:border-box !important;',
       '}',
       '#depositInlineApp #grid.categories .card,',
       '#depositInlineApp .categories .card{',
@@ -2091,10 +2132,12 @@ html[data-theme="dark"] #depositInlineApp .categories .card.depositTreeCard .off
       '  }',
       '}',
       '@media (max-width: 760px){',
+      '  #depositInlineApp .search-container,',
       '  #depositInlineApp #grid.categories,',
       '  #depositInlineApp .categories{',
       '    grid-template-columns:repeat(3, minmax(0, 1fr)) !important;',
-      '    gap:10px !important;',
+      '    gap:12px !important;',
+      '    width:min(calc(100vw - 16px), var(--home-section-width, 1000px)) !important;',
       '  }',
       '  #depositInlineApp #grid.categories .card,',
       '  #depositInlineApp .categories .card{',
@@ -2107,6 +2150,12 @@ html[data-theme="dark"] #depositInlineApp .categories .card.depositTreeCard .off
       '  #depositInlineApp #grid.categories .card[data-card-type="product"] h2,',
       '  #depositInlineApp .categories .card[data-card-type="product"] h2{',
       '    font-size:var(--site-product-title-size, .78rem) !important;',
+      '  }',
+      '}',
+      '@media (max-width: 480px){',
+      '  #depositInlineApp #grid.categories,',
+      '  #depositInlineApp .categories{',
+      '    gap:10px !important;',
       '  }',
       '}',
       '#depositInlineApp:has(#methodModal:not(.hidden)) #grid,',
@@ -3230,7 +3279,7 @@ html[data-theme="dark"] #depositInlineApp .categories .card.depositTreeCard .off
     return list.length > 0;
     })();
     if (!state.recoveryPromiseByFlow || typeof state.recoveryPromiseByFlow !== 'object') {
-      state.recoveryPromiseByFlow = { deposit: null };
+      state.recoveryPromiseByFlow = { deposit: null, withdraw: null };
     }
     state.recoveryPromiseByFlow[scopedFlow] = task;
     try {
@@ -4287,7 +4336,8 @@ html[data-theme="dark"] #depositInlineApp .categories .card.depositTreeCard .off
   }
 
   function normalizeInlineFlow(value){
-    return 'deposit';
+    var raw = String(value || '').trim().toLowerCase();
+    return (raw === 'withdraw' || raw === 'sahb' || raw === 'سحب') ? 'withdraw' : 'deposit';
   }
 
   function getCurrentInlineHashPath(){
@@ -4304,26 +4354,28 @@ html[data-theme="dark"] #depositInlineApp .categories .card.depositTreeCard .off
   function getCurrentInlineFlowKind(){
     if (typeof getEmbeddedInlineFlowKind === 'function') return getEmbeddedInlineFlowKind();
     try {
-      return 'deposit';
+      const raw = getCurrentInlineHashPath();
+      const first = raw.split('/').filter(Boolean)[0] || '';
+      return normalizeInlineFlow(first);
     } catch (_) {
       return 'deposit';
     }
   }
 
   function getCurrentInlineFlowPath(){
-    return 'deposit';
+    return normalizeInlineFlow(getCurrentInlineFlowKind()) === 'withdraw' ? 'withdraw' : 'deposit';
   }
 
   function getInlineFlowPathFor(flow){
-    return 'deposit';
+    return normalizeInlineFlow(flow) === 'withdraw' ? 'withdraw' : 'deposit';
   }
 
   function getCurrentInlineRootHeading(){
-    return 'خيارات الإيداع المتاحة';
+    return getCurrentInlineFlowKind() === 'withdraw' ? 'خيارات السحب المتاحة' : 'خيارات الإيداع المتاحة';
   }
 
   function getCurrentInlineCountriesHeading(){
-    return 'الدول المتاحة للإيداع';
+    return getCurrentInlineFlowKind() === 'withdraw' ? 'الدول المتاحة للسحب' : 'الدول المتاحة للإيداع';
   }
 
   function buildInlineCountryHash(countryId){
@@ -6479,6 +6531,95 @@ html[data-theme="dark"] #depositInlineApp .categories .card.depositTreeCard .off
     };
   }
 
+  function normalizeSupportDepositLookupValue(value){
+    return String(value == null ? '' : value).trim().toLowerCase();
+  }
+
+  function supportDepositMethodMatches(entry, methodId){
+    const target = normalizeSupportDepositLookupValue(methodId);
+    if (!target || !entry) return false;
+    const data = entry && entry.data && typeof entry.data === 'object' ? entry.data : {};
+    return [
+      entry.id,
+      entry.methodId,
+      data.id,
+      data.methodId,
+      data.method_id,
+      data.name,
+      data.title
+    ].some(function(candidate){
+      return normalizeSupportDepositLookupValue(candidate) === target;
+    });
+  }
+
+  function supportDepositCountryMatches(entry, country){
+    const target = normalizeSupportDepositLookupValue(country);
+    if (!target || !entry) return true;
+    const data = entry && entry.data && typeof entry.data === 'object' ? entry.data : {};
+    return [
+      entry.id,
+      data.id,
+      data.countryId,
+      data.countryCode,
+      data.name,
+      data.title
+    ].some(function(candidate){
+      return normalizeSupportDepositLookupValue(candidate) === target;
+    });
+  }
+
+  async function openInlineDepositMethodById(methodId, options){
+    const safeMethodId = String(methodId || '').trim();
+    if (!safeMethodId) return false;
+    const opts = options && typeof options === 'object' ? options : {};
+    const countryHint = String(opts.country || opts.countryName || '').trim();
+    for (let pass = 0; pass < 2; pass += 1) {
+      try {
+        const rootMatch = (Array.isArray(directRootMethods) ? directRootMethods : []).find(function(entry){
+          return supportDepositMethodMatches(entry, safeMethodId);
+        });
+        if (rootMatch) {
+          openRootMethod(rootMatch);
+          return true;
+        }
+      } catch (_) {}
+
+      const countryList = Array.isArray(countries) ? countries.slice() : [];
+      for (let i = 0; i < countryList.length; i += 1) {
+        const countryEntry = countryList[i];
+        if (!supportDepositCountryMatches(countryEntry, countryHint)) continue;
+        let resolvedMethods = [];
+        try {
+          resolvedMethods = await resolveInlineCountryMethods(countryEntry);
+        } catch (_) {
+          resolvedMethods = normalizeInlineCountryMethodsList(countryEntry);
+        }
+        const methodEntry = (Array.isArray(resolvedMethods) ? resolvedMethods : []).find(function(entry){
+          return supportDepositMethodMatches(entry, safeMethodId);
+        });
+        if (!methodEntry) continue;
+        try { currentCountry = countryEntry; } catch (_) {}
+        try { methods = resolvedMethods.slice(); } catch (_) {}
+        try { renderMethods(methods); } catch (_) {}
+        openInlineMethodPage(methodEntry, 'support_chat_card');
+        return true;
+      }
+
+      if (pass === 0 && typeof window.__depositInlineRefreshCountries === 'function') {
+        try {
+          await window.__depositInlineRefreshCountries({
+            forceRefresh: true,
+            reason: 'support_chat_method',
+            flow: getCurrentInlineFlowKind()
+          });
+        } catch (_) {}
+      }
+    }
+    return false;
+  }
+
+  try { window.__depositInlineOpenMethodById = openInlineDepositMethodById; } catch (_) {}
+
   function formatInlineMethodInfoAmountWithCurrency(value, currencyCode){
     const resolvedCurrency = normalizeInlineCurrencyCode(currencyCode || '') || 'USD';
     const rawText = String(value == null ? '' : value).trim();
@@ -8248,7 +8389,7 @@ html[data-theme="dark"] #depositInlineApp .categories .card.depositTreeCard .off
     return String(value == null ? '' : value)
       .replace(/[\u064B-\u065F\u0670]/g, '')
       .replace(/[أإآ]/g, 'ا')
-      .replace(/ى/g, 'ظٹ')
+      .replace(/ى/g, 'ي')
       .replace(/\s+/g, ' ')
       .trim()
       .toLowerCase();
@@ -9823,14 +9964,14 @@ html[data-theme="dark"] #depositInlineApp .categories .card.depositTreeCard .off
           "  try {",
           "    const raw = getEmbeddedInlineHashPath();",
           "    const first = raw.split('/').filter(Boolean)[0] || '';",
-          "    return 'deposit';",
+          "    return (first === 'withdraw' || first === 'sahb') ? 'withdraw' : 'deposit';",
           "  } catch (_) {",
           "    return 'deposit';",
           "  }",
           "}",
           "",
           "function getEmbeddedInlineFlowPath(){",
-          "  return 'deposit';",
+          "  return getEmbeddedInlineFlowKind() === 'withdraw' ? 'withdraw' : 'deposit';",
           "}",
           "",
           "function getEmbeddedCountriesCacheViewerKey(){",
@@ -10445,6 +10586,8 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
   const FALLBACK_IMAGE = resolveSiteCatalogFallbackImage("Catalog");
   try { window.__resolveSiteCatalogFallbackImage = resolveSiteCatalogFallbackImage; } catch(_){}
   try { window.__siteCatalogFallbackImage = FALLBACK_IMAGE; } catch(_){}
+  const NAME_VALIDATION_RATE_LIMIT_MAX = 6;
+  const NAME_VALIDATION_RATE_LIMIT_WINDOW_MS = 60 * 1000;
 
   const state = {
     slug: "",
@@ -10468,6 +10611,13 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     modalPriceAnimTimer: null,
     modalPriceDisplayText: "",
     modalPriceAnimatingTarget: "",
+    nameValidation: {
+      productId: "",
+      inputKey: "",
+      status: "idle",
+      result: null,
+      attempts: []
+    },
     modalCloseTimer: null,
     loadSeq: 0,
     serverClockOffsetMs: 0,
@@ -10485,12 +10635,8 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
   function syncServerClockOffsetFromResponse(response) {
     try {
       if (!response || !response.headers || typeof response.headers.get !== "function") return;
-      const serverTimeHeader = response.headers.get("X-Server-Time-Ms");
       const dateHeader = response.headers.get("Date");
-      const headerServerMs = Number(serverTimeHeader);
-      const serverMs = Number.isFinite(headerServerMs) && headerServerMs > 0
-        ? headerServerMs
-        : Date.parse(dateHeader || "");
+      const serverMs = Date.parse(dateHeader || "");
       if (!Number.isFinite(serverMs)) return;
       const localMs = Date.now();
       const offsetMs = serverMs - localMs;
@@ -10726,6 +10872,9 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
 
     searchInput: document.getElementById("catalogSearchInput"),
     searchButton: document.getElementById("catalogSearchButton"),
+    currentSection: document.getElementById("catalogCurrentSection"),
+    currentSectionTitle: document.getElementById("catalogCurrentSectionTitle"),
+    currentSectionBack: document.getElementById("catalogSectionBack"),
     offersContainer: document.getElementById("catalogOffersContainer"),
     loader: document.getElementById("catalogLoader"),
     noResults: document.getElementById("catalogNoResults"),
@@ -10747,6 +10896,9 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     modalPlayerLabel: document.getElementById("modal-player-label"),
     modalPlayerId: document.getElementById("modal-player-id"),
     modalExtraFields: document.getElementById("modalExtraFields"),
+    modalNameValidation: document.getElementById("modal-name-validation"),
+    modalNameValidationBtn: document.getElementById("modal-name-validation-btn"),
+    modalNameValidationResult: document.getElementById("modal-name-validation-result"),
     modalQtyRow: document.getElementById("modal-qty-row"),
     modalQty: document.getElementById("modal-qty"),
     modalQtySelect: document.getElementById("modal-qty-select"),
@@ -10765,6 +10917,443 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     };
     return dom;
   }
+
+  function decodeCatalogSectionLabel(value) {
+    let text = String(value == null ? "" : value).trim();
+    if (!text) return "";
+    try { text = decodeURIComponent(text); } catch (_) {}
+    text = text.replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim();
+    try {
+      if (text && typeof translateCatalogDynamicText === "function") {
+        return translateCatalogDynamicText(text) || text;
+      }
+    } catch (_) {}
+    return text;
+  }
+
+  const catalogSectionLabelMemory = new Map();
+
+  function normalizeCatalogSectionLookup(value) {
+    let text = String(value == null ? "" : value).trim();
+    if (!text) return "";
+    try { text = decodeURIComponent(text); } catch (_) {}
+    const arDigits = "\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669";
+    const faDigits = "\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9";
+    text = text.replace(/[\u0660-\u0669]/g, (digit) => String(arDigits.indexOf(digit)));
+    text = text.replace(/[\u06f0-\u06f9]/g, (digit) => String(faDigits.indexOf(digit)));
+    text = text
+      .toLowerCase()
+      .replace(/[\u064b-\u065f\u0670\u0640]/g, "")
+      .replace(/[\u0622\u0623\u0625]/g, "\u0627")
+      .replace(/\u0649/g, "\u064a")
+      .replace(/\u0629/g, "\u0647")
+      .replace(/[\s/_-]+/g, "");
+    if (/^\d+$/.test(text)) text = text.replace(/^0+(?=\d)/, "");
+    return text;
+  }
+
+  function catalogSectionValuesMatch(left, right) {
+    const a = String(left == null ? "" : left).trim();
+    const b = String(right == null ? "" : right).trim();
+    if (!a || !b) return false;
+    if (a === b) return true;
+    const na = normalizeCatalogSectionLookup(a);
+    const nb = normalizeCatalogSectionLookup(b);
+    return !!na && !!nb && na === nb;
+  }
+
+  function readCatalogSectionLabelsStore() {
+    try {
+      if (!window.__CATALOG_SECTION_LABELS__ || typeof window.__CATALOG_SECTION_LABELS__ !== "object") {
+        window.__CATALOG_SECTION_LABELS__ = {};
+      }
+      return window.__CATALOG_SECTION_LABELS__;
+    } catch (_) {
+      return {};
+    }
+  }
+
+  function rememberCatalogSectionLabel(key, label) {
+    const rawKey = String(key == null ? "" : key).trim();
+    const readable = decodeCatalogSectionLabel(label);
+    if (!rawKey || !readable) return "";
+    const normalizedKey = normalizeCatalogSectionLookup(rawKey);
+    const normalizedLabel = normalizeCatalogSectionLookup(readable);
+    if (/^\d+$/.test(normalizedKey) && (!normalizedLabel || normalizedLabel === normalizedKey || /^\d+$/.test(normalizedLabel))) {
+      return "";
+    }
+    const keys = new Set([rawKey, normalizeCatalogSectionLookup(rawKey)]);
+    try { keys.add(decodeURIComponent(rawKey)); } catch (_) {}
+    const store = readCatalogSectionLabelsStore();
+    keys.forEach((entryKey) => {
+      const safeKey = String(entryKey || "").trim();
+      if (!safeKey) return;
+      catalogSectionLabelMemory.set(safeKey, readable);
+      try { store[safeKey] = readable; } catch (_) {}
+    });
+    return readable;
+  }
+
+  function readCatalogSectionLabelFromMemory(value) {
+    const raw = String(value == null ? "" : value).trim();
+    if (!raw) return "";
+    const normalized = normalizeCatalogSectionLookup(raw);
+    const store = readCatalogSectionLabelsStore();
+    const candidates = [raw, normalized];
+    try { candidates.push(decodeURIComponent(raw)); } catch (_) {}
+    for (const key of candidates) {
+      const safeKey = String(key || "").trim();
+      if (!safeKey) continue;
+      const direct = catalogSectionLabelMemory.get(safeKey) || store[safeKey];
+      if (direct) return decodeCatalogSectionLabel(direct);
+    }
+    return "";
+  }
+
+  function catalogNodeDisplayLabel(node) {
+    if (!node || typeof node !== "object") return "";
+    return decodeCatalogSectionLabel(
+      node.name || node.title || node.label || node.displayName || node.display_name || ""
+    );
+  }
+
+  function catalogNodeIsProduct(node) {
+    if (!node || typeof node !== "object") return false;
+    return String(node.type || node.nodeType || node.kind || "").trim().toLowerCase() === "product";
+  }
+
+  function catalogNodeLookupValues(node) {
+    if (!node || typeof node !== "object") return [];
+    return [
+      node.id,
+      node.slug,
+      node.key,
+      node.code,
+      node.category,
+      node.categoryId,
+      node.category_id,
+      node.name,
+      node.title,
+      node.label
+    ].map((value) => String(value == null ? "" : value).trim()).filter(Boolean);
+  }
+
+  function catalogNodeChildren(node) {
+    if (!node || typeof node !== "object") return [];
+    const out = [];
+    ["branches", "categories", "subcategories", "children", "games", "items", "products"].forEach((key) => {
+      const list = node[key];
+      if (Array.isArray(list)) list.forEach((child) => { if (child && typeof child === "object") out.push(child); });
+    });
+    return out;
+  }
+
+  function findCatalogSectionLabelInTree(tree, value, routeParts) {
+    const root = Array.isArray(tree) ? tree : [];
+    if (!root.length) return "";
+    const parts = Array.isArray(routeParts) ? routeParts.map((part) => String(part || "").trim()).filter(Boolean) : [];
+    const findPath = (nodes, index) => {
+      if (!parts.length || index >= parts.length) return null;
+      const target = parts[index];
+      for (const node of nodes) {
+        if (!node || typeof node !== "object") continue;
+        const isProductNode = catalogNodeIsProduct(node);
+        const matches = catalogNodeLookupValues(node).some((candidate) => catalogSectionValuesMatch(candidate, target));
+        if (!matches) continue;
+        if (index === parts.length - 1) return isProductNode ? null : node;
+        if (isProductNode) continue;
+        const found = findPath(catalogNodeChildren(node), index + 1);
+        if (found) return found;
+      }
+      return null;
+    };
+    const byPath = findPath(root, 0);
+    if (byPath) {
+      const label = catalogNodeDisplayLabel(byPath);
+      if (label) return rememberCatalogSectionLabel(value || parts[parts.length - 1], label);
+    }
+    let foundLabel = "";
+    const walk = (nodes) => {
+      if (foundLabel) return;
+      nodes.forEach((node) => {
+        if (!node || foundLabel) return;
+        const isProductNode = catalogNodeIsProduct(node);
+        const matches = catalogNodeLookupValues(node).some((candidate) => catalogSectionValuesMatch(candidate, value));
+        if (matches && !isProductNode) {
+          const label = catalogNodeDisplayLabel(node);
+          if (label) {
+            foundLabel = rememberCatalogSectionLabel(value, label);
+            return;
+          }
+        }
+        if (!isProductNode) walk(catalogNodeChildren(node));
+      });
+    };
+    walk(root);
+    return foundLabel;
+  }
+
+  function resolveCatalogSectionLabelFromCatalogCache(value) {
+    let cache = null;
+    try { cache = window.__CATALOG_CATALOG_CACHE__ || null; } catch (_) { cache = null; }
+    if (!cache || typeof cache !== "object") return "";
+    const roots = [cache, cache.catalog, cache.data].filter((entry) => entry && typeof entry === "object");
+    for (const root of roots) {
+      for (const bucketName of ["categories", "games"]) {
+        const bucket = root[bucketName];
+        if (!bucket || typeof bucket !== "object" || Array.isArray(bucket)) continue;
+        for (const [key, meta] of Object.entries(bucket)) {
+          if (!catalogSectionValuesMatch(key, value) && !(meta && catalogNodeLookupValues(meta).some((candidate) => catalogSectionValuesMatch(candidate, value)))) continue;
+          const label = catalogNodeDisplayLabel(meta) || decodeCatalogSectionLabel(key);
+          if (label) return rememberCatalogSectionLabel(value, label);
+        }
+      }
+      if (Array.isArray(root.tree)) {
+        const label = findCatalogSectionLabelInTree(root.tree, value, []);
+        if (label) return label;
+      }
+    }
+    return "";
+  }
+
+  function resolveCatalogSectionLabelFromDom(value, routeParts) {
+    try {
+      const cards = Array.from(document.querySelectorAll("[data-catalog-card], .catalog-card, .catalog-branch-card"));
+      for (const card of cards) {
+        const data = card.dataset || {};
+        const cardType = String(data.cardType || card.getAttribute("data-card-type") || "").trim().toLowerCase();
+        if (cardType === "product" || (card.classList && card.classList.contains("catalog-offer"))) continue;
+        const candidates = [data.category, data.target, data.stateKey, data.gameSlug, data.catalogItemId, data.title];
+        let pathParts = [];
+        try { pathParts = data.treePath ? JSON.parse(data.treePath) : []; } catch (_) { pathParts = []; }
+        const pathLeaf = pathParts.length ? pathParts[pathParts.length - 1] : "";
+        candidates.push(pathLeaf);
+        const routeMatch = Array.isArray(routeParts) && routeParts.length && pathParts.length === routeParts.length &&
+          pathParts.every((part, index) => catalogSectionValuesMatch(part, routeParts[index]));
+        if (!routeMatch && !candidates.some((candidate) => catalogSectionValuesMatch(candidate, value))) continue;
+        const h2 = card.querySelector && card.querySelector("h2");
+        const label = decodeCatalogSectionLabel(data.title || card.getAttribute("data-title") || (h2 ? h2.textContent : ""));
+        if (label) return rememberCatalogSectionLabel(value || pathLeaf, label);
+      }
+    } catch (_) {}
+    return "";
+  }
+
+  function resolveCatalogSectionDisplayLabel(value, routeParts) {
+    const raw = String(value == null ? "" : value).trim();
+    const parts = parseCatalogRouteParts(routeParts);
+    const leaf = raw || (parts.length ? parts[parts.length - 1] : "");
+    if (!leaf) return "";
+    return (
+      readCatalogSectionLabelFromMemory(leaf) ||
+      resolveCatalogSectionLabelFromDom(leaf, parts) ||
+      (() => {
+        try {
+          const tree = Array.isArray(window.__CATALOG_TREE_CACHE__) ? window.__CATALOG_TREE_CACHE__ : [];
+          return findCatalogSectionLabelInTree(tree, leaf, parts);
+        } catch (_) {
+          return "";
+        }
+      })() ||
+      resolveCatalogSectionLabelFromCatalogCache(leaf) ||
+      decodeCatalogSectionLabel(leaf)
+    );
+  }
+
+  function parseCatalogRouteParts(value) {
+    if (Array.isArray(value)) return value.map((part) => String(part || "").trim()).filter(Boolean);
+    const raw = String(value || "").trim();
+    if (!raw) return [];
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed.map((part) => String(part || "").trim()).filter(Boolean);
+    } catch (_) {}
+    return raw.split("/").map((part) => String(part || "").trim()).filter(Boolean);
+  }
+
+  function readCatalogRouteContextFromHash(preferredRouteKey = "") {
+    try {
+      const raw = String(location.hash || "").replace(/^#\/?/, "").split(/[?#]/)[0].trim();
+      if (!raw) return { routeKey: "", parts: [] };
+      const decoded = raw.split("/").filter(Boolean).map((part) => {
+        try { return decodeURIComponent(part || ""); } catch (_) { return part; }
+      }).filter(Boolean);
+      if (!decoded.length) return { routeKey: "", parts: [] };
+      const first = String(decoded[0] || "").trim();
+      const firstLower = first.toLowerCase();
+      const preferred = String(preferredRouteKey || "").trim().toLowerCase();
+      if (firstLower === "games" || firstLower === "catalog") {
+        return { routeKey: "games", parts: decoded.slice(1) };
+      }
+      if (preferred && firstLower === preferred) {
+        return { routeKey: preferred, parts: decoded.slice(1) };
+      }
+      try {
+        if (typeof isCategoryKey === "function" && isCategoryKey(first)) {
+          return { routeKey: "games", parts: decoded };
+        }
+      } catch (_) {}
+      if (/^\d+$/.test(first)) return { routeKey: "games", parts: decoded };
+      return { routeKey: firstLower, parts: decoded.slice(1) };
+    } catch (_) {
+      return { routeKey: "", parts: [] };
+    }
+  }
+
+  function getCatalogInlineParentRouteKey() {
+    try {
+      const host = document.getElementById("catalogInlineHost");
+      const hostKey = host && host.dataset ? String(host.dataset.parentRouteKey || host.dataset.routeKey || "").trim() : "";
+      const globalKey = String(window.__CATALOG_INLINE_PARENT_ROUTE_KEY__ || "").trim();
+      const fallback = globalKey || hostKey || "games";
+      const hashContext = readCatalogRouteContextFromHash(fallback);
+      return hashContext.routeKey || fallback;
+    } catch (_) {
+      return "games";
+    }
+  }
+
+  function getCatalogInlineParentRouteParts() {
+    try {
+      const host = document.getElementById("catalogInlineHost");
+      const hostParts = host && host.dataset ? String(host.dataset.parentRouteParts || "").trim() : "";
+      const globalParts = String(window.__CATALOG_INLINE_PARENT_ROUTE_PARTS__ || "").trim();
+      const hashContext = readCatalogRouteContextFromHash(getCatalogInlineParentRouteKey());
+      if (hashContext.parts.length) return hashContext.parts;
+      return parseCatalogRouteParts(globalParts || hostParts);
+    } catch (_) {
+      return [];
+    }
+  }
+
+  const CATALOG_SECTION_BACK_STATE_KEY = "catalog:section-back-state:v1";
+
+  function encodeCatalogHashPart(value) {
+    return encodeURIComponent(String(value == null ? "" : value).trim());
+  }
+
+  function isCatalogLegacyRootRoute(routeKey) {
+    const route = String(routeKey || "").trim().toLowerCase();
+    return !route || route === "games" || route === "catalog";
+  }
+
+  function buildCatalogSectionHash(routeKey, routeParts) {
+    const safeParts = parseCatalogRouteParts(routeParts);
+    const route = String(routeKey || "").trim();
+    const encodedParts = safeParts.map(encodeCatalogHashPart).filter(Boolean);
+    if (isCatalogLegacyRootRoute(route)) {
+      return encodedParts.length ? "#/" + encodedParts.join("/") : "#/";
+    }
+    const encodedRoute = encodeCatalogHashPart(route);
+    return "#/" + [encodedRoute].concat(encodedParts).filter(Boolean).join("/");
+  }
+
+  function rememberCatalogSectionBackState(routeKey, routeParts) {
+    try {
+      const safeParts = parseCatalogRouteParts(routeParts);
+      if (!safeParts.length) return;
+      const previousParts = safeParts.length > 1 ? safeParts.slice(0, -1) : [];
+      localStorage.setItem(CATALOG_SECTION_BACK_STATE_KEY, JSON.stringify({
+        routeKey: String(routeKey || "").trim() || "games",
+        parts: safeParts,
+        targetHash: buildCatalogSectionHash(routeKey, previousParts),
+        at: Date.now()
+      }));
+    } catch (_) {}
+  }
+
+  function readCatalogSectionBackHash(routeKey, routeParts) {
+    const safeParts = parseCatalogRouteParts(routeParts);
+    try {
+      const raw = localStorage.getItem(CATALOG_SECTION_BACK_STATE_KEY);
+      const payload = raw ? JSON.parse(raw) : null;
+      const storedParts = parseCatalogRouteParts(payload && payload.parts);
+      const sameParts = storedParts.length === safeParts.length &&
+        storedParts.every((part, index) => String(part) === String(safeParts[index]));
+      const storedRoute = String(payload && payload.routeKey || "").trim().toLowerCase();
+      const currentRoute = String(routeKey || "games").trim().toLowerCase();
+      if (payload && sameParts && storedRoute === currentRoute && payload.targetHash) {
+        return String(payload.targetHash || "").trim();
+      }
+    } catch (_) {}
+    const previousParts = safeParts.length > 1 ? safeParts.slice(0, -1) : [];
+    return buildCatalogSectionHash(routeKey, previousParts);
+  }
+
+  function applyCatalogSectionBackHash(targetHash) {
+    const hash = String(targetHash || "#/").trim() || "#/";
+    try { window.__CATALOG_SUPPRESS_CATEGORY_FETCH_UNTIL__ = Date.now() + 20000; } catch (_) {}
+    try { window.__CATALOG_BACK_LOCAL_ONLY_UNTIL__ = Date.now() + 5000; } catch (_) {}
+    try {
+      if (hash === "#/" && typeof navigateHome === "function") {
+        navigateHome();
+        return;
+      }
+    } catch (_) {}
+    try {
+      if (String(location.hash || "") !== hash) {
+        location.hash = hash;
+      } else if (typeof initFromHash === "function") {
+        initFromHash();
+      }
+    } catch (_) {
+      try { location.hash = hash; } catch (__) {}
+    }
+  }
+
+  function setCatalogInlineParentRouteContext(routeKey, parentParts) {
+    const safeRoute = String(routeKey || "games").trim() || "games";
+    const safeParts = parseCatalogRouteParts(parentParts);
+    const encoded = JSON.stringify(safeParts);
+    rememberCatalogSectionBackState(safeRoute, safeParts);
+    try {
+      window.__CATALOG_INLINE_PARENT_ROUTE_KEY__ = safeRoute;
+      window.__CATALOG_INLINE_PARENT_ROUTE_PARTS__ = encoded;
+    } catch (_) {}
+    try {
+      const host = document.getElementById("catalogInlineHost");
+      if (host && host.dataset) {
+        host.dataset.parentRouteKey = safeRoute;
+        host.dataset.parentRouteParts = encoded;
+      }
+    } catch (_) {}
+  }
+
+  function navigateCatalogSectionBack(routeKey, parentParts) {
+    const safeRoute = String(routeKey || "games").trim() || "games";
+    const parts = parseCatalogRouteParts(parentParts);
+    const targetHash = readCatalogSectionBackHash(safeRoute, parts);
+    applyCatalogSectionBackHash(targetHash);
+  }
+
+  function updateCatalogCurrentSectionBar(label, parentParts, routeKey) {
+    const parts = parseCatalogRouteParts(parentParts);
+    const title = resolveCatalogSectionDisplayLabel(label || (parts.length ? parts[parts.length - 1] : ""), parts);
+    if (!dom.currentSection || !dom.currentSectionTitle) return;
+    if (!title) {
+      dom.currentSection.hidden = true;
+      return;
+    }
+    dom.currentSectionTitle.textContent = title;
+    dom.currentSection.hidden = false;
+    const safeRoute = String(routeKey || "games").trim() || "games";
+    try {
+      dom.currentSection.dataset.parentRouteKey = safeRoute;
+      dom.currentSection.dataset.parentRouteParts = JSON.stringify(parts);
+      rememberCatalogSectionBackState(safeRoute, parts);
+    } catch (_) {}
+    if (dom.currentSectionBack) {
+      dom.currentSectionBack.hidden = false;
+      dom.currentSectionBack.disabled = false;
+    }
+  }
+  try {
+    window.__setCatalogInlineParentRouteContext = setCatalogInlineParentRouteContext;
+    window.__navigateCatalogSectionBack = navigateCatalogSectionBack;
+    window.__decodeCatalogSectionLabel = decodeCatalogSectionLabel;
+    window.__rememberCatalogSectionLabel = rememberCatalogSectionLabel;
+    window.__resolveCatalogSectionDisplayLabel = resolveCatalogSectionDisplayLabel;
+  } catch (_) {}
 
   /* -------------------------------------------------- */
   /* Helpers                                            */
@@ -11821,7 +12410,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         dom.toast.style.removeProperty("color");
       }
 
-      if (variant === "error") {
+      if (variant === "error" && options.sound === true) {
         try {
           if (typeof window.__playErrorToastSound === "function") {
             window.__playErrorToastSound();
@@ -13337,6 +13926,44 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     showWalletActivityOverlay(latestPayload);
   }
 
+  async function fetchWalletCreditMotionSnapshotFromServer(user, uid) {
+    const safeUid = String(uid || "").trim();
+    if (!user || !safeUid || typeof user.getIdToken !== "function") return null;
+    const info = typeof readSessionInfo === "function" ? (readSessionInfo() || {}) : {};
+    const sessionKey = String(info.sessionKey || (typeof getLocalSessionKey === "function" ? getLocalSessionKey() : "") || "").trim();
+    if (!sessionKey) return null;
+    let requestUrl;
+    try {
+      const workerBase = window.__getSiteWorkerBaseDefault
+        ? String(window.__getSiteWorkerBaseDefault({ trailingSlash: true }) || "").trim()
+        : "";
+      requestUrl = workerBase ? new URL(workerBase) : new URL("/", window.location.href);
+    } catch (_) {
+      requestUrl = new URL("/", window.location.href);
+    }
+    requestUrl.searchParams.set("mode", "client-wallet");
+    requestUrl.searchParams.set("useruid", safeUid);
+    requestUrl.searchParams.set("sessionKey", sessionKey);
+    requestUrl.searchParams.set("limit", "50");
+    requestUrl.searchParams.set("_", String(Date.now()));
+    const res = await fetch(requestUrl.toString(), {
+      method: "GET",
+      cache: "no-store"
+    });
+    const payload = await res.json().catch(() => ({}));
+    if (!res.ok || !payload || payload.ok === false) return null;
+    const entriesMap = {};
+    const wallet = payload && payload.wallet && typeof payload.wallet === "object" ? payload.wallet : {};
+    const list = Array.isArray(wallet.items)
+      ? wallet.items
+      : (Array.isArray(payload.transactions) ? payload.transactions : (Array.isArray(payload.items) ? payload.items : []));
+    list.forEach((entry, index) => {
+      const key = String(entry && (entry.entryKey || entry.cacheKey || entry.code) || "").trim() || `tx_${index + 1}`;
+      entriesMap[key] = entry;
+    });
+    return { entriesMap };
+  }
+
   function syncWalletCreditMotionWatcher(user) {
     const uid = user && user.uid ? String(user.uid).trim() : "";
     if (!uid) {
@@ -13351,13 +13978,12 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     resetWalletCreditMotionWatcher();
     walletCreditMotionWatcherState.uid = uid;
     walletCreditMotionWatcherState.seenKeys = readWalletCreditMotionSeenKeys(uid);
-    if (!db || typeof db.collection !== "function") return;
     walletCreditMotionWatcherState.unsubscribe = function(){};
-    db.collection("userTransactions").doc(uid).get().then((snapshot) => {
+    fetchWalletCreditMotionSnapshotFromServer(user, uid).then((data) => {
+      if (!data) return;
       handleWalletCreditMotionSnapshot({
         data: function(){
-          if (!snapshot || !snapshot.exists) return {};
-          return snapshot.data() || {};
+          return data || {};
         }
       });
     }).catch((err) => {
@@ -13828,8 +14454,24 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
       try { img.fetchPriority = high ? "high" : "low"; } catch(_){}
     }
 
+    function isActuallyLoaded(img) {
+      try { return !!(img && img.complete && Number(img.naturalWidth || 0) > 0); } catch(_){}
+      return false;
+    }
+
+    function markImageLoaded(img) {
+      if (!img) return;
+      try { img.dataset.catalogPriorityLoaded = "1"; } catch(_){}
+      try { delete img.dataset.catalogSharedPending; } catch(_){}
+      try { delete img.dataset.placeholderApplied; } catch(_){}
+      try { img.style.display = ""; } catch(_){}
+    }
+
     function isLoaded(img) {
-      try { return !!(img && img.dataset && img.dataset.catalogPriorityLoaded === "1"); } catch(_){}
+      if (isActuallyLoaded(img)) {
+        markImageLoaded(img);
+        return true;
+      }
       return false;
     }
 
@@ -13873,7 +14515,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
 
     function markImageForSharedSource(img, src, high, originalSrc) {
       if (!img || !src) return;
-      try { img.dataset.catalogPriorityLoaded = "1"; } catch(_){}
+      try { delete img.dataset.catalogPriorityLoaded; } catch(_){}
       try { img.dataset.catalogOriginalSrc = originalSrc || src; } catch(_){}
       try {
         if (/^blob:/i.test(String(src || ""))) img.dataset.catalogBlobUrl = src;
@@ -13881,15 +14523,20 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
       try { delete img.dataset.catalogSharedPending; } catch(_){}
       setImagePriority(img, high === true);
       try { img.style.display = ""; } catch(_){}
+      if (isActuallyLoaded(img)) markImageLoaded(img);
     }
 
     function assignSharedSource(img, src, high, originalSrc) {
       if (!img || !src) return false;
       markImageForSharedSource(img, src, high, originalSrc);
       try {
-        if (String(img.getAttribute("src") || "") === src) return true;
+        if (String(img.getAttribute("src") || "") === src) {
+          if (isActuallyLoaded(img)) markImageLoaded(img);
+          return true;
+        }
       } catch(_){}
       try { img.src = src; } catch(_) { return false; }
+      if (isActuallyLoaded(img)) markImageLoaded(img);
       return true;
     }
 
@@ -14088,8 +14735,9 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     function refresh(root) {
       var scope = root && root.querySelectorAll ? root : document;
       try {
-        var list = scope.querySelectorAll("img[data-catalog-deferred-src]:not([data-catalog-priority-loaded='1'])");
+        var list = scope.querySelectorAll("img[data-catalog-deferred-src]");
         Array.prototype.forEach.call(list, function(img){
+          if (isLoaded(img)) return;
           if (isNearViewport(img, 260)) upgrade(img);
           else observeOrQueue(img);
         });
@@ -14106,6 +14754,41 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
   try { window.__registerCatalogCardMediaImage = function(img, src, opts){ return catalogCardImageScheduler.register(img, src, opts); }; } catch(_){}
   try { window.__upgradeCatalogCardMediaImage = function(img){ return catalogCardImageScheduler.upgrade(img); }; } catch(_){}
   try { window.__refreshCatalogCardMediaImages = function(root){ return catalogCardImageScheduler.refresh(root); }; } catch(_){}
+
+  function scheduleCatalogCardMediaImageAudit(host, media, img, src) {
+    var safeSrc = sanitizeCatalogCardMediaUrl(src || "");
+    if (!img || !safeSrc) return;
+    [120, 900, 2400].forEach(function(delay, index) {
+      try {
+        setTimeout(function() {
+          try {
+            if (!img || (img.dataset && img.dataset.catalogFallbackImage === "1")) return;
+            if (img.complete && Number(img.naturalWidth || 0) > 0) {
+              try { img.dataset.catalogPriorityLoaded = "1"; } catch(_){}
+              try { img.style.display = ""; } catch(_){}
+              clearCatalogCardMediaEmptyState(host, media);
+              return;
+            }
+            if (img.dataset && img.dataset.catalogBlobRetry === "1") return;
+            try { catalogCardImageScheduler.refresh(host || media || document); } catch(_){}
+            var current = "";
+            try { current = String(img.getAttribute("src") || ""); } catch(_){}
+            if (!current) {
+              try { img.src = safeSrc; } catch(_){}
+              return;
+            }
+            if (index >= 1 && img.complete === true && Number(img.naturalWidth || 0) <= 0) {
+              try { delete img.dataset.catalogPriorityLoaded; } catch(_){}
+              try { img.removeAttribute("src"); } catch(_){}
+              setTimeout(function() {
+                try { img.src = safeSrc; } catch(_){}
+              }, 30);
+            }
+          } catch(_){}
+        }, delay);
+      } catch(_){}
+    });
+  }
 
   function appendCatalogCardMedia(card, options) {
     const host = card && typeof card === "object" ? card : null;
@@ -14145,6 +14828,8 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           return;
         }
         clearCatalogCardMediaEmptyState(host, media);
+        try { img.dataset.catalogPriorityLoaded = "1"; } catch(_){}
+        try { img.style.display = ""; } catch(_){}
         try { delete img.dataset.placeholderApplied; } catch(_){}
       } catch(_){}
     });
@@ -14173,9 +14858,11 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           loading: requestedLoading,
           fetchPriority: requestedFetchPriority
         });
+        catalogCardImageScheduler.refresh(host);
       } catch (_) {
         img.src = realImageUrl;
       }
+      scheduleCatalogCardMediaImageAudit(host, media, img, realImageUrl);
     } else {
       try { applyCatalogCardMediaFallback(host, media, img, label); } catch (_) {}
     }
@@ -14340,12 +15027,12 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         fr: "Le code est livre instantanement. "
       },
       {
-        pattern: /يمكن\s*استرداد\s*الكود\s*(?:ظپظٹ|من)\s*موقع\s*pubg\s*mobile\s*العالمي\s*:?\s*/gi,
+        pattern: /يمكن\s*استرداد\s*الكود\s*(?:في|من)\s*موقع\s*pubg\s*mobile\s*العالمي\s*:?\s*/gi,
         en: "The code can be redeemed on the official PUBG Mobile global site: ",
         fr: "Le code peut etre utilise sur le site mondial officiel de PUBG Mobile : "
       },
       {
-        pattern: /يمكن\s*استرداد\s*الكود\s*(?:ظپظٹ|من)\s*موقع\s*/gi,
+        pattern: /يمكن\s*استرداد\s*الكود\s*(?:في|من)\s*موقع\s*/gi,
         en: "The code can be redeemed on ",
         fr: "Le code peut etre utilise sur "
       }
@@ -14380,7 +15067,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
       { pattern: /كلاش\s*رويال/gi, en: "Clash Royale", fr: "Clash Royale" },
       { pattern: /براول\s*ستارز/gi, en: "Brawl Stars", fr: "Brawl Stars" },
       { pattern: /بلود\s*سترايك/gi, en: "Blood Strike", fr: "Blood Strike" },
-      { pattern: /ظˆظٹ\s*بلاي/gi, en: "WePlay", fr: "WePlay" },
+      { pattern: /وي\s*بلاي/gi, en: "WePlay", fr: "WePlay" },
       { pattern: /ليبي/gi, en: "Ludo", fr: "Ludo" },
       { pattern: /اورلي/gi, en: "Orly", fr: "Orly" }
     ];
@@ -14888,10 +15575,14 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
 
   function inferFieldInputMode(field) {
     const text = `${field.key} ${field.label} ${field.placeholder}`.toLowerCase();
+    const explicitType = String(field && field.inputType || "").trim().toLowerCase();
+    if (explicitType === "text") return "text";
+    if (explicitType === "number") return "decimal";
+    if (["tel", "email", "url"].includes(explicitType)) return explicitType;
     if (/(email|mail|بريد)/.test(text)) return "email";
     if (/(url|link|http|website|site|رابط)/.test(text)) return "url";
-    if (/(phone|tel|mobile|whatsapp|رقم|هاتف|جوال|واتس)/.test(text)) return "tel";
-    if (/(id|uid|player|account|number|num|رقم|ايدي|معرف|user)/.test(text)) return "numeric";
+    if (/(phone|tel|mobile|whatsapp|هاتف|جوال|واتس)/.test(text)) return "tel";
+    if (/(^|[\s_-])(id|uid|player|account|user)([\s_-]|$)/.test(text) && !/(name|text|note|comment|message)/.test(text)) return "numeric";
     return "text";
   }
 
@@ -14922,7 +15613,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     const required = readBool(
       def.required ?? def.isRequired ?? def.must ?? def.need ?? def.needs ?? def.mandatory ?? def.is_mandatory
     );
-    const rawType = String(def.inputType ?? def.input_type ?? def.type ?? "").trim().toLowerCase();
+    const rawType = String(def.inputType ?? def.input_type ?? def.type ?? def.kind ?? "").trim().toLowerCase();
     const options = normalizeFieldOptions(def.options ?? def.values ?? def.items ?? def.choices ?? def.list);
     let kind = "input";
     if (rawType === "textarea" || rawType === "multiline") kind = "textarea";
@@ -15318,7 +16009,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     const list = normalizeQtyOptions(options);
     if (!list.length) return "";
     const maxItems = Number.isFinite(limit) ? Math.max(1, limit) : 8;
-    const shown = list.slice(0, maxItems).join("طŒ ");
+    const shown = list.slice(0, maxItems).join("، ");
     if (list.length > maxItems) return `${shown} ...`;
     return shown;
   }
@@ -16172,6 +16863,273 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     return out;
   }
 
+  function getItemNameValidationConfig(item) {
+    const src = item && typeof item === "object"
+      ? (item.nameValidation || item.name_validation || {})
+      : {};
+    if (!src || typeof src !== "object" || src.enabled !== true) return null;
+    const apiFile = String(src.apiFile || src.api_file || "").trim();
+    const userIdFieldId = String(src.userIdFieldId || src.user_id_field_id || "").trim();
+    if (!apiFile || !userIdFieldId) return null;
+    return {
+      enabled: true,
+      gameLabel: String(src.gameLabel || src.game_label || "").trim(),
+      apiFile,
+      requiresZoneId: src.requiresZoneId === true || src.requires_zone_id === true,
+      userIdFieldId,
+      zoneIdFieldId: String(src.zoneIdFieldId || src.zone_id_field_id || "").trim()
+    };
+  }
+
+  function readModalNameValidationInputSet(item, root) {
+    const config = getItemNameValidationConfig(item);
+    if (!config) return null;
+    const userId = readFieldValue(root, config.userIdFieldId);
+    const zoneId = config.requiresZoneId ? readFieldValue(root, config.zoneIdFieldId) : "";
+    return {
+      config,
+      productId: String(item?.id ?? "").trim(),
+      userId,
+      zoneId,
+      inputKey: [String(item?.id ?? "").trim(), config.apiFile, userId, zoneId].join("|")
+    };
+  }
+
+  function clearNameValidationResult() {
+    state.nameValidation = {
+      productId: "",
+      inputKey: "",
+      status: "idle",
+      result: null,
+      attempts: Array.isArray(state.nameValidation?.attempts) ? state.nameValidation.attempts : []
+    };
+    if (dom.modalNameValidationResult) {
+      dom.modalNameValidationResult.textContent = "";
+      dom.modalNameValidationResult.classList.remove("ok", "err");
+    }
+    if (dom.modalNameValidationBtn) {
+      dom.modalNameValidationBtn.classList.remove("ok", "err");
+    }
+    if (dom.modalPlayerRow) {
+      dom.modalPlayerRow.classList.remove("is-name-validated");
+    }
+  }
+
+  function getNameValidationDisplayName(result) {
+    const username = String(result?.username || "").trim();
+    return username;
+  }
+
+  function pruneNameValidationAttempts() {
+    const cutoff = Date.now() - NAME_VALIDATION_RATE_LIMIT_WINDOW_MS;
+    const attempts = (Array.isArray(state.nameValidation?.attempts) ? state.nameValidation.attempts : [])
+      .map((ts) => Number(ts))
+      .filter((ts) => Number.isFinite(ts) && ts > cutoff);
+    state.nameValidation.attempts = attempts;
+    return attempts;
+  }
+
+  function canStartNameValidationRequest() {
+    return pruneNameValidationAttempts().length < NAME_VALIDATION_RATE_LIMIT_MAX;
+  }
+
+  function recordNameValidationRequestAttempt() {
+    const attempts = pruneNameValidationAttempts();
+    attempts.push(Date.now());
+    state.nameValidation.attempts = attempts;
+  }
+
+  function ensureModalNameValidationElements() {
+    if (!dom.modalNameValidation) {
+      const wrap = document.createElement("div");
+      wrap.className = "pm-input pm-name-validation";
+      wrap.id = "modal-name-validation";
+      wrap.style.display = "none";
+
+      const btn = document.createElement("button");
+      btn.id = "modal-name-validation-btn";
+      btn.className = "pm-name-validation-field";
+      btn.type = "button";
+      btn.textContent = "انقر للتحقق من الاسم";
+
+      const result = document.createElement("div");
+      result.id = "modal-name-validation-result";
+      result.className = "pm-hint";
+      result.setAttribute("aria-live", "polite");
+
+      wrap.append(btn, result);
+      const anchor = dom.modalQtyRow || dom.modalDescWrap || dom.modalActions || null;
+      if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(wrap, anchor);
+      else if (dom.modalPlayerRow && dom.modalPlayerRow.parentNode) dom.modalPlayerRow.parentNode.appendChild(wrap);
+      else if (dom.modal) dom.modal.appendChild(wrap);
+    }
+
+    dom.modalNameValidation = document.getElementById("modal-name-validation");
+    dom.modalNameValidationBtn = document.getElementById("modal-name-validation-btn");
+    dom.modalNameValidationResult = document.getElementById("modal-name-validation-result");
+    if (dom.modalNameValidationBtn) {
+      dom.modalNameValidationBtn.classList.add("pm-name-validation-field");
+      if (dom.modalNameValidationBtn.dataset.nameValidationBound !== "1") {
+        dom.modalNameValidationBtn.dataset.nameValidationBound = "1";
+        dom.modalNameValidationBtn.addEventListener("click", () => validateModalGameUser());
+      }
+    }
+    return !!dom.modalNameValidation;
+  }
+
+  function syncNameValidationUI(item) {
+    const config = getItemNameValidationConfig(item);
+    if (!ensureModalNameValidationElements()) return;
+    dom.modalNameValidation.style.display = config ? "" : "none";
+    if (!config) {
+      clearNameValidationResult();
+      return;
+    }
+    const label = dom.modalNameValidation.querySelector("label");
+    if (label && label.parentNode) label.parentNode.removeChild(label);
+    if (dom.modalNameValidationBtn) {
+      const approvedName = state.nameValidation.status === "approved"
+        ? getNameValidationDisplayName(state.nameValidation.result)
+        : "";
+      const failedMessage = state.nameValidation.status === "failed"
+        ? (state.nameValidation.errorMessage || getNameValidationErrorText(state.nameValidation.result && (state.nameValidation.result.message || state.nameValidation.result.error) || ""))
+        : "";
+      dom.modalNameValidationBtn.disabled = state.nameValidation.status === "loading";
+      dom.modalNameValidationBtn.textContent = state.nameValidation.status === "loading" ? "جاري التحقق..." : (approvedName || failedMessage || "انقر للتحقق من الاسم");
+      dom.modalNameValidationBtn.classList.toggle("ok", state.nameValidation.status === "approved");
+      dom.modalNameValidationBtn.classList.toggle("err", state.nameValidation.status === "failed");
+    }
+    if (dom.modalPlayerRow) {
+      dom.modalPlayerRow.classList.toggle("is-name-validated", state.nameValidation.status === "approved");
+    }
+  }
+
+  function renderNameValidationSuccess(result) {
+    const displayName = getNameValidationDisplayName(result);
+    if (dom.modalNameValidationBtn) {
+      dom.modalNameValidationBtn.textContent = displayName || "انقر للتحقق من الاسم";
+      dom.modalNameValidationBtn.classList.remove("err");
+      dom.modalNameValidationBtn.classList.add("ok");
+    }
+    if (dom.modalPlayerRow) {
+      dom.modalPlayerRow.classList.add("is-name-validated");
+    }
+    if (!dom.modalNameValidationResult) return;
+    dom.modalNameValidationResult.classList.remove("ok", "err");
+    dom.modalNameValidationResult.textContent = "";
+  }
+
+  function getNameValidationErrorText(message) {
+    const rawMessage = String(message || "").trim();
+    return /userid|user id|invalid|wrong/i.test(rawMessage)
+      ? "الايدي خاطئ"
+      : (rawMessage || "الايدي خاطئ");
+  }
+
+  function renderNameValidationError(message) {
+    const displayMessage = getNameValidationErrorText(message);
+    if (state.nameValidation && typeof state.nameValidation === "object") {
+      state.nameValidation.errorMessage = displayMessage;
+    }
+    if (dom.modalNameValidationBtn) {
+      dom.modalNameValidationBtn.textContent = displayMessage;
+      dom.modalNameValidationBtn.classList.remove("ok");
+      dom.modalNameValidationBtn.classList.add("err");
+    }
+    if (!dom.modalNameValidationResult) return;
+    dom.modalNameValidationResult.classList.remove("ok", "err");
+    dom.modalNameValidationResult.textContent = "";
+  }
+
+  async function validateModalGameUser() {
+    if (!state.selected) return;
+    const item = state.selected.item || {};
+    const modalRoot = dom.modalPlayerRow || dom.modal;
+    const inputSet = readModalNameValidationInputSet(item, modalRoot);
+    if (!inputSet) return;
+    if (!inputSet.userId) {
+      showToast("يرجى إدخال UserID قبل التحقق.", "warning");
+      const target = findFieldInput(modalRoot, inputSet.config.userIdFieldId);
+      if (target && typeof target.focus === "function") target.focus();
+      return;
+    }
+    if (inputSet.config.requiresZoneId && !inputSet.zoneId) {
+      showToast("يرجى إدخال ZoneID قبل التحقق.", "warning");
+      const target = findFieldInput(modalRoot, inputSet.config.zoneIdFieldId);
+      if (target && typeof target.focus === "function") target.focus();
+      return;
+    }
+    if (!canStartNameValidationRequest()) {
+      renderNameValidationError("وصلت للحد الأقصى للتحقق، حاول بعد دقيقة.");
+      showToast("وصلت للحد الأقصى للتحقق، حاول بعد دقيقة.", "warning");
+      return;
+    }
+    const currentUser = await requireCatalogPurchaseLogin();
+    if (!currentUser) return;
+    let idToken = "";
+    try {
+      idToken = await currentUser.getIdToken(false);
+    } catch (_) {}
+    clearNameValidationResult();
+    state.nameValidation = {
+      productId: inputSet.productId,
+      inputKey: inputSet.inputKey,
+      status: "loading",
+      result: null,
+      attempts: Array.isArray(state.nameValidation?.attempts) ? state.nameValidation.attempts : []
+    };
+    recordNameValidationRequestAttempt();
+    syncNameValidationUI(item);
+    try {
+      const url = buildCatalogActionUrl(getCatalogBase(), state.slug);
+      url.searchParams.set("mode", "validate-game-user");
+      const response = await fetch(url.toString(), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(idToken ? { "Authorization": `Bearer ${idToken}` } : {})
+        },
+        body: JSON.stringify({
+          productId: inputSet.productId,
+          userId: inputSet.userId,
+          zoneId: inputSet.zoneId
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data?.ok !== true) {
+        const message = String(data?.message || data?.error || "بيانات اللاعب غير صحيحة، تأكد من الآيدي والمنطقة.").trim();
+        state.nameValidation = {
+          productId: inputSet.productId,
+          inputKey: inputSet.inputKey,
+          status: "failed",
+          result: data || null,
+          attempts: Array.isArray(state.nameValidation?.attempts) ? state.nameValidation.attempts : []
+        };
+        renderNameValidationError(message);
+        return;
+      }
+      state.nameValidation = {
+        productId: inputSet.productId,
+        inputKey: inputSet.inputKey,
+        status: "approved",
+        result: data,
+        attempts: Array.isArray(state.nameValidation?.attempts) ? state.nameValidation.attempts : []
+      };
+      renderNameValidationSuccess(data);
+    } catch (_) {
+      state.nameValidation = {
+        productId: inputSet.productId,
+        inputKey: inputSet.inputKey,
+        status: "failed",
+        result: null,
+        attempts: Array.isArray(state.nameValidation?.attempts) ? state.nameValidation.attempts : []
+      };
+      renderNameValidationError("تعذر التحقق حالياً، حاول مرة أخرى بعد قليل.");
+    } finally {
+      syncNameValidationUI(item);
+    }
+  }
+
   function resolvePrimaryPlayerId(fields, values) {
     if (!Array.isArray(fields) || fields.length === 0) return "";
     const explicit = fields.find((field) => field.isPlayerId);
@@ -16332,6 +17290,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
       if (dom.playerExtraFields) dom.playerExtraFields.innerHTML = "";
       if (dom.modalExtraFields) dom.modalExtraFields.innerHTML = "";
       if (dom.pasteBtn) dom.pasteBtn.style.display = "none";
+      syncNameValidationUI(currentItem);
       if (dom.modalBuy) dom.modalBuy.textContent = translateCatalogActionLabel("catalog.buy", "شراء");
       if (dom.purchaseBtn) dom.purchaseBtn.textContent = translateCatalogActionLabel("catalog.buy", "شراء");
       return;
@@ -16384,6 +17343,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     renderExtraFields(dom.modalExtraFields, extraFields, "modal", mergedValues);
 
     if (dom.pasteBtn) dom.pasteBtn.style.display = showInline && usePrimaryInput && fields.length === 1 ? "" : "none";
+    syncNameValidationUI(currentItem);
 
     if (dom.modalBuy) dom.modalBuy.textContent = translateCatalogActionLabel("catalog.buy", "شراء");
     if (dom.purchaseBtn) dom.purchaseBtn.textContent = translateCatalogActionLabel("catalog.buy", "شراء");
@@ -16707,6 +17667,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           ? levelsState.levels
           : (Array.isArray(levelsState.entries) ? levelsState.entries : null));
       if (items) addKnownLevelSuffixesFromCollection(set, items);
+      else addKnownLevelSuffixesFromCollection(set, levelsState);
     }
     const levelPricing = (resolved.levelPricing && typeof resolved.levelPricing === "object")
       ? resolved.levelPricing
@@ -17178,6 +18139,8 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           if (productRequirements !== null) meta.requirements = productRequirements;
           var productInputFields = pickExplicitInputSource(product, ITEM_INPUT_FIELD_SOURCE_KEYS);
           if (productInputFields !== null) meta.inputFields = productInputFields;
+          if (product.nameValidation && typeof product.nameValidation === "object") meta.nameValidation = product.nameValidation;
+          else if (product.name_validation && typeof product.name_validation === "object") meta.nameValidation = product.name_validation;
           catalog.items[gameKey][itemKey] = meta;
         });
     }
@@ -17432,6 +18395,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           inputFields: inputFieldsRaw,
           inputKey: inputKeyRaw || "",
           showInlinePlayerId: inlinePlayerId,
+          nameValidation: meta.nameValidation || meta.name_validation || null,
           currency: meta.currency || gameMeta.currency || "USD"
         };
         if (qtyPriceMap) itemPayload.qtyPriceMap = qtyPriceMap;
@@ -17604,6 +18568,12 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         : rawCategory;
       span.textContent = rawCategory ? `${categoryLabel}: ${translatedCategory || rawCategory}` : (translatedTitle || rawTitle);
     }
+    try {
+      const parentParts = getCatalogInlineParentRouteParts();
+      const routeKey = getCatalogInlineParentRouteKey();
+      const sectionLabel = parentParts.length ? parentParts[parentParts.length - 1] : (game.category || game.name || "");
+      updateCatalogCurrentSectionBar(sectionLabel, parentParts.length ? parentParts : [game.category || game.name || ""], routeKey);
+    } catch (_) {}
     if (dom.gameImage) {
       const gameImageUrl = sanitizeCatalogCardMediaUrl(game && game.imageUrl);
       if (gameImageUrl) {
@@ -17699,15 +18669,15 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     const isAvailable = isCatalogItemAvailable(item, true);
     const title = document.createElement("h2");
     title.setAttribute("dir", "auto");
-    title.textContent = isAvailable
-      ? label
-      : (typeof translateCatalogUi === "function" ? translateCatalogUi("catalog.unavailable", "غير متوفر") : "غير متوفر");
+    title.textContent = label;
     card.appendChild(title);
 
     const price = document.createElement("span");
     price.className = "offer-price";
     const displayPrice = getItemDisplayPrice(item);
-    price.textContent = formatPrice(displayPrice, item.currency);
+    price.textContent = isAvailable
+      ? formatPrice(displayPrice, item.currency)
+      : (typeof translateCatalogUi === "function" ? translateCatalogUi("catalog.unavailable", "غير متوفر") : "غير متوفر");
     card.appendChild(price);
 
     if (!isAvailable) {
@@ -18055,6 +19025,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     state.selected = null;
     state.selectedCard = null;
     state.modalLock = null;
+    clearNameValidationResult();
     writeModalQtyValue("");
     syncPlayerIdUI(null);
     syncQtyUI(null);
@@ -18100,7 +19071,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     let cut = token.length;
     while (cut > 0) {
       const ch = token.charAt(cut - 1);
-      if (/[).,;:!?]/.test(ch) || ch === "،" || ch === "؛" || ch === "؟" || ch === "طŒ" || ch === "طں") {
+      if (/[).,;:!?]/.test(ch) || ch === "،" || ch === "؛" || ch === "؟" || ch === "،" || ch === "؟") {
         cut -= 1;
         continue;
       }
@@ -18377,6 +19348,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
       fields: resolveItemInputFields(item),
       qtyMeta: getItemQtyMeta(item)
     };
+    clearNameValidationResult();
     state.modalPriceValue = null;
     state.modalPriceDisplayText = "";
     state.modalPriceAnimatingTarget = "";
@@ -18414,6 +19386,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     const inlineBox = dom.playerInput ? dom.playerInput.closest(".player-id-box") : null;
     const inlineValues = collectFieldValues(inlineBox);
     applyFieldValues(dom.modalPlayerRow || dom.modal, inlineValues, { onlyEmpty: true });
+    syncNameValidationUI(item);
     updateModalPrice();
     updateModalFavoriteButton(item);
     resetTurnstileWidget({ remove: true });
@@ -18464,6 +19437,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     try { document.body.classList.remove("modal-open"); } catch (_) {}
     resetTurnstileWidget({ remove: true });
     state.modalLock = null;
+    clearNameValidationResult();
     state.modalPriceValue = null;
     state.modalPriceDisplayText = "";
     state.modalPriceAnimatingTarget = "";
@@ -19098,7 +20072,6 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
     }
     const playerId = resolvePrimaryPlayerId(fieldDefs, playerFields);
     const requiresPlayerId = fieldDefs.some((field) => field.required !== false && isPlayerIdFieldDef(field));
-
     const qtyMeta = (lockActive && lock.qtyMeta) ? lock.qtyMeta : getItemQtyMeta(selectedItem);
     let quantity = 1;
     if (shouldShowQtyInput(selectedItem)) {
@@ -19380,6 +20353,13 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
   }
 
   function bindEvents() {
+    try {
+      window.__resetCatalogOfferSearch = function() {
+        if (!dom.searchInput) return;
+        dom.searchInput.value = "";
+        applySearch("");
+      };
+    } catch (_) {}
     dom.searchButton?.addEventListener("click", () => applySearch(dom.searchInput.value));
     dom.searchInput?.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
@@ -19391,11 +20371,34 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
       clearTimeout(bindEvents._searchTimer);
       bindEvents._searchTimer = setTimeout(() => applySearch(dom.searchInput.value), 0);
     });
+    dom.currentSectionBack?.addEventListener("click", () => {
+      const parts = dom.currentSection && dom.currentSection.dataset
+        ? dom.currentSection.dataset.parentRouteParts
+        : "";
+      const routeKey = dom.currentSection && dom.currentSection.dataset
+        ? dom.currentSection.dataset.parentRouteKey
+        : "games";
+      navigateCatalogSectionBack(routeKey, parts);
+    });
 
     dom.clearBtn?.addEventListener("click", () => clearSelection());
     dom.purchaseBtn?.addEventListener("click", () => openModal());
     dom.modalCancel?.addEventListener("click", () => closeModal());
     dom.modalBuy?.addEventListener("click", () => submitOrder());
+    if (dom.modalNameValidationBtn && dom.modalNameValidationBtn.dataset.nameValidationBound !== "1") {
+      dom.modalNameValidationBtn.dataset.nameValidationBound = "1";
+      dom.modalNameValidationBtn.addEventListener("click", () => validateModalGameUser());
+    }
+    if (dom.modalPlayerRow) {
+      dom.modalPlayerRow.addEventListener("input", () => {
+        clearNameValidationResult();
+        syncNameValidationUI(state.selected ? state.selected.item : null);
+      });
+      dom.modalPlayerRow.addEventListener("change", () => {
+        clearNameValidationResult();
+        syncNameValidationUI(state.selected ? state.selected.item : null);
+      });
+    }
     dom.modalFavToggle?.addEventListener("click", () => {
       if (!state.selected || !state.selected.item) return;
       const active = toggleFavoriteItem(state.selected.item);
@@ -21026,6 +22029,14 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         if (!node) return '';
         const parts = [];
         const data = node.dataset || {};
+        const cardType = String(data.cardType || node.getAttribute('data-card-type') || '').toLowerCase();
+        if (cardType === 'product') {
+          pushPart(parts, data.searchSelf || node.getAttribute('data-search-self'));
+          pushPart(parts, data.title || node.getAttribute('data-title'));
+          pushPart(parts, data.catalogItemId);
+          pushPart(parts, node.querySelector && node.querySelector('h2') ? node.querySelector('h2').textContent : '');
+          return norm(parts.join(' '));
+        }
         if (data.searchExpanded !== '1' && typeof window.__buildCatalogSearchTextFull === 'function') {
           try {
             const treePath = parseDataList(data.treePath);
@@ -21179,20 +22190,34 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         } catch (_) {}
       }
       const urlQuery = getUrlSearchQuery();
-      const saved = localStorage.getItem(KEY) || '';
-      const initialQuery = urlQuery || saved;
+      try { localStorage.removeItem(KEY); } catch (_) {}
+      const initialQuery = urlQuery || '';
       if (initialQuery) input.value = initialQuery;
-      if (urlQuery) {
-        try { localStorage.setItem(KEY, urlQuery); } catch (_) {}
-      }
       apply(initialQuery);
+      try {
+        window.__resetCatalogSearchInputs = function(){
+          try { localStorage.removeItem(KEY); } catch (_) {}
+          try { setUrlSearchQuery('', true); } catch (_) {}
+          input.value = '';
+          apply('');
+          try {
+            if (typeof window.__resetCatalogOfferSearch === 'function') window.__resetCatalogOfferSearch();
+          } catch (_) {}
+          try {
+            document.querySelectorAll('#inlinePage .search-container input, #catalogInlineHost .search-container input').forEach(function(node){
+              if (!node) return;
+              node.value = '';
+              var root = node.closest('#inlinePage, #catalogInlineHost, .catalog-inline-host, main') || document;
+              if (root && typeof root.__applyCatalogSearch === 'function') root.__applyCatalogSearch('');
+            });
+          } catch (_) {}
+        };
+      } catch (_) {}
 
       // الزر محذوف؛ نعتمد على Enter وتحديث حي
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
-          localStorage.setItem(KEY, input.value);
-          setUrlSearchQuery(input.value, false);
           apply(input.value);
         }
       });
@@ -21200,8 +22225,6 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
       input.addEventListener('input', () => {
         clearTimeout(t);
         t = setTimeout(() => {
-          localStorage.setItem(KEY, input.value);
-          setUrlSearchQuery(input.value, true);
           apply(input.value);
         }, 0);
       });
@@ -21274,7 +22297,6 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           balanceUsd: null,
           copyBound: false,
           resetBound: false,
-          themeBound: false,
           currencyBound: false,
           telegramBound: false,
           authRetry: 0,
@@ -21303,7 +22325,6 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             '    </div>',
             '    <button id="resetBtn" type="button"><i class="fa-solid fa-key"></i> إعادة تعيين كلمة المرور</button>',
             '    <div id="msg"></div>',
-            '    <button id="themeToggle" class="theme-toggle" type="button">🌙 الوضع الداكن</button>',
             '  </div>',
             '</div>'
           ].join('');
@@ -21319,8 +22340,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             totalspent: root.querySelector('#totalspent'),
             webuid: root.querySelector('#webuid'),
             resetBtn: root.querySelector('#resetBtn'),
-            msg: root.querySelector('#msg'),
-            themeToggle: root.querySelector('#themeToggle')
+            msg: root.querySelector('#msg')
           };
           ['username','level','email','phone','balance','totalspent','webuid'].forEach(function(key){
             var el = state.refs[key];
@@ -21329,7 +22349,6 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           updateMessage('', true);
           setupCopy();
           setupReset();
-          bindTheme();
           ensureCurrencyListeners();
           return root;
         }
@@ -21587,7 +22606,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             toast.appendChild(textNode);
             document.body.appendChild(toast);
 
-            if (isError) {
+            if (isError && window.__ENABLE_ERROR_TOAST_SOUND__ === true) {
               try {
                 if (typeof window.__playErrorToastSound === 'function') {
                   window.__playErrorToastSound();
@@ -21844,26 +22863,6 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           } catch(_){}
         }
 
-        function updateThemeToggleText(){
-          if (!state.refs || !state.refs.themeToggle) return;
-          var current = getCurrentTheme();
-          state.refs.themeToggle.textContent = current === 'dark'
-              ? '🌙 الوضع الداكن'
-            : '☀️ الوضع الفاتح';
-        }
-
-        function bindTheme(){
-          if (state.themeBound || !state.refs || !state.refs.themeToggle) return;
-          state.refs.themeToggle.addEventListener('click', function(){
-            var current = getCurrentTheme();
-            var next = current === 'dark' ? 'light' : 'dark';
-            setTheme(next);
-            updateThemeToggleText();
-          });
-          state.themeBound = true;
-          updateThemeToggleText();
-        }
-
         function attachAuth(){
           if (state.unsubAuth) return;
           var services = ensureFirebase();
@@ -21915,6 +22914,16 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
                     ? levelsState.items
                     : (Array.isArray(levelsState.levels) ? levelsState.levels : (Array.isArray(levelsState.entries) ? levelsState.entries : [])))
                   : [];
+                if (!levelItems.length && levelsState && typeof levelsState === 'object') {
+                  var reservedLevelKeys = { items: true, levels: true, entries: true, enabled: true, title: true, subtitle: true, description: true };
+                  levelItems = Object.keys(levelsState).map(function(key){
+                    if (reservedLevelKeys[key]) return null;
+                    var value = levelsState[key];
+                    if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+                    var entry = Object.assign({ key: key, levelKey: key }, value);
+                    return (entry.id != null || entry.label || entry.name || entry.title || entry.order != null || entry.rank != null || entry.requiredSpent != null || entry.minSpent != null) ? entry : null;
+                  }).filter(Boolean);
+                }
                 var levelId = Number(data.levelId != null ? data.levelId : data.level_id);
                 var levelOrder = Number(data.levelNo != null ? data.levelNo : data.level_no);
                 var levelKey = String(data.level || '').trim().toLowerCase();
@@ -21955,7 +22964,6 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         function build(){
           var root = ensureRoot();
           attachAuth();
-          updateThemeToggleText();
           syncBodyThemeClass();
           var frag = document.createDocumentFragment();
           frag.appendChild(root);
@@ -21963,7 +22971,6 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         }
 
         function onShow(){
-          updateThemeToggleText();
           syncBodyThemeClass();
         }
 
@@ -22275,6 +23282,16 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           var rawItems = Array.isArray(levelsState.items)
             ? levelsState.items
             : (Array.isArray(levelsState.levels) ? levelsState.levels : (Array.isArray(levelsState.entries) ? levelsState.entries : []));
+          if (!rawItems.length && levelsState && typeof levelsState === 'object') {
+            var reservedLevelKeys = { items: true, levels: true, entries: true, enabled: true, title: true, subtitle: true, description: true };
+            rawItems = Object.keys(levelsState).map(function(key){
+              if (reservedLevelKeys[key]) return null;
+              var value = levelsState[key];
+              if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+              var entry = Object.assign({ key: key, levelKey: key }, value);
+              return (entry.id != null || entry.label || entry.name || entry.title || entry.order != null || entry.rank != null || entry.requiredSpent != null || entry.minSpent != null) ? entry : null;
+            }).filter(Boolean);
+          }
           var out = [];
           var seen = new Set();
           rawItems.forEach(function(rawEntry, index){
@@ -22410,9 +23427,140 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           return getCatalogLevelEntries(siteState).length > 0;
         }
 
+        function getRawLevelItemsForRequirements(siteState){
+          var safeState = (siteState && typeof siteState === 'object') ? siteState : {};
+          var levelsState = (safeState.levels && typeof safeState.levels === 'object') ? safeState.levels : {};
+          var rawItems = Array.isArray(levelsState.items)
+            ? levelsState.items
+            : (Array.isArray(levelsState.levels) ? levelsState.levels : (Array.isArray(levelsState.entries) ? levelsState.entries : []));
+          if (!rawItems.length && levelsState && typeof levelsState === 'object') {
+            var reserved = { items: true, levels: true, entries: true, enabled: true, title: true, subtitle: true, description: true, version: true, updatedAt: true, defaultLevelId: true, defaultLevelKey: true };
+            rawItems = Object.keys(levelsState).map(function(key){
+              if (reserved[key]) return null;
+              var value = levelsState[key];
+              return value && typeof value === 'object' && !Array.isArray(value) ? value : null;
+            }).filter(Boolean);
+          }
+          return rawItems;
+        }
+
+        function hasClientLevelsRequirementData(siteState){
+          return getRawLevelItemsForRequirements(siteState).some(function(entry){
+            if (!entry || typeof entry !== 'object') return false;
+            return Object.prototype.hasOwnProperty.call(entry, 'requiredSpent') ||
+              Object.prototype.hasOwnProperty.call(entry, 'required_spent') ||
+              Object.prototype.hasOwnProperty.call(entry, 'minSpent') ||
+              Object.prototype.hasOwnProperty.call(entry, 'min_spent') ||
+              Object.prototype.hasOwnProperty.call(entry, 'threshold');
+          });
+        }
+
+        function readLevelsSessionInfo(){
+          var out = { uid: '', sessionKey: '', idToken: '' };
+          try {
+            var raw = localStorage.getItem('sessionKeyInfo');
+            if (raw) {
+              var parsed = JSON.parse(raw);
+              if (parsed && typeof parsed === 'object') {
+                out.uid = String(parsed.uid || parsed.useruid || parsed.userUid || '').trim();
+                out.sessionKey = String(parsed.sessionKey || parsed.session_key || '').trim();
+              }
+            }
+          } catch(_){}
+          try {
+            if (typeof readPostLoginPayload === 'function') {
+              var payload = readPostLoginPayload() || {};
+              out.uid = out.uid || String(payload.uid || payload.useruid || payload.userUid || '').trim();
+              out.sessionKey = out.sessionKey || String(payload.sessionKey || payload.session_key || '').trim();
+              out.idToken = String(payload.idToken || payload.id_token || payload.firebaseIdToken || payload.firebase_id_token || payload.token || '').trim();
+            }
+          } catch(_){}
+          return out;
+        }
+
+        async function resolveLevelsAuthContext(){
+          var session = readLevelsSessionInfo();
+          var user = getCurrentAuthUser();
+          var uid = String((user && user.uid) || session.uid || state.currentUid || '').trim();
+          var idToken = String(session.idToken || '').trim();
+          if (user && typeof user.getIdToken === 'function') {
+            try { idToken = String(await user.getIdToken(false) || '').trim(); }
+            catch (_) {
+              try { idToken = String(await user.getIdToken(true) || '').trim(); }
+              catch(__){}
+            }
+          }
+          return {
+            uid: uid,
+            sessionKey: String(session.sessionKey || '').trim(),
+            idToken: idToken
+          };
+        }
+
+        function buildClientLevelsRequestUrl(uid){
+          var requestUrl;
+          try {
+            var workerBase = window.__getSiteWorkerBaseDefault
+              ? String(window.__getSiteWorkerBaseDefault({ trailingSlash: true }) || '').trim()
+              : '';
+            requestUrl = workerBase ? new URL(workerBase) : new URL('/', window.location.href);
+          } catch (_) {
+            requestUrl = new URL('/', window.location.href);
+          }
+          requestUrl.searchParams.set('mode', 'client-levels');
+          requestUrl.searchParams.set('useruid', String(uid || '').trim());
+          requestUrl.searchParams.set('_', String(Date.now()));
+          return requestUrl;
+        }
+
+        async function fetchClientLevelsStateFromServer(){
+          var auth = await resolveLevelsAuthContext();
+          if (!auth.uid || !auth.idToken || !auth.sessionKey) {
+            throw new Error('levels_auth_missing');
+          }
+          var requestUrl = buildClientLevelsRequestUrl(auth.uid);
+          var response = await fetch(requestUrl.toString(), {
+            method: 'GET',
+            cache: 'no-store',
+            headers: {
+              'accept': 'application/json',
+              'Authorization': 'Bearer ' + auth.idToken,
+              'X-SessionKey': auth.sessionKey
+            }
+          });
+          if (!response.ok) throw new Error('levels_http_' + String(response.status || 0));
+          var payload = await response.json();
+          var levels = payload && payload.levels && typeof payload.levels === 'object' ? payload.levels : null;
+          if (!levels || !Array.isArray(levels.items)) throw new Error('levels_payload_invalid');
+          var baseState = readResolvedSiteState() || state.siteState || {};
+          state.siteState = Object.assign({}, baseState, { levels: levels });
+          if (payload && payload.profile && typeof payload.profile === 'object') {
+            state.profile = Object.assign({}, state.profile || {}, payload.profile);
+            state.profileResolvedUid = auth.uid;
+            settleInitialLevelsReady();
+          }
+          return state.siteState;
+        }
+
         async function ensureLevelsSiteStateFromNetwork(force){
           var shouldForce = force === true;
           var currentState = readResolvedSiteState() || state.siteState || null;
+          if (getCurrentAuthUid()) {
+            if (state.siteStateRefreshPromise) {
+              await state.siteStateRefreshPromise.catch(function(){ return false; });
+              return state.siteState || readResolvedSiteState() || null;
+            }
+            state.siteStateRefreshPromise = fetchClientLevelsStateFromServer()
+              .catch(function(err){
+                try { console.warn('client_levels_fetch_failed', err && err.message ? err.message : err); } catch(_){}
+                return null;
+              })
+              .finally(function(){
+                state.siteStateRefreshPromise = null;
+              });
+            var loaded = await state.siteStateRefreshPromise;
+            if (loaded) return loaded;
+          }
           if (!shouldForce && hasUsableLevelsSiteState(currentState)) {
             state.siteState = currentState;
             return currentState;
@@ -22516,7 +23664,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           }) || null;
 
           if (state.refs.currentLabel) state.refs.currentLabel.textContent = currentEntry ? currentEntry.label : (profile.level || '--');
-          if (state.refs.currentBadge) state.refs.currentBadge.innerHTML = currentEntry ? buildBadgeMedia(currentEntry) : '<span>طں</span>';
+          if (state.refs.currentBadge) state.refs.currentBadge.innerHTML = currentEntry ? buildBadgeMedia(currentEntry) : '<span>؟</span>';
           if (state.refs.spentValue) state.refs.spentValue.textContent = formatMoney(totalSpent);
           if (state.refs.nextValue) state.refs.nextValue.textContent = nextEntry ? (nextEntry.label + (nextEntry.requiredSpent > 0 ? ' - ' + formatMoney(nextEntry.requiredSpent) : '')) : 'لا يوجد مستوى تلقائي تالٍ';
           if (state.refs.autoValue) state.refs.autoValue.textContent = nextEntry ? (nextEntry.manualUnlockOnly ? 'يدوي فقط' : 'تلقائي عند الوصول') : 'لا توجد ترقية تلقائية تالية';
@@ -22526,7 +23674,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
               : 'يمكنك متابعة المستويات المتاحة وشروط فتح كل عضوية من هذه الصفحة.';
           }
           if (state.refs.currentBadge && !currentEntry) {
-            state.refs.currentBadge.innerHTML = '<span>طں</span>';
+            state.refs.currentBadge.innerHTML = '<span>؟</span>';
           }
           if (state.refs.nextValue) {
             state.refs.nextValue.textContent = nextEntry
@@ -22550,7 +23698,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             state.refs.warning.className = 'levels-warning' + (warningText ? ' is-visible' : '');
           }
           if (state.refs.currentBadge) {
-            state.refs.currentBadge.innerHTML = currentEntry ? buildBadgeMedia(currentEntry) : '<span>طں</span>';
+            state.refs.currentBadge.innerHTML = currentEntry ? buildBadgeMedia(currentEntry) : '<span>؟</span>';
           }
           if (state.refs.leadText) {
             var currentLevelLabel = currentEntry ? currentEntry.label : (profile.level || '--');
@@ -22685,7 +23833,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             '  <div class="container levels-shell">',
             '    <section class="levels-hero">',
             '      <div class="levels-current-head">',
-            '        <div class="levels-hero-badge" id="levelsCurrentBadge"><span>طں</span></div>',
+            '        <div class="levels-hero-badge" id="levelsCurrentBadge"><span>؟</span></div>',
             '        <h2 id="levelsCurrentLabel">--</h2>',
             '      </div>',
             '      <div class="levels-hero-copy">',
@@ -22801,12 +23949,18 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           try {
             window.addEventListener('site-state-updated', function(event){
               var payload = event && event.detail;
+              var incoming = null;
               if (payload && typeof payload === 'object') {
-                state.siteState = (payload.siteState && typeof payload.siteState === 'object' && !payload.levels)
+                incoming = (payload.siteState && typeof payload.siteState === 'object' && !payload.levels)
                   ? payload.siteState
                   : payload;
               } else {
-                state.siteState = readResolvedSiteState() || {};
+                incoming = readResolvedSiteState() || {};
+              }
+              if (hasClientLevelsRequirementData(state.siteState) && !hasClientLevelsRequirementData(incoming)) {
+                state.siteState = Object.assign({}, incoming || {}, { levels: state.siteState.levels });
+              } else {
+                state.siteState = incoming || {};
               }
               renderLevels();
             });
@@ -22815,7 +23969,11 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
 
         async function refreshCatalog(force){
           state.siteState = readResolvedSiteState() || {};
-          if (force || !hasUsableLevelsSiteState(state.siteState)) {
+          var hasUser = !!getCurrentAuthUid();
+          if (hasUser) {
+            setStatus('جاري تحميل بيانات المستويات من الخادم...', 'info');
+            await ensureLevelsSiteStateFromNetwork(true);
+          } else if (force || !hasUsableLevelsSiteState(state.siteState)) {
             setStatus('جاري تحميل بيانات المستويات من siteState...', 'info');
             await ensureLevelsSiteStateFromNetwork(force === true);
             state.siteState = readResolvedSiteState() || state.siteState || {};
@@ -24384,8 +25542,10 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         function syncEnableRequestButtonVisibility(){
           if (!state.refs || !state.refs.enableRequestBtn) return;
           var method = isSecurityCodeDeliveryMethod(state.enableMethod) ? state.enableMethod : "";
-          var shouldShow = method === "telegram" && hasValidSecurityTelegramTargetId();
+          var shouldShow = method === "telegram" && hasValidSecurityTelegramTargetId() && !getEnableCodeRequested(method);
           state.refs.enableRequestBtn.style.display = shouldShow ? "flex" : "none";
+          var actions = state.refs.enableRequestBtn.closest ? state.refs.enableRequestBtn.closest(".security-telegram-actions") : null;
+          if (actions) actions.classList.toggle("has-request", shouldShow);
         }
 
         function renderSecurityTelegramTarget(telegramId){
@@ -24664,8 +25824,8 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
 
         function getSecurityRequestButtonHtml(method, requestedBefore){
           return requestedBefore
-            ? '<i class="fa-brands fa-telegram"></i> إعادة طلب رمز عبر تيليغرام'
-            : '<i class="fa-brands fa-telegram"></i> طلب رمز عبر تيليغرام';
+            ? '<i class="fa-solid fa-comment-sms" aria-hidden="true"></i> إعادة طلب رمز عبر تيليغرام'
+            : '<i class="fa-solid fa-comment-sms" aria-hidden="true"></i> طلب رمز عبر تيليغرام';
         }
 
         function getEnableCodeRequested(method){
@@ -24888,6 +26048,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             closeEmailCodeModal();
           }
           state.enableMethod = normalized;
+          if (state.root) state.root.setAttribute("data-security-method", normalized || "none");
           if (normalized) {
             state.methodModalAutoPromptPending = false;
           }
@@ -24912,12 +26073,12 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
               state.refs.enableMethodHint.style.display = "none";
             }
           } else if (normalized === "telegram") {
-            showEnableAction = getEnableCodeRequested(normalized);
-            setEnableCodeInputVisible(showEnableAction, getSecurityMethodCodeLabel(normalized));
+            showEnableAction = false;
+            setEnableCodeInputVisible(false, getSecurityMethodCodeLabel(normalized));
             if (state.refs.enableMethodHint) {
               state.refs.enableMethodHint.style.display = "block";
               state.refs.enableMethodHint.textContent = getEnableCodeRequested(normalized)
-                ? "أُرسل الرمز. أدخله الآن ثم فعّل الحماية."
+                ? "تم إرسال الرمز. أدخله في النموذج المنفصل لإكمال التفعيل."
                 : "افتح البوت، أدخل المعرّف الرقمي، ثم اضغط طلب الرمز.";
             }
           } else {
@@ -24928,6 +26089,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             }
           }
           if (state.refs.enableBtn && state.refs.enableBtn.parentElement) {
+            state.refs.enableBtn.style.display = normalized === "telegram" ? "none" : "";
             state.refs.enableBtn.parentElement.style.display = showEnableAction ? "flex" : "none";
           }
           setLoading(state.loading);
@@ -25240,7 +26402,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           var city = String(source.locationCity || "").trim();
           var region = String(source.locationRegion || "").trim();
           var country = String(source.locationCountry || source.locationCountryCode || "").trim();
-          return [city, region, country].filter(Boolean).join("طŒ ").trim();
+          return [city, region, country].filter(Boolean).join("، ").trim();
         }
 
         function renderDevices(){
@@ -25721,11 +26883,9 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             startEmailCooldown("enable", cooldownSeconds);
             setEnableMethod(method);
             setStatus("success", (res && res.to)
-              ? ("تم إرسال رمز تيليغرام إلى " + res.to + ". أدخله في الحقل ثم فعّل الحماية.")
-              : "تم إرسال رمز تيليغرام. أدخله في الحقل ثم فعّل الحماية.");
-            setTimeout(function(){
-              try { if (state.refs && state.refs.otp) state.refs.otp.focus(); } catch(_){}
-            }, 30);
+              ? ("تم إرسال رمز تيليغرام إلى " + res.to + ".")
+              : "تم إرسال رمز تيليغرام.");
+            openEmailCodeModal({ flow: "enable", method: method, target: getEnableCodeTarget(method) || "" });
           }).catch(function(err){
             setStatus("error", err && err.message ? err.message : ("تعذر إرسال رمز " + getSecurityMethodLabel(method) + "."));
           }).finally(function(){
@@ -25933,9 +27093,9 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             '      </label>',
             '      <div class="security-telegram-actions">',
             '        <a id="securityTelegramOpenBotBtn" class="security-btn ghost neutral security-telegram-open-btn is-disabled" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true"><i class="fa-brands fa-telegram"></i> فتح بوت تيليغرام</a>',
+            '        <button id="securityEnableRequestBtn" type="button" class="security-btn ghost neutral security-request-btn" style="display:none;">طلب رمز تحقق</button>',
             '      </div>',
             '    </div>',
-            '    <button id="securityEnableRequestBtn" type="button" class="security-btn ghost neutral security-request-btn" style="display:none;">طلب رمز تحقق</button>',
             '    <div id="securityAppDetails" class="security-app-details" style="display:none;">',
             '      <ol class="security-steps">',
             '        <li>تنزيل تطبيق <strong>Google Authenticator</strong> على هاتفك (Android أو iOS).</li>',
@@ -25991,7 +27151,6 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             '      <div class="security-code-actions">',
             '        <button id="securityEmailCodeSubmit" type="button" class="security-btn">تأكيد</button>',
             '        <button id="securityEmailCodeResend" type="button" class="security-btn ghost neutral security-resend-btn"><i class="fa-brands fa-telegram"></i> إعادة إرسال الرمز</button>',
-            '        <button id="securityEmailCodeCancel" type="button" class="security-btn ghost neutral">إلغاء</button>',
             '      </div>',
             '    </div>',
             '  </div>',
@@ -26053,6 +27212,11 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             emailCodeResend: root.querySelector("#securityEmailCodeResend"),
             emailCodeCancel: root.querySelector("#securityEmailCodeCancel")
           };
+          if (state.refs.logoutAllBtn) {
+            state.refs.logoutAllBtn.textContent = "تسجيل خروج جميع الاجهزه";
+            state.refs.logoutAllBtn.classList.add("security-logout-all-btn");
+          }
+          root.setAttribute("data-security-method", normalizeTotpEnabledVia(state.enableMethod || "") || "none");
           bindEvents();
           mountSecurityModalsToBody();
           renderSecurityTelegramBotLink();
@@ -27161,7 +28325,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             if (state.refs && state.refs.totpSubtitle) {
               state.refs.totpSubtitle.textContent = deliveryChannel === "push"
                 ? "ادخل الكود الذي وصلك عبر إشعار Firebase على جهازك."
-                : "ادخل الكود الذي وصلك على تيليغرام.";
+                : "ادخل الكود المستلم على تيليغرام.";
             }
             if (errEl) {
               errEl.style.color = "var(--success, #22c55e)";
@@ -27236,7 +28400,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           } else if (!subtitle) {
             /*
             subtitle = method === "telegram"
-              ? "ادخل الكود الذي وصلك على تيليغرام."
+              ? "ادخل الكود المستلم على تيليغرام."
               : (method === "app"
                 ? "من فضلك افتح تطبيق Google Authenticator وأدخل الكود المكون من 6 أرقام."
                 : "أدخل رمز التحقق المكوّن من 6 أرقام."));
@@ -27312,7 +28476,10 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           if (state.refs.target){
             state.refs.target.addEventListener("input", function(){
               showStatus();
-              scheduleRecipientLookup(this.value);
+              var next = normalizeWebuid(this.value);
+              if (state.lookupTimer) clearTimeout(state.lookupTimer);
+              if (state.recipientInfo && state.recipientInfo.webuid !== next) state.recipientInfo = null;
+              updateRecipientPreview(state.currentUser ? "idle" : "need-login");
             });
           }
           if (state.refs.copyWebuid){
@@ -27459,7 +28626,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             var webuid = data.webuid || "";
             nameEl.textContent = username;
             var hint = webuid ? ("المعرف: " + webuid) : "تم العثور على المستلم.";
-            if (data.level) hint += " â€¢ ط§ظ„ظ…ط³طھظˆظ‰: " + data.level;
+            if (data.level) hint += " â€¢ المستوى: " + data.level;
             hintEl.textContent = hint;
           } else if (stateName === "error"){
             nameEl.textContent = "تعذر العثور على اسم المستلم.";
@@ -27930,6 +29097,14 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           showStatus("info","جارٍ تجهيز التحويل...");
           try{
             var recipientInfo = (state.recipientInfo && state.recipientInfo.webuid === target) ? state.recipientInfo : null;
+            if (!recipientInfo){
+              recipientInfo = await lookupRecipient(target);
+            }
+            if (!recipientInfo || recipientInfo.webuid !== target){
+              showStatus("error","تعذر التحقق من اسم المستلم.");
+              updateRecipientPreview("error", { message: "تحقق من الايدي ثم اضغط تأكيد التحويل مرة أخرى." });
+              return;
+            }
             var receiverLabel = recipientInfo && recipientInfo.username
               ? recipientInfo.username + " (" + (recipientInfo.webuid || target) + ")"
               : target;
@@ -27955,7 +29130,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
                   : "يرجى إدخال رمز التحقق لإكمال التحويل.");
               showStatus("info", statusMessage);
               var subtitle = challengeMethod === "telegram"
-                ? "ادخل الكود الذي وصلك على تيليغرام."
+                ? "ادخل الكود المستلم على تيليغرام."
                 : (challengeMethod === "app"
                   ? "من فضلك افتح تطبيق Google Authenticator وأدخل الكود المكوّن من 6 أرقام."
                   : "أدخل رمز التحقق المكوّن من 6 أرقام.");
@@ -28607,14 +29782,18 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         }
 
         function init(){
-          if (state.initialized) return false;
-          if (!document.getElementById('walletList')) return false;
+          if (state.initialized) return state.initPromise || Promise.resolve(false);
+          if (!document.getElementById('walletList')) return Promise.resolve(false);
           if (typeof window.__initWalletPage === 'function'){
-            window.__initWalletPage();
             state.initialized = true;
-            return true;
+            state.initPromise = Promise.resolve(window.__initWalletPage()).catch(function(err){
+              state.initialized = false;
+              state.initPromise = null;
+              throw err;
+            });
+            return state.initPromise;
           }
-          return false;
+          return Promise.resolve(false);
         }
 
         function onShow(ctx){
@@ -28624,13 +29803,14 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
               window.__I18N__.applyTranslations(state.root);
             }
           } catch(_){}
-          var firstInit = init();
-          if (typeof window.__WALLET_REFRESH__ === 'function'){
-            if (firstInit && !context.forced) return;
-            var opts = { skipSkeleton: true };
-            if (context.forced) opts.force = true;
-            try { window.__WALLET_REFRESH__(opts); } catch(_){}
-          }
+          return Promise.resolve(init()).then(function(){
+            if (typeof window.__WALLET_REFRESH__ === 'function'){
+              var opts = { skipSkeleton: true, force: true };
+              if (context.forced) opts.force = true;
+              try { return window.__WALLET_REFRESH__(opts); } catch(_){ return Promise.resolve(); }
+            }
+            return Promise.resolve();
+          });
         }
 
         return {
@@ -28681,14 +29861,18 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         }
 
         function init(){
-          if (state.initialized) return false;
-          if (!document.getElementById('paymentsList')) return false;
+          if (state.initialized) return state.initPromise || Promise.resolve(false);
+          if (!document.getElementById('paymentsList')) return Promise.resolve(false);
           if (typeof window.__initPaymentsPage === 'function'){
-            window.__initPaymentsPage();
             state.initialized = true;
-            return true;
+            state.initPromise = Promise.resolve(window.__initPaymentsPage()).catch(function(err){
+              state.initialized = false;
+              state.initPromise = null;
+              throw err;
+            });
+            return state.initPromise;
           }
-          return false;
+          return Promise.resolve(false);
         }
 
         function onShow(ctx){
@@ -28698,13 +29882,14 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
               window.__I18N__.applyTranslations(state.root);
             }
           } catch(_){}
-          var firstInit = init();
-          if (typeof window.__PAYMENTS_REFRESH__ === 'function'){
-            if (firstInit && !context.forced) return;
-            var opts = { skipSkeleton: true };
-            if (context.forced) opts.force = true;
-            try { window.__PAYMENTS_REFRESH__(opts); } catch(_){}
-          }
+          return Promise.resolve(init()).then(function(){
+            if (typeof window.__PAYMENTS_REFRESH__ === 'function'){
+              var opts = { skipSkeleton: false, force: true, authWaitMs: 6000 };
+              if (context.forced) opts.force = true;
+              try { return window.__PAYMENTS_REFRESH__(opts); } catch(_){ return Promise.resolve(); }
+            }
+            return Promise.resolve();
+          });
         }
 
         return {
@@ -28870,7 +30055,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             '    <div class="toolbar" id="ordersToolbar">',
             '      <button class="chip" data-filter="all">الكل</button>',
             '      <button class="chip" data-filter="pending">قيد الانتظار</button>',
-            '      <button class="chip" data-filter="approved">تم الشحن</button>',
+            '      <button class="chip" data-filter="approved">مقبول</button>',
             '      <button class="chip" data-filter="rejected">مرفوض</button>',
             '      <span style="flex:1 1 auto"></span>',
             '      <button class="chip" id="dateChip">التاريخ</button>',
@@ -28896,23 +30081,28 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         }
 
         function init(){
-          if (state.initialized) return false;
-          if (!document.getElementById('ordersList')) return false;
+          if (state.initialized) return state.initPromise || Promise.resolve(false);
+          if (!document.getElementById('ordersList')) return Promise.resolve(false);
           if (typeof window.__initOrdersPage === 'function'){
-            window.__initOrdersPage();
             state.initialized = true;
-            return true;
+            state.initPromise = Promise.resolve(window.__initOrdersPage()).catch(function(err){
+              state.initialized = false;
+              state.initPromise = null;
+              throw err;
+            });
+            return state.initPromise;
           }
-          return false;
+          return Promise.resolve(false);
         }
 
         function onShow(ctx){
-          var firstInit = init();
-          if (typeof window.__ORDERS_REFRESH__ === 'function'){
-            var opts = { force: !!(ctx && ctx.forced) };
-            if (firstInit) opts.force = true;
-            try { window.__ORDERS_REFRESH__(opts); } catch(_){}
-          }
+          return Promise.resolve(init()).then(function(){
+            if (typeof window.__ORDERS_REFRESH__ === 'function'){
+              var opts = { force: true };
+              try { return window.__ORDERS_REFRESH__(opts); } catch(_){ return Promise.resolve(); }
+            }
+            return Promise.resolve();
+          });
         }
 
         return {
@@ -29134,8 +30324,6 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             '    <button type="button" class="api-inline-btn outline" id="apiInlineRegenBtn">إعادة توليد</button>',
             '  </div>',
             '  <div class="api-inline-meta">',
-            '    <span id="apiInlineTokenStatus">الحالة: غير مفعل</span>',
-            '    <span id="apiInlineTokenLast">آخر 4 أرقام: ----</span>',
             '    <span id="apiInlineTokenCreated">تاريخ التوليد: --</span>',
             '  </div>',
             '  <div id="apiInlineLoginHint" class="api-inline-note" style="display:none">يجب تسجيل الدخول أولًا.</div>',
@@ -29176,6 +30364,30 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           if (!el) return;
           el.textContent = String(text || '').trim();
           el.className = 'api-inline-status' + (tone ? (' ' + tone) : '');
+        }
+
+        function emitApiToast(message, ok){
+          var text = String(message || '').trim();
+          if (!text) return;
+          try {
+            if (typeof showToast === 'function') {
+              showToast(text, ok === false ? 'error' : 'success');
+              return;
+            }
+          } catch (_) {}
+          try {
+            var toast = document.createElement('div');
+            toast.className = 'toast app-toast ' + (ok === false ? 'app-toast--error' : 'app-toast--success');
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'polite');
+            toast.textContent = text;
+            document.body.appendChild(toast);
+            setTimeout(function(){ try { toast.classList.add('is-visible'); } catch(_){} }, 20);
+            setTimeout(function(){
+              try { toast.classList.remove('is-visible'); } catch(_){}
+              setTimeout(function(){ try { toast.remove(); } catch(_){} }, 260);
+            }, 1800);
+          } catch (_) {}
         }
 
 	        function setAccessSectionsVisible(enabled){
@@ -29254,7 +30466,16 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
         function copyById(id){
           var input = byId(id);
           if (!input) return Promise.resolve(false);
-          return copyText(input.value || input.textContent || '');
+          return copyText(input.value || input.textContent || '').then(function(ok){
+            if (ok) {
+              setStatus('تم النسخ.', 'ok');
+              emitApiToast('تم النسخ', true);
+            } else {
+              setStatus('تعذر النسخ.', 'err');
+              emitApiToast('تعذر النسخ', false);
+            }
+            return ok;
+          });
         }
 
         function setDocsStatus(text, tone){
@@ -30877,12 +32098,107 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           return isDepositCatalogBlockedRoute() || !isCatalogLoadAllowedRoute();
         }
 
+        function catalogTimingNow(){
+          try {
+            if (window.performance && typeof window.performance.now === "function") {
+              return window.performance.now();
+            }
+          } catch(_){}
+          return Date.now();
+        }
+
+        function roundCatalogTimingMs(value){
+          var num = Number(value);
+          if (!Number.isFinite(num)) return null;
+          return Math.max(0, Math.round(num * 1000) / 1000);
+        }
+
+        function readCatalogResponseHeaderNumber(res, name){
+          try {
+            var raw = res && res.headers && typeof res.headers.get === "function"
+              ? res.headers.get(name)
+              : "";
+            var num = Number(raw);
+            return Number.isFinite(num) ? num : null;
+          } catch(_){
+            return null;
+          }
+        }
+
+        function readCatalogResponseHeaderText(res, name){
+          try {
+            return res && res.headers && typeof res.headers.get === "function"
+              ? String(res.headers.get(name) || "")
+              : "";
+          } catch(_){
+            return "";
+          }
+        }
+
+        function annotateCatalogClientTimings(payload, res, timingInfo, bodyStartedAt, bodyEndedAt){
+          if (!payload || typeof payload !== "object") return payload;
+          if (!payload.timings || typeof payload.timings !== "object") return payload;
+          var startedAt = Number(timingInfo && timingInfo.startedAt);
+          var headersAt = Number(timingInfo && timingInfo.headersReceivedAt);
+          var bodyStart = Number(bodyStartedAt);
+          var bodyEnd = Number(bodyEndedAt);
+          if (!Number.isFinite(startedAt)) startedAt = bodyStart;
+          if (!Number.isFinite(headersAt)) headersAt = bodyStart;
+          if (!Number.isFinite(bodyStart)) bodyStart = headersAt;
+          if (!Number.isFinite(bodyEnd)) bodyEnd = catalogTimingNow();
+
+          var totalMs = roundCatalogTimingMs(bodyEnd - startedAt);
+          var headerWaitMs = roundCatalogTimingMs(headersAt - startedAt);
+          var beforeBodyReadMs = roundCatalogTimingMs(bodyStart - headersAt);
+          var bodyReadJsonMs = roundCatalogTimingMs(bodyEnd - bodyStart);
+          var afterHeadersMs = roundCatalogTimingMs(bodyEnd - headersAt);
+          var serverReportedTotalMs = readCatalogResponseHeaderNumber(res, "x-router-response-ready-ms");
+          if (serverReportedTotalMs == null) serverReportedTotalMs = readCatalogResponseHeaderNumber(res, "x-router-total-to-response-ms");
+          if (serverReportedTotalMs == null) serverReportedTotalMs = Number(payload.timings.totalMs);
+          if (!Number.isFinite(serverReportedTotalMs)) serverReportedTotalMs = null;
+          var estimatedUnmeasuredMs = (serverReportedTotalMs != null && totalMs != null)
+            ? roundCatalogTimingMs(totalMs - serverReportedTotalMs)
+            : null;
+          var clientTimings = {
+            measuredUntil: "response_json_parsed",
+            transferMeasured: true,
+            totalMs: totalMs,
+            totalSeconds: totalMs == null ? null : Number((totalMs / 1000).toFixed(3)),
+            headerWaitMs: headerWaitMs,
+            beforeBodyReadMs: beforeBodyReadMs,
+            bodyReadJsonMs: bodyReadJsonMs,
+            afterHeadersMs: afterHeadersMs,
+            serverReportedTotalMs: serverReportedTotalMs,
+            estimatedUnmeasuredMs: estimatedUnmeasuredMs,
+            responseStatus: res && typeof res.status === "number" ? res.status : null,
+            routerTimingScope: readCatalogResponseHeaderText(res, "x-router-timing-scope")
+          };
+          payload.timings.client = clientTimings;
+          payload.timings.measurement = Object.assign({}, payload.timings.measurement || {}, {
+            clientTransferMeasured: true,
+            clientMeasuredUntil: "response_json_parsed"
+          });
+          payload.timings.response = Object.assign({}, payload.timings.response || {}, {
+            clientTransferMeasured: true,
+            clientTotalMs: totalMs,
+            clientHeaderWaitMs: headerWaitMs,
+            clientBodyReadJsonMs: bodyReadJsonMs,
+            estimatedClientUnmeasuredMs: estimatedUnmeasuredMs
+          });
+          return payload;
+        }
+
         function fetchWithCatalogTimeout(url, options, timeoutMs){
           var finalOptions = Object.assign({}, options || {});
           var controller = null;
           var timer = 0;
           var ms = Math.max(3000, Number(timeoutMs || 0) || CATALOG_NETWORK_TIMEOUT_MS);
           var releaseCatalogFetchLoader = holdCatalogFetchLoader(url, ms);
+          var timingInfo = {
+            url: String(url || ""),
+            startedAt: catalogTimingNow(),
+            headersReceivedAt: 0
+          };
           try {
             if (typeof AbortController !== "undefined") {
               controller = new AbortController();
@@ -30896,7 +32212,8 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
             timer = 0;
           }
           return fetch(url, finalOptions).then(function(res){
-            return attachCatalogFetchLoaderRelease(res, releaseCatalogFetchLoader);
+            timingInfo.headersReceivedAt = catalogTimingNow();
+            return attachCatalogFetchLoaderRelease(res, releaseCatalogFetchLoader, timingInfo);
           }).catch(function(err){
             try { releaseCatalogFetchLoader(); } catch(_){}
             throw err;
@@ -30907,7 +32224,7 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
           });
         }
 
-        function attachCatalogFetchLoaderRelease(res, releaseFn){
+        function attachCatalogFetchLoaderRelease(res, releaseFn, timingInfo){
           if (!res || typeof releaseFn !== "function") return res;
           var released = false;
           function releaseOnce(){
@@ -30920,8 +32237,15 @@ try { window.__CATALOG_INLINE_HOLD__ = true; } catch (_) {}
               if (typeof res[method] !== "function") return;
               var original = res[method].bind(res);
               res[method] = function(){
+                var bodyStartedAt = catalogTimingNow();
                 try {
-                  return Promise.resolve(original.apply(null, arguments)).finally(releaseOnce);
+                  var result = Promise.resolve(original.apply(null, arguments));
+                  if (method === "json") {
+                    result = result.then(function(data){
+                      return annotateCatalogClientTimings(data, res, timingInfo, bodyStartedAt, catalogTimingNow());
+                    });
+                  }
+                  return result.finally(releaseOnce);
                 } catch(err) {
                   releaseOnce();
                   throw err;
@@ -31484,7 +32808,7 @@ function normalizeCategory(value){
         }
         function normalizeTreeNumericPart(value){
           var text = String(value || "")
-            .replace(/[ظ -٩]/g, function(digit){ return String("٠١٢٣٤٥٦٧٨٩".indexOf(digit)); })
+            .replace(/[٠-٩]/g, function(digit){ return String("٠١٢٣٤٥٦٧٨٩".indexOf(digit)); })
             .trim();
           if (!/^\d+$/.test(text)) return "";
           return text.replace(/^0+(?=\d)/, "");
@@ -32579,6 +33903,12 @@ function normalizeCategory(value){
           if (shouldBlockLoadCategories(mode)) {
             return Promise.resolve([]);
           }
+          var backLocalOnlyUntil = 0;
+          try { backLocalOnlyUntil = Number(window.__CATALOG_BACK_LOCAL_ONLY_UNTIL__ || 0); } catch(_){ backLocalOnlyUntil = 0; }
+          if (backLocalOnlyUntil > Date.now()) {
+            if (Array.isArray(cache)) return Promise.resolve(cache);
+            return Promise.resolve([]);
+          }
           if (!force && cache && cacheFromStorage) {
             try { queueCatalogStorageRefresh(); } catch(_){}
             if (mode === "provider-games") {
@@ -33634,15 +34964,28 @@ function normalizeCategory(value){
           var titleI18nKey = String(opts.titleI18nKey || "").trim();
           var imageUrl = String(opts.imageUrl || "").trim();
           var available = opts.available !== false;
+          var cardTypeText = String(opts.cardType || "").trim().toLowerCase();
+          var isProductCard = cardTypeText === "product";
           var activate = (typeof opts.onActivate === "function") ? opts.onActivate : null;
           var itemFallback = titleText || translateCatalogUi("catalog.item", "\u0639\u0646\u0635\u0631");
           var dynamicTitle = (!titleI18nKey && typeof translateCatalogDynamicText === "function")
             ? translateCatalogDynamicText(itemFallback)
             : itemFallback;
           var unavailableText = translateCatalogUi("catalog.unavailable", "\u063A\u064A\u0631 \u0645\u062A\u0648\u0641\u0631");
-          var displayTitle = available
-            ? (titleI18nKey ? translateCatalogUi(titleI18nKey, itemFallback) : dynamicTitle)
-            : unavailableText;
+          var displayTitle = titleI18nKey ? translateCatalogUi(titleI18nKey, itemFallback) : dynamicTitle;
+          var displayPriceText = (!available && isProductCard) ? unavailableText : String(opts.priceText || "").trim();
+
+          try {
+            if (!isProductCard) {
+              var dataset = (opts.dataset && typeof opts.dataset === "object") ? opts.dataset : {};
+              [dataset.category, dataset.target, dataset.stateKey, dataset.gameSlug, dataset.catalogItemId].forEach(function(key){
+                rememberCatalogSectionLabel(key, displayTitle || itemFallback);
+              });
+              if (Array.isArray(opts.treePath) && opts.treePath.length) {
+                rememberCatalogSectionLabel(opts.treePath[opts.treePath.length - 1], displayTitle || itemFallback);
+              }
+            }
+          } catch(_){}
 
           card.className = "card catalog-card";
           card.setAttribute("data-catalog-card", "1");
@@ -33651,7 +34994,6 @@ function normalizeCategory(value){
           if (opts.cardType) {
             card.dataset.cardType = String(opts.cardType);
           }
-          var cardTypeText = String(opts.cardType || "").trim().toLowerCase();
           if (cardTypeText === "category" || cardTypeText === "game") {
             card.dataset.noLoader = "1";
             card.setAttribute("data-no-loader", "1");
@@ -33693,24 +35035,19 @@ function normalizeCategory(value){
           var title = document.createElement("h2");
           if (opts.cardType === "product") title.setAttribute("dir", "auto");
           title.textContent = displayTitle || itemFallback;
-          if (available && titleI18nKey) {
+          if (titleI18nKey) {
             title.setAttribute("data-i18n", titleI18nKey);
             title.dataset.i18nFallback = itemFallback;
             card.setAttribute("data-i18n-data-title", titleI18nKey);
             card.dataset.i18nDataTitleFallback = itemFallback;
-          } else if (!available) {
-            title.setAttribute("data-i18n", "catalog.unavailable");
-            title.dataset.i18nFallback = "\u063A\u064A\u0631 \u0645\u062A\u0648\u0641\u0631";
-            card.setAttribute("data-i18n-data-title", "catalog.unavailable");
-            card.dataset.i18nDataTitleFallback = "\u063A\u064A\u0631 \u0645\u062A\u0648\u0641\u0631";
           }
 
           card.appendChild(title);
 
-          if (opts.priceText) {
+          if (displayPriceText) {
             var price = document.createElement("span");
             price.className = "offer-price";
-            price.textContent = String(opts.priceText);
+            price.textContent = displayPriceText;
             card.appendChild(price);
           }
 
@@ -33839,7 +35176,7 @@ function normalizeCategory(value){
               list.shift();
             }
             if (!list.length) {
-              return "#/" + route;
+              return "#/";
             }
             return "#/" + list.map(function(part){
               return encodeURIComponent(String(part || "").trim());
@@ -34094,6 +35431,10 @@ function normalizeCategory(value){
           try { card.dataset.treePath = JSON.stringify(parts); } catch(_){}
           try { card.dataset.treePathParent = JSON.stringify(parentParts); } catch(_){}
           try {
+            card.dataset.searchSelf = buildCardSearchText({
+              name: titleText,
+              key: itemId || key
+            });
             card.dataset.search = buildCardSearchText({
               name: titleText,
               key: itemId || key,
@@ -34115,6 +35456,9 @@ function normalizeCategory(value){
               window.__CATALOG_INLINE_ITEM_ID__ = itemId || "";
               window.__CATALOG_INLINE_ITEM_SLUG__ = catalogSlug || "";
               window.__CATALOG_INLINE_FORCE_MODAL__ = itemId ? "1" : "";
+              if (typeof window.__setCatalogInlineParentRouteContext === "function") {
+                window.__setCatalogInlineParentRouteContext(baseRoute, parentParts);
+              }
             } catch(_){}
             if (typeof window.__openCatalogInline === "function") {
               try { window.__openCatalogInline(catalogSlug, baseRoute); } catch(_){}
@@ -34549,6 +35893,9 @@ function normalizeCategory(value){
               window.__CATALOG_INLINE_ITEM_ID__ = catalogItemId || "";
               window.__CATALOG_INLINE_ITEM_SLUG__ = effectiveSlug || slug || "";
               window.__CATALOG_INLINE_FORCE_MODAL__ = catalogItemId ? "1" : "";
+              if (typeof window.__setCatalogInlineParentRouteContext === "function") {
+                window.__setCatalogInlineParentRouteContext(baseRoute, parentParts);
+              }
               window.__CATALOG_SUPPRESS_CATEGORY_FETCH_UNTIL__ = Date.now() + 20000;
               if (catalogItemId) {
                 window.__CATALOG_PRODUCT_CLICK_LOCK_UNTIL__ = Date.now() + 30000;
@@ -34588,6 +35935,10 @@ function normalizeCategory(value){
               routeKey: baseRoute,
               catalogItemId: itemId,
               category: String(p.category || p.categoryId || parentSlug || ""),
+              searchSelf: buildCardSearchText({
+                name: name || key,
+                key: itemId || key
+              }),
               search: buildCardSearchText({
                 name: name || key,
                 key: itemId || key,
@@ -35854,7 +37205,7 @@ function normalizeCategory(value){
             .toLowerCase()
             .replace(/[ًٌٍَُِّْـ]/g,'')
             .replace(/[إأآا]/g,'ا')
-            .replace(/ى/g,'ظٹ')
+            .replace(/ى/g,'ي')
             .replace(/ة/g,'ه')
             .replace(/\s+/g,' ')
             .trim();
@@ -35874,7 +37225,7 @@ function normalizeCategory(value){
 
         var CATEGORY_ICON_RULES = [
           { icon: '\u{1F916}', keywords: ['gpt', 'شات gpt', 'بريميوم'] },
-          { icon: '\u{1F3B5}', keywords: ['طھظٹظƒ طھظˆظƒ', 'tiktok'] },
+          { icon: '\u{1F3B5}', keywords: ['تيك توك', 'tiktok'] },
           { icon: '\u{1F4D8}', keywords: ['فيسبوك', 'facebook'] },
           { icon: '\u{1F4F8}', keywords: ['انستجرام', 'انستا', 'instagram'] },
           { icon: '\u25B6\uFE0F', keywords: ['يوتيوب', 'youtube'] },
@@ -35889,7 +37240,7 @@ function normalizeCategory(value){
           { icon: '\u{1F451}', keywords: ['vip', 'نجوم', 'premium'] },
           { icon: '\u2705', keywords: ['توثيق', 'verified'] },
           { icon: '\u{1F4F0}', keywords: ['جرايد', 'جريدة', 'google', 'جوجل'] },
-          { icon: '\u{1F3A5}', keywords: ['ظƒظٹظƒ', 'kick', 'بيغو', 'bigo'] },
+          { icon: '\u{1F3A5}', keywords: ['كيك', 'kick', 'بيغو', 'bigo'] },
           { icon: '\u{1F680}', keywords: ['رشق', 'خدمات'] },
           { icon: '\u{1F4E1}', keywords: ['قنوات', 'قناة', 'channel'] },
           { icon: '\u{1F4C8}', keywords: ['ساعات', 'minutes', 'مشاهدات', 'views'] },
@@ -37314,6 +38665,7 @@ function normalizeCategory(value){
           card.dataset.gameSlug = slug;
           card.dataset.routeHash = slug ? buildFavoriteCategoryHash('games', [slug]) : '';
           card.href = 'javascript:void(0)';
+          try { card.dataset.searchSelf = normalize(label); } catch(_){ }
           try { card.dataset.search = normalize(label); } catch(_){ }
 
           appendFavoriteCardMedia(card, {
@@ -37756,8 +39108,13 @@ function normalizeCategory(value){
           if (back && !back.dataset.bound) {
             back.dataset.bound = '1';
             back.addEventListener('click', function(){
-              var routeKey = host.dataset.routeKey || 'games';
-              if (typeof navigate === 'function') navigate(routeKey);
+              var routeKey = host.dataset.parentRouteKey || host.dataset.routeKey || 'games';
+              var parentParts = host.dataset.parentRouteParts || '';
+              if (typeof window.__navigateCatalogSectionBack === 'function') {
+                window.__navigateCatalogSectionBack(routeKey, parentParts);
+              } else if (typeof navigate === 'function') {
+                navigate(routeKey);
+              }
             });
           }
           return host;
@@ -37785,6 +39142,7 @@ function normalizeCategory(value){
                 window.__CATALOG_INLINE_FORCE_MODAL__ = '';
                 window.__CATALOG_INLINE_MODAL_ONLY__ = '';
                 window.__CATALOG_INLINE_MODAL_ONLY_SOURCE__ = '';
+                window.__CATALOG_INLINE_KEEP_PAGE_FOR_FORCE_MODAL__ = '';
                 window.__CATALOG_PRODUCT_CLICK_LOCK_UNTIL__ = 0;
                 window.__CATALOG_PRODUCT_CLICK_LOCK_SLUG__ = '';
               } catch(_){ }
@@ -37805,7 +39163,10 @@ function normalizeCategory(value){
             var forceModalRaw = String(window.__CATALOG_INLINE_FORCE_MODAL__ || '').trim().toLowerCase();
             var pendingInlineItemId = String(window.__CATALOG_INLINE_ITEM_ID__ || '').trim();
             var forceModalOpen = !!pendingInlineItemId && (forceModalRaw === '1' || forceModalRaw === 'true');
-            if (forceModalOpen && !modalOnly) {
+            var keepPageForForceModalRaw = String(window.__CATALOG_INLINE_KEEP_PAGE_FOR_FORCE_MODAL__ || '').trim().toLowerCase();
+            var modalOnlySourceRaw = String(window.__CATALOG_INLINE_MODAL_ONLY_SOURCE__ || '').trim().toLowerCase();
+            var keepPageForForceModal = keepPageForForceModalRaw === '1' || keepPageForForceModalRaw === 'true' || modalOnlySourceRaw === 'support';
+            if (forceModalOpen && !modalOnly && !keepPageForForceModal) {
               modalOnly = true;
               window.__CATALOG_INLINE_MODAL_ONLY__ = '1';
               if (!String(window.__CATALOG_INLINE_MODAL_ONLY_SOURCE__ || '').trim()) {
@@ -37817,7 +39178,36 @@ function normalizeCategory(value){
           try {
             if (hostEl && hostEl.dataset) hostEl.dataset.modalOnlyFlow = modalOnly ? '1' : '0';
           } catch(_){ }
-          hostEl.dataset.routeKey = routeKey || 'games';
+          var safeRouteKey = routeKey || 'games';
+          hostEl.dataset.routeKey = safeRouteKey;
+          try {
+            var parentParts = [];
+            try {
+              var hostPartsRaw = String(window.__CATALOG_INLINE_PARENT_ROUTE_PARTS__ || '').trim();
+              if (hostPartsRaw) parentParts = JSON.parse(hostPartsRaw);
+            } catch(_){ parentParts = []; }
+            if (!Array.isArray(parentParts) || !parentParts.length) {
+              var rawHash = String(location.hash || '').replace(/^#\/?/, '');
+              var hashParts = rawHash.split('/').filter(Boolean).map(function(part){
+                try { return decodeURIComponent(part || ''); } catch(_){ return part; }
+              });
+              var hashKey = String(hashParts[0] || '').trim();
+              if (String(hashKey || '').toLowerCase() === String(safeRouteKey || '').toLowerCase()) {
+                parentParts = hashParts.slice(1);
+              } else if (hashKey) {
+                parentParts = hashParts;
+              }
+            }
+            if (typeof window.__setCatalogInlineParentRouteContext === 'function') {
+              window.__setCatalogInlineParentRouteContext(safeRouteKey, parentParts);
+            } else {
+              hostEl.dataset.parentRouteKey = safeRouteKey;
+              hostEl.dataset.parentRouteParts = JSON.stringify(parentParts || []);
+            }
+          } catch(_){ }
+          try {
+            if (typeof window.__resetCatalogSearchInputs === 'function') window.__resetCatalogSearchInputs();
+          } catch(_){ }
           hostEl.style.display = '';
           try {
             var pendingInlineId = String(window.__CATALOG_INLINE_ITEM_ID__ || "").trim();
@@ -37887,7 +39277,7 @@ function normalizeCategory(value){
           } catch(_){ modalOnlyFlow = false; }
           if (host) host.style.display = 'none';
           setModalOnlyClassSafe(false);
-          try { window.__CATALOG_INLINE_MODAL_ONLY__ = ''; window.__CATALOG_INLINE_MODAL_ONLY_SOURCE__ = ''; } catch(_){ }
+          try { window.__CATALOG_INLINE_MODAL_ONLY__ = ''; window.__CATALOG_INLINE_MODAL_ONLY_SOURCE__ = ''; window.__CATALOG_INLINE_KEEP_PAGE_FOR_FORCE_MODAL__ = ''; } catch(_){ }
           try { document.body.classList.remove('catalog-inline-active'); } catch(_){ }
           if (!modalOnlyFlow) {
             try { document.body.classList.remove('inline-view'); } catch(_){ }
@@ -38051,7 +39441,9 @@ function normalizeCategory(value){
         } catch(_){ }
         try { renderHomeGames(true); homeCardsBooted = true; } catch(_){ }
         try { clearInlineShellRecoveryState(); } catch(_){ }
-        try { console.warn('[inline-shell] restored home shell from blank state', { reason: reason || 'unknown' }); } catch(_){ }
+        try {
+          if (window.__INLINE_SHELL_DEBUG__ === true) console.debug('[inline-shell] restored home shell from blank state', { reason: reason || 'unknown' });
+        } catch(_){ }
       }
       function routeHashLooksInline(raw, key){
         try {
@@ -38086,6 +39478,15 @@ function normalizeCategory(value){
           } catch(_){ routePending = false; }
           var loaderVisible = false;
           try { loaderVisible = isPageLoaderActuallyVisible(); } catch(_){ loaderVisible = false; }
+          try {
+            var supportForceModal = String(window.__CATALOG_INLINE_KEEP_PAGE_FOR_FORCE_MODAL__ || '').trim() === '1' ||
+              String(window.__CATALOG_INLINE_MODAL_ONLY_SOURCE__ || '').trim().toLowerCase() === 'support' ||
+              String(window.__CATALOG_INLINE_FORCE_MODAL__ || '').trim() === '1';
+            if (supportForceModal && /^catalog_/i.test(String(reason || ''))) {
+              clearInlineShellRecoveryState();
+              return;
+            }
+          } catch(_){ }
           if (walletPending) {
             if (!loaderVisible) {
               try {
@@ -38176,7 +39577,7 @@ function normalizeCategory(value){
           }
           var ordersActive = isRouteActive('orders');
           var walletActive = isRouteActive('wallet');
-          var paymentsActive = isRouteActive('payments');
+          var paymentsActive = isRouteActive('dafaati') || isRouteActive('payments');
           var ordersStyle = document.getElementById('orders-inline-style');
           if (ordersStyle) ordersStyle.media = ordersActive ? 'all' : 'not all';
           var apiStyle = document.getElementById('api-inline-style');
@@ -38330,12 +39731,99 @@ function normalizeCategory(value){
         return frag;
       }
 
+      function decodeInlineCatalogSectionLabel(value, parts){
+        try {
+          if (typeof window.__resolveCatalogSectionDisplayLabel === 'function') {
+            return window.__resolveCatalogSectionDisplayLabel(value, parts);
+          }
+          if (typeof window.__decodeCatalogSectionLabel === 'function') {
+            return window.__decodeCatalogSectionLabel(value);
+          }
+        } catch(_){ }
+        var text = String(value == null ? '' : value).trim();
+        if (!text) return '';
+        try { text = decodeURIComponent(text); } catch(_){ }
+        return text.replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
+      }
+
+      function getInlineCatalogRouteParts(){
+        try{
+          var raw = String(location.hash || '').replace(/^#\/?/, '');
+          var parts = raw.split('/').filter(Boolean).map(function(part){
+            try { return decodeURIComponent(part || ''); } catch(_){ return part; }
+          }).filter(Boolean);
+          if (!parts.length) return { routeKey:'', parts:[] };
+          var key = String(parts[0] || '').trim();
+          var keyLower = key.toLowerCase();
+          if (keyLower === 'games') return { routeKey:'games', parts:parts.slice(1) };
+          if (keyLower === 'favorites') return { routeKey:'favorites', parts:parts.slice(1) };
+          try {
+            if (typeof isCategoryKey === 'function' && isCategoryKey(key)) return { routeKey:'games', parts:parts };
+          } catch(_){ }
+          return { routeKey:keyLower, parts:[] };
+        }catch(_){
+          return { routeKey:'', parts:[] };
+        }
+      }
+
+      function ensureInlineCatalogSectionBar(container, input){
+        try{
+          var searchWrap = input && input.closest ? input.closest('.search-container') : null;
+          if (!container || !searchWrap) return;
+          var ctx = getInlineCatalogRouteParts();
+          var parts = Array.isArray(ctx.parts) ? ctx.parts.filter(Boolean) : [];
+          var existing = container.querySelector('.catalog-current-sectionbar.inline-catalog-sectionbar');
+          if (!parts.length) {
+            if (existing) existing.hidden = true;
+            return;
+          }
+          if (!existing) {
+            existing = document.createElement('div');
+            existing.className = 'catalog-current-sectionbar inline-catalog-sectionbar';
+            var back = document.createElement('button');
+            back.type = 'button';
+            back.className = 'catalog-current-section-back';
+            back.setAttribute('aria-label', '\u0631\u062c\u0648\u0639');
+            back.innerHTML = '<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>';
+            var title = document.createElement('strong');
+            title.className = 'catalog-current-section-title';
+            existing.appendChild(back);
+            existing.appendChild(title);
+            searchWrap.parentNode.insertBefore(existing, searchWrap);
+          }
+          var titleEl = existing.querySelector('.catalog-current-section-title');
+          var backBtn = existing.querySelector('.catalog-current-section-back');
+          if (titleEl) titleEl.textContent = decodeInlineCatalogSectionLabel(parts[parts.length - 1], parts);
+          existing.hidden = false;
+          existing.dataset.parentRouteKey = ctx.routeKey || 'games';
+          existing.dataset.parentRouteParts = JSON.stringify(parts);
+          if (backBtn && backBtn.dataset.bound !== '1') {
+            backBtn.dataset.bound = '1';
+            backBtn.addEventListener('click', function(){
+              var routeKey = existing.dataset.parentRouteKey || 'games';
+              var routeParts = [];
+              try { routeParts = JSON.parse(existing.dataset.parentRouteParts || '[]'); } catch(_){ routeParts = []; }
+              if (typeof window.__navigateCatalogSectionBack === 'function') {
+                window.__navigateCatalogSectionBack(routeKey, routeParts);
+                return;
+              }
+              var previousParts = routeParts.length > 1 ? routeParts.slice(0, -1) : [];
+              if (typeof navigate === 'function') {
+                if (previousParts.length) navigate(routeKey, '', previousParts);
+                else navigate(routeKey);
+              }
+            });
+          }
+        }catch(_){ }
+      }
+
       function attachSearchBehavior(container){
         try{
           var input = container.querySelector('.search-container input');
           var grid = container.querySelector('.categories');
           var noResults = container.querySelector('#inlineNoResults');
           if(!input || !grid) return;
+          ensureInlineCatalogSectionBar(container, input);
           var tools = window.__catalogSearchTools || null;
           function apply(q){
             if (tools && typeof tools.apply === 'function') {
@@ -38717,7 +40205,7 @@ function normalizeCategory(value){
             numericKey = !!normalizeTreeNumericPart(key);
           } else {
             var latin = String(key || '')
-              .replace(/[ظ -٩]/g, function(digit){ return String("٠١٢٣٤٥٦٧٨٩".indexOf(digit)); })
+              .replace(/[٠-٩]/g, function(digit){ return String("٠١٢٣٤٥٦٧٨٩".indexOf(digit)); })
               .trim();
             numericKey = /^\d+$/.test(latin);
           }
@@ -39130,6 +40618,9 @@ function normalizeCategory(value){
           parts = safePath.split('/').map(function(p){ return String(p || "").trim(); }).filter(Boolean);
           hasParts = !!(parts && parts.length);
         }
+        try {
+          if (typeof window.__resetCatalogSearchInputs === 'function') window.__resetCatalogSearchInputs();
+        } catch(_){ }
         var routeValue = safePath || '';
         var effectiveParts = null;
         if (Array.isArray(hashParts)) {
@@ -39213,6 +40704,7 @@ function normalizeCategory(value){
         } catch(_){ }
         history.pushState({}, '', '#/');
         try { if (typeof window.__closeCatalogInline === 'function') window.__closeCatalogInline(); } catch(_){ }
+        try { if (typeof window.__resetCatalogSearchInputs === 'function') window.__resetCatalogSearchInputs(); } catch(_){ }
         updateViewForInline(false);
         try { clearInlineSearchTopSpacing(); } catch(_){ }
         clearHomeHideState();
@@ -39246,6 +40738,7 @@ function normalizeCategory(value){
             }
           } catch(_){ }
           try { if (typeof window.__closeCatalogInline === 'function') window.__closeCatalogInline(); } catch(_){ }
+          try { if (typeof window.__resetCatalogSearchInputs === 'function') window.__resetCatalogSearchInputs(); } catch(_){ }
           updateViewForInline(false);
           clearHomeHideState();
           try { renderHomeGames(true); homeCardsBooted = true; } catch(_){}
@@ -39253,6 +40746,7 @@ function normalizeCategory(value){
           try { scheduleInlineShellRecovery('init_home_hash', 80); } catch(_){ }
           return;
         }
+        try { if (typeof window.__resetCatalogSearchInputs === 'function') window.__resetCatalogSearchInputs(); } catch(_){ }
         var parts = raw.split('/').filter(Boolean);
         var key = parts[0] || '';
         var keyLowerDirect = String(key || '').toLowerCase();

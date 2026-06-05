@@ -25,16 +25,16 @@
       firebaseHelperOrigin: "https://wa7shstore-52513.firebaseapp.com"
     },
     brand: {
-      storeName: "wa7shstore.com",
+      storeName: "Wa7sh Store",
       tickerText: "",
-      waBadgeBrand: "وحش ستور"
+      waBadgeBrand: ""
     },
     media: {
-      siteIcon: "https://api.wa7shstore.com/site-icon.png?v=admin-20260519-01",
+      siteIcon: "https://api.wa7shstore.com/site-icon.png?v=wa7sh-20260605-01",
       sitePreview: ""
     },
     pwa: {
-      legacyCachePrefixes: ["wa7shstore-52513-pwa-", "njadstore1-pwa-", "static-", "images-", "pages-"]
+      legacyCachePrefixes: ["wa7shstore-52513-pwa-", "static-", "images-", "pages-"]
     }
   };
 

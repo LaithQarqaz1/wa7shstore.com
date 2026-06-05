@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /__/
 
 Sitemap: https://wa7shstore.com/sitemap.xml
 Host: wa7shstore.com

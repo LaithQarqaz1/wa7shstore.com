@@ -1674,7 +1674,7 @@ function watchSessionDocForDevice(user){
     const RATES_CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
 
     const STORE_BASE_CODE = 'USD'; // Balance stored in database is USD.
-    // Rates map — filled from cache or Firebase
+    // Rates map â€” filled from cache or Firebase
     const CURRENCIES = {};
     let ratesListenerStarted = false;
     let ratesRestLoadInFlight = false;
@@ -1918,8 +1918,8 @@ function watchSessionDocForDevice(user){
         let s = String(raw)
           .replace(/\uFEFF/g,'')
           .replace(/[\u200f\u200e\u202a-\u202e]/g,'')
-          .replace(/[“”«»]/g,'"')
-          .replace(/[‘’]/g,"'")
+          .replace(/[â€œâ€‌آ«آ»]/g,'"')
+          .replace(/[â€کâ€™]/g,"'")
           .replace(/،/g,',')
           .replace(/؛/g,',');
         // إذا كان النص ملفوفًا بعلامات اقتباس ويبدأ بـ {، أزل الاقتباس الزائد
@@ -2339,8 +2339,8 @@ function watchSessionDocForDevice(user){
         let s = String(raw || '')
           .replace(/\uFEFF/g,'')
           .replace(/[\u200f\u200e\u202a-\u202e]/g,'')
-          .replace(/[“”«»]/g,'"')
-          .replace(/[‘’]/g,"'")
+          .replace(/[â€œâ€‌آ«آ»]/g,'"')
+          .replace(/[â€کâ€™]/g,"'")
           .replace(/،/g,',').replace(/؛/g,',');
         s = s.replace(/([\{\[,]\s*)'([^']*)'\s*:/g,'$1"$2":');
         s = s.replace(/:\s*'([^']*)'/g,':"$1"');
@@ -2765,10 +2765,10 @@ try {
     'legal.privacy.cookies.body': 'يستخدم الموقع التخزين المحلي وملفات تعريف الارتباط لتحسين تجربة الاستخدام، حفظ التفضيلات، واستمرارية الجلسة وعرض المحتوى بشكل أسرع.',
     'legal.privacy.changes.title': '9) التعديلات على السياسة',
     'legal.privacy.changes.body': 'قد يتم تحديث هذه السياسة عند تطوير الخدمات. استمرار الاستخدام بعد التحديث يعني الاطلاع والقبول بالإصدار الأحدث.',
-    'legal.privacy.note': 'باستخدامك للموقع، فإنك توافق على هذه السياسة بما يضمن مصلحة المستخدم والمتجر ويحفظ حقوق الطرفين.',
+    'legal.privacy.note': 'باستخدامك للموقڡ فإنك توافق على هذه السياسة بما يضمن مصلحة المستخدم والمتجر ويحفظ حقوق الطرفين.',
     'legal.terms.title': 'شروط الاستخدام',
     'legal.terms.acceptance.title': '1) القبول والأهلية',
-    'legal.terms.acceptance.body': 'استخدامك للمتجر يعني موافقتك على هذه الشروط، وأن لديك الأهلية النظامية لإجراء الطلبات والالتزامات المالية.',
+    'legal.terms.acceptance.body': 'استخدامك للمتجر يعني موافقتك على هذه الشروء وأن لديك الأهلية النظامية لإجراء الطلبات والالتزامات المالية.',
     'legal.terms.services.title': '2) طبيعة الخدمات',
     'legal.terms.services.body': 'المتجر يقدم منتجات وخدمات رقمية (شحن/اشتراكات/أكواد). بعض الخدمات تعتمد على مزودين خارجيين وقد تختلف مدة التنفيذ وفق حالة المزود.',
     'legal.terms.user.title': '3) التزامات المستخدم',
@@ -2854,7 +2854,7 @@ try {
     'legal.terms.note': 'These terms were created to protect both the user and the store in a balanced way and to ensure a clear and fair relationship that preserves both parties\' rights.'
   });
   Object.assign(I18N_TEXT.fr, {
-    'legal.links.label': 'Liens légaux',
+    'legal.links.label': 'Liens lأ©gaux',
     'legal.consent.prefix': 'J\'accepte',
     'legal.consent.and': 'et',
     'legal.consent.requiredAccount': 'Vous devez accepter la Politique de confidentialite et les Conditions d\'utilisation pour finaliser la creation du compte.',
@@ -2931,7 +2931,7 @@ const LATIN_RE = /[A-Za-z]/;
 function hasLatin(value){
   return LATIN_RE.test(String(value || ''));
 }
-const CURRENCY_TOKEN_RE = /(?:[$€£¥₺₽₿]|[A-Z]{2,8}|د\.ا|د\.إ|د\.ك|ر\.س|ر\.ق|ر\.ع|د\.ب|ج\.م|ل\.س|ل\.ل)/i;
+const CURRENCY_TOKEN_RE = /(?:[$â‚¬آ£آ¥â‚؛â‚½â‚؟]|[A-Z]{2,8}|د\.ا|د\.إ|د\.ك|ر\.س|ر\.ق|ر\.ع|د\.ب|ج\.م|ل\.س|ل\.ل)/i;
 const ARABIC_INDIC_DIGITS_RE = /[\u0660-\u0669]/g;
 const EASTERN_ARABIC_INDIC_DIGITS_RE = /[\u06F0-\u06F9]/g;
 function normalizeDigitsForCurrency(value){
@@ -4436,8 +4436,17 @@ try {
 } catch {}
 
 (function(){
+  const IS_TOUCH_DEVICE = (function(){
+    try {
+      if (!window.matchMedia) return false;
+      return window.matchMedia('(hover: none), (pointer: coarse)').matches;
+    } catch (_) {
+      return false;
+    }
+  })();
   const CUSTOM_CONTEXT_MENU_ENABLED = (function(){
     try {
+      if (IS_TOUCH_DEVICE) return false;
       const root = document && document.documentElement ? document.documentElement : null;
       const raw = String(root && root.getAttribute ? (root.getAttribute('data-custom-context-menu') || '') : '').trim().toLowerCase();
       if (!raw) return true;
@@ -5767,11 +5776,6 @@ try {
     if (target.closest && target.closest('#' + CONTEXT_MENU_ID + ',[data-native-context-menu]')) return;
     const context = buildContextSnapshot(target, Number(event.clientX), Number(event.clientY));
     if (shouldAllowNativeTouchSelection(context)) {
-      try {
-        event.preventDefault();
-        event.stopPropagation();
-        if (typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
-      } catch {}
       hideContextMenu();
       return;
     }
@@ -6366,8 +6370,8 @@ balanceSpan.style.padding = '0';
 balanceSpan.style.minWidth = '0';
 balanceSpan.innerHTML = `
   <span class="header-balance__metrics">
-    <span class="header-balance__currency" id="headerBalanceCurrency">—</span>
-    <span class="header-balance__value" id="headerBalanceText">…</span>
+    <span class="header-balance__currency" id="headerBalanceCurrency">â€”</span>
+    <span class="header-balance__value" id="headerBalanceText">â€¦</span>
   </span>
 `;
 
@@ -6566,9 +6570,19 @@ function headerGetLevelEntries(){
   const levelsState = safeState && typeof safeState === 'object' && safeState.levels && typeof safeState.levels === 'object'
     ? safeState.levels
     : {};
-  const rawItems = Array.isArray(levelsState.items)
+  let rawItems = Array.isArray(levelsState.items)
     ? levelsState.items
     : (Array.isArray(levelsState.levels) ? levelsState.levels : (Array.isArray(levelsState.entries) ? levelsState.entries : []));
+  if (!rawItems.length && levelsState && typeof levelsState === 'object') {
+    const reservedLevelKeys = { items: true, levels: true, entries: true, enabled: true, title: true, subtitle: true, description: true };
+    rawItems = Object.keys(levelsState).map((key) => {
+      if (reservedLevelKeys[key]) return null;
+      const value = levelsState[key];
+      if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+      const entry = Object.assign({ key, levelKey: key }, value);
+      return (entry.id != null || entry.label || entry.name || entry.title || entry.order != null || entry.rank != null || entry.requiredSpent != null || entry.minSpent != null) ? entry : null;
+    }).filter(Boolean);
+  }
   const out = [];
   const seen = new Set();
   rawItems.forEach((rawEntry, index) => {
@@ -6640,8 +6654,8 @@ function headerGetSelectedCurrencyText(rawCode){
   if (symbol) return symbol;
   const fallbackMap = {
     USD: '$',
-    EUR: '€',
-    GBP: '£',
+    EUR: 'â‚¬',
+    GBP: 'آ£',
     JOD: 'د.أ',
     SAR: 'ر.س',
     AED: 'د.إ',
@@ -6812,35 +6826,35 @@ function setHeaderBalance(text){
     if (Number.isFinite(numeric)) {
       text = formatHeaderBalanceText(numeric);
     } else {
-      valueEl.textContent = text == null ? '—' : String(text);
-      if (currencyEl) currencyEl.textContent = '—';
+      valueEl.textContent = text == null ? 'â€”' : String(text);
+      if (currencyEl) currencyEl.textContent = 'â€”';
       enforceFixedSidebarCurrencyBadgeColor();
       return;
     }
   }
   const trimmed = text.trim();
   if (!trimmed) {
-    valueEl.textContent = '—';
-    if (currencyEl) currencyEl.textContent = '—';
+    valueEl.textContent = 'â€”';
+    if (currencyEl) currencyEl.textContent = 'â€”';
     enforceFixedSidebarCurrencyBadgeColor();
     return;
   }
   const hasDigits = /[0-9]/.test(trimmed);
   if (!hasDigits) {
     valueEl.textContent = trimmed;
-    if (currencyEl) currencyEl.textContent = '—';
+    if (currencyEl) currencyEl.textContent = 'â€”';
     enforceFixedSidebarCurrencyBadgeColor();
     return;
   }
   const parts = splitHeaderBalanceParts(trimmed);
   if (parts) {
     valueEl.textContent = parts.value || trimmed;
-    if (currencyEl) currencyEl.textContent = parts.currency || headerGetSelectedCurrencyText() || '—';
+    if (currencyEl) currencyEl.textContent = parts.currency || headerGetSelectedCurrencyText() || 'â€”';
     enforceFixedSidebarCurrencyBadgeColor();
     return;
   }
   valueEl.textContent = trimmed;
-  if (currencyEl) currencyEl.textContent = headerGetSelectedCurrencyText() || '—';
+  if (currencyEl) currencyEl.textContent = headerGetSelectedCurrencyText() || 'â€”';
   enforceFixedSidebarCurrencyBadgeColor();
 }
 try {
@@ -7288,7 +7302,7 @@ function applyAuthUi(user){
 }
 try { window.__applyAuthUi = applyAuthUi; } catch {}
 
-const SITE_PWA_SW_URL = "sw.js?v=20260519-04";
+const SITE_PWA_SW_URL = "sw.js?v=20260605-wa7sh-01";
 const SITE_PWA_CACHE_DISABLED = true;
 let deferredSiteInstallPrompt = null;
 let activeSiteManifestUrl = "";
@@ -7636,7 +7650,7 @@ function setSiteManifestLinkHref(manifestUrl, isObjectUrl){
   return href;
 }
 function setStaticSiteManifestLink(){
-  const manifestUrl = "/manifest.webmanifest?v=20260519-04";
+  const manifestUrl = "/manifest.webmanifest?v=20260605-wa7sh-01";
   setSiteManifestLinkHref(manifestUrl, false);
   revokeSiteManifestUrl();
   return manifestUrl;
@@ -7656,9 +7670,9 @@ function readInstallAppBrandName(){
     if (metaTitle) return metaTitle;
   } catch {}
   try {
-    return normalizeInstallAppText(DEFAULT_SITE_STORE_NAME) || normalizeInstallAppText(window.location && window.location.hostname) || "wa7shstore.com";
+    return normalizeInstallAppText(DEFAULT_SITE_STORE_NAME) || normalizeInstallAppText(window.location && window.location.hostname) || "Wa7sh Store";
   } catch (_) {
-    return normalizeInstallAppText(window.location && window.location.hostname) || "wa7shstore.com";
+    return normalizeInstallAppText(window.location && window.location.hostname) || "Wa7sh Store";
   }
 }
 function readInstallAppIconUrl(){
@@ -7746,8 +7760,8 @@ function buildContainedInstallAppIconDataUrl(iconUrl){
   return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 }
 function buildSiteInstallManifestPayload(){
-  const name = readInstallAppBrandName() || "wa7shstore.com";
-  const shortName = normalizeInstallAppText(name).slice(0, 24) || "wa7sh";
+  const name = readInstallAppBrandName() || "Wa7sh Store";
+  const shortName = normalizeInstallAppText(name).slice(0, 24) || "Wa7sh";
   const rawIcon = readInstallAppIconUrl();
   const iconUrl = resolveInstallAppAbsoluteUrl(rawIcon, "");
   const containedIcon = buildContainedInstallAppIconDataUrl(iconUrl);
@@ -9140,7 +9154,7 @@ function syncSidebarBalanceFromHeader(){
     const val = node ? String(node.textContent || '').trim() : '';
     const cur = curNode ? String(curNode.textContent || '').trim() : '';
     if (!val && !cur) return;
-    setSidebarBalanceText(cur && cur !== '—' ? `${val} ${cur}` : val);
+    setSidebarBalanceText(cur && cur !== 'â€”' ? `${val} ${cur}` : val);
   } catch {}
 }
 
@@ -12042,20 +12056,26 @@ function wirePageBalanceBox(){
       sending: false,
       pollTimer: 0,
       badgePollTimer: 0,
-      pollDelayMs: 1800,
+      markReadTimer: 0,
+      pollDelayMs: 15000,
       badgePollDelayMs: 30000,
       realtimeUnsubscribe: null,
       realtimeStarting: false,
       realtimeReady: false,
+      realtimeDisabled: false,
       realtimeError: '',
       realtimeRunId: 0,
       markReadInFlight: false,
       thread: null,
       imageFile: null,
+      lastThreadFetchAt: 0,
       lastThreadVersion: '',
       lastIncomingMessageKey: '',
       lastNotifyAt: 0,
+      lastRenderedMessagesVersion: '',
+      hasRenderedMessages: false,
       titleBase: '',
+      aiTypedMessageKeys: {},
       selectedMessageKeys: []
     };
     var supportChatAuthUser = null;
@@ -12080,6 +12100,29 @@ function wirePageBalanceBox(){
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+    }
+
+    function isSupportAiAuthorName(value){
+      return /^(?:المساعد الذكي|ai|assistant|support ai)$/i.test(String(value || '').trim());
+    }
+
+    function supportThreadMessages(thread){
+      var source = thread && typeof thread === 'object' ? thread : {};
+      return Array.isArray(source.messages) ? source.messages.map(normalizeSupportMessage) : [];
+    }
+
+    function supportThreadHasHumanAdminReply(thread){
+      return supportThreadMessages(thread).some(function(message){
+        return message && message.sender === 'admin' && !isSupportAiAuthorName(message.authorName);
+      });
+    }
+
+    function isSupportThreadTicketOpen(thread){
+      var source = thread && typeof thread === 'object' ? thread : {};
+      var status = String(source.status || '').trim().toLowerCase();
+      if (status === 'closed' || status === 'resolved') return false;
+      if (source.humanTicketOpen === true) return true;
+      return supportThreadHasHumanAdminReply(source);
     }
 
     function normalizeSupportMediaUrl(value){
@@ -12332,10 +12375,22 @@ function wirePageBalanceBox(){
       } catch (_) {}
       try {
         if (panel && !allowed) {
+          try {
+            var active = document.activeElement;
+            if (active && panel.contains(active)) {
+              if (fab && !fab.hidden && typeof fab.focus === 'function') fab.focus({ preventScroll: true });
+              else if (typeof active.blur === 'function') active.blur();
+            }
+          } catch (_) {}
           panel.hidden = true;
           panel.setAttribute('aria-hidden', 'true');
+          try { panel.setAttribute('inert', ''); } catch (_) {}
         } else if (panel) {
           panel.setAttribute('aria-hidden', supportChatState.open ? 'false' : 'true');
+          try {
+            if (supportChatState.open) panel.removeAttribute('inert');
+            else panel.setAttribute('inert', '');
+          } catch (_) {}
         }
       } catch (_) {}
       try {
@@ -12441,6 +12496,56 @@ function wirePageBalanceBox(){
       }
     }
 
+    var SUPPORT_AI_GUARD_COOKIE_NAME = 'z3_support_ai_guard';
+
+    function readSupportCookie(name){
+      var target = String(name || '').trim();
+      if (!target) return '';
+      var parts = String(document.cookie || '').split(';');
+      for (var i = 0; i < parts.length; i += 1) {
+        var item = parts[i].trim();
+        var eq = item.indexOf('=');
+        var key = eq >= 0 ? item.slice(0, eq) : item;
+        if (key !== target) continue;
+        var raw = eq >= 0 ? item.slice(eq + 1) : '';
+        try { return decodeURIComponent(raw); } catch (_) { return raw; }
+      }
+      return '';
+    }
+
+    function writeSupportCookie(name, value, maxAgeSeconds){
+      var key = String(name || '').trim();
+      var text = String(value || '').trim();
+      if (!key || !text) return;
+      var cookie = key + '=' + encodeURIComponent(text) + '; Path=/; Max-Age=' + String(Math.max(60, Number(maxAgeSeconds) || 21600)) + '; SameSite=Lax';
+      if (String(location.protocol || '').toLowerCase() === 'https:') cookie += '; Secure';
+      document.cookie = cookie;
+    }
+
+    function createSupportAiGuardToken(){
+      var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
+      var bytes = new Uint8Array(32);
+      try {
+        if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+          window.crypto.getRandomValues(bytes);
+        } else {
+          for (var i = 0; i < bytes.length; i += 1) bytes[i] = Math.floor(Math.random() * 256);
+        }
+      } catch (_) {
+        for (var j = 0; j < bytes.length; j += 1) bytes[j] = Math.floor(Math.random() * 256);
+      }
+      var out = '';
+      for (var k = 0; k < bytes.length; k += 1) out += alphabet[bytes[k] % alphabet.length];
+      return out;
+    }
+
+    function ensureSupportAiGuardToken(){
+      var token = readSupportCookie(SUPPORT_AI_GUARD_COOKIE_NAME);
+      if (!/^[A-Za-z0-9_-]{24,160}$/.test(token)) token = createSupportAiGuardToken();
+      writeSupportCookie(SUPPORT_AI_GUARD_COOKIE_NAME, token, 21600);
+      return token;
+    }
+
     async function buildSupportAuthPayload(){
       await ensureSupportAuthReady();
       var user = await waitForSupportUser();
@@ -12505,6 +12610,9 @@ function wirePageBalanceBox(){
         });
       }
       var body = opts.body && typeof opts.body === 'object' ? opts.body : {};
+      var supportAiGuardToken = method === 'POST' && String(mode || '').trim() === 'support-message'
+        ? ensureSupportAiGuardToken()
+        : '';
       var send = async function(nextAuth){
         var nextParams = Object.assign({}, params || {});
         if (method === 'GET') {
@@ -12512,19 +12620,23 @@ function wirePageBalanceBox(){
           nextParams.sessionKey = nextAuth.sessionKey;
         }
         var requestUrl = getSupportEndpoint(mode, nextParams);
+        var headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + nextAuth.idToken,
+          'X-SessionKey': nextAuth.sessionKey
+        };
+        if (supportAiGuardToken) headers['X-Support-AI-Guard'] = supportAiGuardToken;
+        var requestBody = Object.assign({}, body, {
+          useruid: nextAuth.uid,
+          sessionKey: nextAuth.sessionKey
+        });
+        if (supportAiGuardToken) requestBody.supportAiGuard = supportAiGuardToken;
         var response = await fetch(requestUrl, {
           method: method,
           cache: 'no-store',
           credentials: getSupportFetchCredentials(requestUrl),
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + nextAuth.idToken,
-            'X-SessionKey': nextAuth.sessionKey
-          },
-          body: method === 'GET' ? undefined : JSON.stringify(Object.assign({}, body, {
-            useruid: nextAuth.uid,
-            sessionKey: nextAuth.sessionKey
-          }))
+          headers: headers,
+          body: method === 'GET' ? undefined : JSON.stringify(requestBody)
         });
         var text = await response.text();
         var payload = {};
@@ -12621,14 +12733,206 @@ function wirePageBalanceBox(){
 
     function normalizeSupportMessage(raw){
       var source = raw && typeof raw === 'object' ? raw : {};
+      var senderRaw = String(source.sender || source.from || '').trim().toLowerCase();
+      var sender = senderRaw === 'admin' || senderRaw === 'support'
+        ? 'admin'
+        : (senderRaw === 'system' || senderRaw === 'notice' || senderRaw === 'event' ? 'system' : 'user');
       return {
         id: String(source.id || source.messageId || ''),
-        sender: String(source.sender || source.from || '').trim().toLowerCase() === 'admin' ? 'admin' : 'user',
+        sender: sender,
         text: String(source.text || source.message || source.body || '').trim(),
         imageUrl: String(source.imageUrl || source.image_url || '').trim(),
+        cards: normalizeSupportCards(source.cards || source.supportCards || source.cardList || []),
         authorName: String(source.authorName || source.author || source.name || '').trim(),
         createdAt: String(source.createdAt || source.created_at || '').trim()
       };
+    }
+
+    function normalizeSupportCard(raw){
+      var source = raw && typeof raw === 'object' ? raw : {};
+      var type = String(source.type || source.kind || '').trim().toLowerCase();
+      var action = String(source.action || source.actionCode || source.code || '').trim().toLowerCase();
+      if (['product', 'deposit', 'order', 'support'].indexOf(type) < 0) return null;
+      if (['open_product', 'open_deposit', 'start_objection', 'open_ticket'].indexOf(action) < 0) return null;
+      var title = String(source.title || source.name || source.label || '').trim();
+      var id = String(source.id || source.cardId || source.productId || source.methodId || source.orderCode || (action === 'open_ticket' ? 'open_ticket' : '') || title || '').trim();
+      if (!id && !title) return null;
+      return {
+        id: id,
+        type: type,
+        action: action,
+        title: title || id,
+        subtitle: String(source.subtitle || source.description || source.meta || '').trim(),
+        priceText: String(source.priceText || source.price_text || '').trim(),
+        statusText: String(source.statusText || source.statusLabel || source.status || '').trim(),
+        imageUrl: String(source.imageUrl || source.image_url || source.image || '').trim(),
+        productId: String(source.productId || source.product_id || '').trim(),
+        gameSlug: String(source.gameSlug || source.game_slug || source.catalogSlug || source.slug || '').trim(),
+        methodId: String(source.methodId || source.method_id || '').trim(),
+        country: String(source.country || source.countryName || '').trim(),
+        orderCode: String(source.orderCode || source.order_code || '').trim(),
+        available: source.available === false ? false : true
+      };
+    }
+
+    function normalizeSupportCards(rawCards){
+      var seen = {};
+      return (Array.isArray(rawCards) ? rawCards : []).map(normalizeSupportCard).filter(function(card){
+        if (!card) return false;
+        var key = [card.type, card.action, card.productId, card.gameSlug, card.methodId, card.orderCode, card.id, card.title].join('|').toLowerCase();
+        if (seen[key]) return false;
+        seen[key] = true;
+        return true;
+      }).slice(0, 12);
+    }
+
+    function getSupportCardsSignature(cards){
+      return normalizeSupportCards(cards).map(function(card){
+        return [card.type, card.action, card.id, card.productId, card.gameSlug, card.methodId, card.orderCode, card.title, card.priceText].join(':');
+      }).join(',');
+    }
+
+    function renderSupportCards(cards){
+      var list = normalizeSupportCards(cards);
+      if (!list.length) return '';
+      var ticketOnly = list.length === 1 && list[0].type === 'support' && list[0].action === 'open_ticket';
+      return '<div class="site-support-chat__cards' + (ticketOnly ? ' is-ticket-prompt' : '') + '" role="list">' + list.map(function(card){
+        if (card.type === 'support' && card.action === 'open_ticket') {
+          var ticketData = [
+            'data-support-card-action="' + escapeSupport(card.action) + '"',
+            'data-card-type="' + escapeSupport(card.type) + '"',
+            'data-card-id="' + escapeSupport(card.id || 'open_ticket') + '"'
+          ].join(' ');
+          return '<button class="site-support-chat__ticket-btn" type="button" role="listitem" ' + ticketData + '>فتح تذكرة</button>';
+        }
+        var icon = card.type === 'deposit' ? 'fa-wallet' : (card.type === 'order' ? 'fa-receipt' : 'fa-bag-shopping');
+        var cta = card.action === 'open_deposit' ? 'إيداع' : (card.action === 'start_objection' ? 'اعتراض' : 'شراء');
+        var media = card.imageUrl
+          ? '<span class="site-support-chat__card-media"><img src="' + escapeSupport(card.imageUrl) + '" alt=""></span>'
+          : '<span class="site-support-chat__card-media is-empty"><i class="fa-solid ' + icon + '" aria-hidden="true"></i></span>';
+        var data = [
+          'data-support-card-action="' + escapeSupport(card.action) + '"',
+          'data-card-type="' + escapeSupport(card.type) + '"',
+          'data-card-id="' + escapeSupport(card.id) + '"',
+          'data-product-id="' + escapeSupport(card.productId || card.id) + '"',
+          'data-game-slug="' + escapeSupport(card.gameSlug) + '"',
+          'data-method-id="' + escapeSupport(card.methodId || card.id) + '"',
+          'data-country="' + escapeSupport(card.country) + '"',
+          'data-order-code="' + escapeSupport(card.orderCode || card.id) + '"'
+        ].join(' ');
+        return [
+          '<button class="site-support-chat__card" type="button" role="listitem" ' + data + '>',
+            media,
+            '<span class="site-support-chat__card-body">',
+              '<strong>' + escapeSupport(card.title) + '</strong>',
+              card.subtitle ? '<small>' + escapeSupport(card.subtitle) + '</small>' : '',
+              (card.priceText || card.statusText) ? '<em>' + escapeSupport(card.priceText || card.statusText) + '</em>' : '',
+            '</span>',
+            '<span class="site-support-chat__card-cta">' + escapeSupport(cta) + '</span>',
+          '</button>'
+        ].join('');
+      }).join('') + '</div>';
+    }
+
+    function getSupportContactKind(href){
+      var text = String(href || '').trim().toLowerCase();
+      if (!text) return '';
+      if (text.indexOf('wa.me/') >= 0 || text.indexOf('whatsapp.com/') >= 0 || text.indexOf('whatsapp:') === 0) return 'whatsapp';
+      if (text.indexOf('t.me/') >= 0 || text.indexOf('telegram.me/') >= 0 || text.indexOf('telegram:') === 0 || text.indexOf('tg:') === 0) return 'telegram';
+      if (text.indexOf('facebook.com/') >= 0 || text.indexOf('fb.com/') >= 0) return 'facebook';
+      if (text.indexOf('instagram.com/') >= 0) return 'instagram';
+      if (text.indexOf('mailto:') === 0) return 'email';
+      return '';
+    }
+
+    function getSupportContactIcon(kind){
+      if (kind === 'whatsapp') return 'fa-brands fa-whatsapp';
+      if (kind === 'telegram') return 'fa-brands fa-telegram';
+      if (kind === 'facebook') return 'fa-brands fa-facebook-f';
+      if (kind === 'instagram') return 'fa-brands fa-instagram';
+      if (kind === 'email') return 'fa-solid fa-envelope';
+      return 'fa-solid fa-link';
+    }
+
+    function getSupportContactFallbackLabel(kind, group){
+      if (kind === 'whatsapp') return group ? 'مجموعة واتساب' : 'واتساب';
+      if (kind === 'telegram') return 'تيليجرام';
+      if (kind === 'facebook') return 'فيسبوك';
+      if (kind === 'instagram') return 'إنستغرام';
+      if (kind === 'email') return 'البريد الإلكتروني';
+      return 'رابط التواصل';
+    }
+
+    function cleanSupportContactHref(value){
+      var text = String(value || '').trim().replace(/[)\].,،؛!?؟]+$/g, '');
+      if (/^(https?:|mailto:|tel:|tg:|telegram:|whatsapp:)/i.test(text)) return text;
+      return '';
+    }
+
+    function extractSupportContactLinksFromText(text){
+      var rawText = String(text || '');
+      if (!rawText.trim()) return { text: '', links: [] };
+      var seen = {};
+      var links = [];
+      var keptLines = [];
+      rawText.split(/\r?\n/).forEach(function(line){
+        var rawLine = String(line || '');
+        var urlMatch = rawLine.match(/(?:https?:\/\/|mailto:|tel:|tg:|telegram:|whatsapp:)[^\s<>"']+/i);
+        if (!urlMatch) {
+          keptLines.push(rawLine);
+          return;
+        }
+        var href = cleanSupportContactHref(urlMatch[0]);
+        var kind = getSupportContactKind(href);
+        if (!href || !kind) {
+          keptLines.push(rawLine);
+          return;
+        }
+        var label = rawLine
+          .replace(urlMatch[0], '')
+          .replace(/^[\s>*\-–—•]+/g, '')
+          .replace(/^\d+[\).\-]\s*/g, '')
+          .replace(/[:：\-\s]+$/g, '')
+          .trim();
+        var group = kind === 'whatsapp' && (/chat\.whatsapp\.com/i.test(href) || /(?:مجموعة|جروب|group|community)/i.test(label));
+        var key = href.toLowerCase();
+        if (!seen[key]) {
+          seen[key] = true;
+          links.push({
+            href: href,
+            kind: kind,
+            label: label || getSupportContactFallbackLabel(kind, group),
+            group: group
+          });
+        }
+      });
+      return {
+        text: keptLines.join('\n').replace(/\n{3,}/g, '\n\n').trim(),
+        links: links.slice(0, 8)
+      };
+    }
+
+    function renderSupportContactLinks(links){
+      var list = Array.isArray(links) ? links : [];
+      if (!list.length) return '';
+      return '<div class="site-support-chat__contact-links" role="list">' + list.map(function(link){
+        var kind = String(link && link.kind || 'link').trim().toLowerCase() || 'link';
+        var label = String(link && link.label || '').trim() || getSupportContactFallbackLabel(kind, link && link.group);
+        var href = String(link && link.href || '').trim();
+        if (!href) return '';
+        var icon = getSupportContactIcon(kind);
+        var groupBadge = link && link.group
+          ? '<span class="site-support-chat__contact-badge" aria-hidden="true"><i class="fa-solid fa-user-group"></i></span>'
+          : '';
+        return [
+          '<a class="site-support-chat__contact-btn is-' + escapeSupport(kind) + (link && link.group ? ' is-group' : '') + '"',
+            ' href="' + escapeSupport(href) + '" target="_blank" rel="noopener noreferrer"',
+            ' data-support-contact-link="1" role="listitem" aria-label="' + escapeSupport(label) + '">',
+            '<span class="site-support-chat__contact-icon" aria-hidden="true"><i class="' + escapeSupport(icon) + '"></i>' + groupBadge + '</span>',
+            '<span class="site-support-chat__contact-label">' + escapeSupport(label) + '</span>',
+          '</a>'
+        ].join('');
+      }).join('') + '</div>';
     }
 
     function formatSupportTime(value){
@@ -12660,6 +12964,7 @@ function wirePageBalanceBox(){
     }
 
     function playSupportIncomingTone(){
+      if (window.__ENABLE_SUPPORT_CHAT_TONE__ !== true) return;
       try {
         var audio = new Audio('https://image2url.com/r2/default/audio/1775222006071-0c6196c2-357e-4a1c-9499-a3ada1f41078.mp3');
         audio.volume = 0.36;
@@ -12720,7 +13025,16 @@ function wirePageBalanceBox(){
 
     function setSupportChatStatus(text){
       var status = document.getElementById('siteSupportChatStatus');
-      if (status) status.textContent = String(text || '');
+      if (!status) return;
+      var value = String(text || '').trim();
+      if (!value) {
+        status.textContent = '';
+        return;
+      }
+      var loading = /(?:جاري|جارٍ|تحميل|رفع|إرسال|انتظار)/i.test(value);
+      status.innerHTML = (loading
+        ? '<span class="site-support-chat__status-loader" aria-hidden="true"><span></span><span></span><span></span></span>'
+        : '') + escapeSupport(value);
     }
 
     function renderSupportBadge(thread){
@@ -12731,13 +13045,71 @@ function wirePageBalanceBox(){
       badge.hidden = !unread;
     }
 
-    function scrollSupportMessagesToBottom(){
+    function syncSupportTicketCloseButton(thread){
+      var button = document.getElementById('siteSupportChatCloseTicket');
+      if (!button) return;
+      var open = isSupportThreadTicketOpen(thread || supportChatState.thread);
+      button.hidden = !open;
+      button.classList.toggle('is-visible', open);
+      button.disabled = !!supportChatState.sending;
+      button.setAttribute('aria-hidden', open ? 'false' : 'true');
+    }
+
+    function getSupportMessagesBelowViewportCount(list){
+      if (!list) return 0;
+      try {
+        var viewportBottom = list.getBoundingClientRect().bottom;
+        var rows = list.querySelectorAll('.site-support-chat__bubble, .site-support-chat__system');
+        var count = 0;
+        Array.prototype.forEach.call(rows, function(row){
+          if (!row || !row.getBoundingClientRect) return;
+          if (row.getBoundingClientRect().bottom > viewportBottom + 8) count += 1;
+        });
+        return count;
+      } catch (_) {
+        return 0;
+      }
+    }
+
+    function isSupportMessagesNearBottom(list){
+      if (!list) return true;
+      try {
+        return (Number(list.scrollHeight || 0) - Number(list.scrollTop || 0) - Number(list.clientHeight || 0)) <= 96;
+      } catch (_) {
+        return true;
+      }
+    }
+
+    function shouldSupportAutoScroll(list){
+      if (!list) return true;
+      return isSupportMessagesNearBottom(list) || getSupportMessagesBelowViewportCount(list) <= 4;
+    }
+
+    function updateSupportJumpButton(){
+      var button = document.getElementById('siteSupportChatJump');
+      var list = document.getElementById('siteSupportChatMessages');
+      if (!button || !list) return;
+      var count = getSupportMessagesBelowViewportCount(list);
+      var show = count > 4;
+      button.hidden = !show;
+      button.classList.toggle('is-visible', show);
+      button.setAttribute('aria-label', show ? 'النزول إلى آخر الرسائل' : 'أنت في آخر المحادثة');
+    }
+
+    function scrollSupportMessagesToBottom(options){
+      var opts = options || {};
       var list = document.getElementById('siteSupportChatMessages');
       if (!list) return;
       var run = function(){
+        if (opts.force !== true && !shouldSupportAutoScroll(list)) {
+          updateSupportJumpButton();
+          return;
+        }
         try { list.scrollTop = list.scrollHeight; } catch (_) {}
+        updateSupportJumpButton();
       };
       run();
+      if (opts.defer === false) return;
       try { window.requestAnimationFrame(run); } catch (_) {}
       setTimeout(run, 80);
       setTimeout(run, 260);
@@ -12747,7 +13119,7 @@ function wirePageBalanceBox(){
     function getSupportMessageKey(thread, message){
       var m = normalizeSupportMessage(message);
       var uid = String(thread && thread.userUid || '').trim();
-      return [uid, m.id, m.sender, m.createdAt, m.text, m.imageUrl].join('|');
+      return [uid, m.id, m.sender, m.createdAt, m.text, m.imageUrl, getSupportCardsSignature(m.cards)].join('|');
     }
 
     function getSupportSelectedMessageKeys(){
@@ -12884,9 +13256,10 @@ function wirePageBalanceBox(){
       updateSupportSelectionBar();
       list.setAttribute('aria-busy', 'true');
       if (!list.querySelector('.site-support-chat__bubble')) {
-        list.innerHTML = '';
+        list.innerHTML = '<div class="site-support-chat__loading"><span class="site-support-chat__spinner" aria-hidden="true"><span></span></span><div>جاري تحميل المحادثة...</div></div>';
       }
       try { list.scrollTop = 0; } catch (_) {}
+      updateSupportJumpButton();
     }
 
     function renderSupportMessages(thread){
@@ -12894,6 +13267,9 @@ function wirePageBalanceBox(){
       if (!list) return;
       list.removeAttribute('aria-busy');
       var messages = Array.isArray(thread && thread.messages) ? thread.messages.map(normalizeSupportMessage) : [];
+      var firstRender = !supportChatState.hasRenderedMessages;
+      var lastMessage = messages.length ? messages[messages.length - 1] : null;
+      var shouldStickToBottom = firstRender || (lastMessage && lastMessage.sender === 'user') || shouldSupportAutoScroll(list);
       if (!messages.length && supportChatState.loading) {
         renderSupportMessagesLoading();
         return;
@@ -12901,20 +13277,46 @@ function wirePageBalanceBox(){
       if (!messages.length) {
         list.innerHTML = '<div class="site-support-chat__empty">لا توجد رسائل بعد.</div>';
         updateSupportSelectionBar();
-        scrollSupportMessagesToBottom();
+        supportChatState.hasRenderedMessages = true;
+        if (shouldStickToBottom) scrollSupportMessagesToBottom({ force: firstRender, defer: !firstRender });
+        else updateSupportJumpButton();
         return;
       }
       list.innerHTML = messages.map(function(message){
+        var system = message.sender === 'system';
         var own = message.sender === 'user';
         var messageKey = getSupportMessageKey(thread || {}, message);
+        var isAi = !own && isSupportAiAuthorName(message.authorName);
+        var contactPayload = !own
+          ? extractSupportContactLinksFromText(message.text)
+          : { text: message.text, links: [] };
+        var displayText = String(contactPayload.text || '');
+        var contactLinksHtml = renderSupportContactLinks(contactPayload.links);
+        var shouldTypeAi = isAi && !!displayText && !firstRender && !supportChatState.aiTypedMessageKeys[messageKey];
+        if (isAi && firstRender) supportChatState.aiTypedMessageKeys[messageKey] = true;
         var selectedClass = isSupportMessageSelected(messageKey) ? ' is-selected' : '';
+        if (system) {
+          return [
+            '<div class="site-support-chat__system" aria-live="polite">',
+              message.text ? '<div>' + escapeSupport(message.text).replace(/\n/g, '<br>') + '</div>' : '',
+              '<span>' + escapeSupport(formatSupportTime(message.createdAt)) + '</span>',
+            '</div>'
+          ].join('');
+        }
         var imageHtml = message.imageUrl
           ? '<button class="site-support-chat__image-btn" type="button" data-support-image="' + escapeSupport(message.imageUrl) + '" aria-label="عرض الصورة"><img src="' + escapeSupport(message.imageUrl) + '" alt=""></button>'
           : '';
+        var cardsHtml = renderSupportCards(message.cards);
         return [
-          '<div class="site-support-chat__bubble ' + (own ? 'is-user' : 'is-admin') + selectedClass + '" data-support-message-key="' + escapeSupport(messageKey) + '" role="button" tabindex="0" aria-selected="' + (selectedClass ? 'true' : 'false') + '">',
+          '<div class="site-support-chat__bubble ' + (own ? 'is-user' : 'is-admin') + (isAi ? ' is-ai' : '') + (shouldTypeAi ? ' is-typing' : '') + selectedClass + '" data-support-message-key="' + escapeSupport(messageKey) + '" role="button" tabindex="0" aria-selected="' + (selectedClass ? 'true' : 'false') + '">',
             '<span class="site-support-chat__select-mark" aria-hidden="true"><i class="fa-solid fa-check"></i></span>',
-            message.text ? '<div>' + escapeSupport(message.text).replace(/\n/g, '<br>') + '</div>' : '',
+            displayText
+              ? (shouldTypeAi
+                ? '<div class="site-support-chat__text" data-support-ai-typing="1" data-support-ai-text="' + escapeSupport(displayText) + '"></div>'
+                : '<div class="site-support-chat__text">' + escapeSupport(displayText).replace(/\n/g, '<br>') + '</div>')
+              : '',
+            contactLinksHtml,
+            cardsHtml,
             imageHtml,
             '<span>' + escapeSupport(formatSupportTime(message.createdAt)) + '</span>',
           '</div>'
@@ -12923,12 +13325,45 @@ function wirePageBalanceBox(){
       try {
         list.querySelectorAll('img').forEach(function(img){
           if (!img || img.complete) return;
-          img.addEventListener('load', scrollSupportMessagesToBottom, { once: true });
-          img.addEventListener('error', scrollSupportMessagesToBottom, { once: true });
+          if (shouldStickToBottom) {
+            img.addEventListener('load', function(){ scrollSupportMessagesToBottom(); }, { once: true });
+            img.addEventListener('error', function(){ scrollSupportMessagesToBottom(); }, { once: true });
+          }
         });
       } catch (_) {}
       updateSupportSelectionBar();
-      scrollSupportMessagesToBottom();
+      supportChatState.hasRenderedMessages = true;
+      animateSupportAiTyping(list, shouldStickToBottom);
+      if (shouldStickToBottom) scrollSupportMessagesToBottom({ force: firstRender, defer: !firstRender });
+      else updateSupportJumpButton();
+    }
+
+    function animateSupportAiTyping(list, shouldStickToBottom){
+      if (!list) return;
+      try {
+        Array.prototype.forEach.call(list.querySelectorAll('[data-support-ai-typing="1"]'), function(node){
+          var bubble = node.closest ? node.closest('.site-support-chat__bubble') : null;
+          var key = bubble ? String(bubble.getAttribute('data-support-message-key') || '') : '';
+          var fullText = String(node.getAttribute('data-support-ai-text') || '');
+          node.removeAttribute('data-support-ai-typing');
+          node.removeAttribute('data-support-ai-text');
+          node.textContent = '';
+          var index = 0;
+          var chunkSize = Math.max(1, Math.ceil(fullText.length / 80));
+          var step = function(){
+            index = Math.min(fullText.length, index + chunkSize);
+            node.textContent = fullText.slice(0, index);
+            if (shouldStickToBottom) scrollSupportMessagesToBottom({ defer: false });
+            if (index < fullText.length) {
+              setTimeout(step, 12);
+              return;
+            }
+            if (bubble) bubble.classList.remove('is-typing');
+            if (key) supportChatState.aiTypedMessageKeys[key] = true;
+          };
+          step();
+        });
+      } catch (_) {}
     }
 
     function showSupportChatPageLoader(){
@@ -12986,8 +13421,24 @@ function wirePageBalanceBox(){
         last && last.id,
         last && last.createdAt,
         last && last.text,
-        last && last.imageUrl
+        last && last.imageUrl,
+        last && getSupportCardsSignature(last.cards)
       ].join('|');
+    }
+
+    function getSupportMessagesVersion(thread){
+      var messages = Array.isArray(thread && thread.messages) ? thread.messages.map(normalizeSupportMessage) : [];
+      return messages.map(function(message){
+        return [
+          message.id,
+          message.sender,
+          message.authorName,
+          message.createdAt,
+          message.text,
+          message.imageUrl,
+          getSupportCardsSignature(message.cards)
+        ].join('|');
+      }).join('||');
     }
 
     function renderSupportThread(thread, options){
@@ -12996,9 +13447,14 @@ function wirePageBalanceBox(){
       var previousIncomingKey = String(supportChatState.lastIncomingMessageKey || '');
       var previousThreadVersion = String(supportChatState.lastThreadVersion || '');
       var nextThreadVersion = getSupportThreadVersion(thread || {});
+      var nextMessagesVersion = getSupportMessagesVersion(thread || {});
       supportChatState.thread = thread || supportChatState.thread || null;
       renderSupportBadge(supportChatState.thread);
-      renderSupportMessages(supportChatState.thread);
+      syncSupportTicketCloseButton(supportChatState.thread);
+      if (!supportChatState.hasRenderedMessages || supportChatState.lastRenderedMessagesVersion !== nextMessagesVersion || opts.forceRender === true) {
+        renderSupportMessages(supportChatState.thread);
+        supportChatState.lastRenderedMessagesVersion = nextMessagesVersion;
+      }
       if (incomingKey) {
         if (previousIncomingKey && previousIncomingKey !== incomingKey && opts.notify !== false) {
           notifySupportIncomingMessage(supportChatState.thread);
@@ -13006,7 +13462,37 @@ function wirePageBalanceBox(){
         supportChatState.lastIncomingMessageKey = incomingKey;
       }
       supportChatState.lastThreadVersion = nextThreadVersion;
+      if (isSupportChatActive()) {
+        if (isSupportThreadTicketOpen(supportChatState.thread)) {
+          if (supportChatState.realtimeDisabled) startSupportPolling();
+          else startSupportRealtime().catch(function(){});
+        } else {
+          stopSupportPolling();
+          stopSupportRealtime();
+        }
+      }
       return !!(previousThreadVersion && nextThreadVersion && previousThreadVersion !== nextThreadVersion);
+    }
+
+    function mergeSupportThreadMessages(threadMeta, messages){
+      var base = supportChatState.thread && typeof supportChatState.thread === 'object' ? supportChatState.thread : {};
+      var meta = threadMeta && typeof threadMeta === 'object' ? threadMeta : {};
+      var currentMessages = Array.isArray(base.messages) ? base.messages.map(normalizeSupportMessage) : [];
+      var nextMessages = currentMessages.slice();
+      var seen = {};
+      nextMessages.forEach(function(message){
+        if (message && message.id) seen[String(message.id)] = true;
+      });
+      (Array.isArray(messages) ? messages : []).forEach(function(raw){
+        var message = normalizeSupportMessage(raw);
+        if (!message.id || seen[String(message.id)]) return;
+        seen[String(message.id)] = true;
+        nextMessages.push(message);
+      });
+      nextMessages.sort(function(a, b){
+        return (Date.parse(a.createdAt || '') || 0) - (Date.parse(b.createdAt || '') || 0);
+      });
+      return Object.assign({}, base, meta, { messages: nextMessages });
     }
 
     function supportRealtimeDocId(uid){
@@ -13046,10 +13532,33 @@ function wirePageBalanceBox(){
       return firebase.firestore();
     }
 
+    function supportIsRealtimePermissionError(err){
+      var text = err && err.message ? String(err.message) : '';
+      var code = String(err && err.code ? err.code : '').trim().toLowerCase();
+      return code === 'permission-denied' ||
+        code === 'permission_denied' ||
+        /missing or insufficient permissions|permission denied|insufficient permissions/i.test(text);
+    }
+
     function markSupportThreadReadFromRealtime(){
       if (!isSupportChatActive() || supportChatState.markReadInFlight) return;
       var thread = supportChatState.thread || {};
       if (!(Number(thread.unreadUser || 0) > 0)) return;
+      var minThreadFetchMs = Math.max(15000, Number(supportChatState.pollDelayMs || 0) || 15000);
+      var nowMs = Date.now();
+      var remainingMs = supportChatState.lastThreadFetchAt
+        ? minThreadFetchMs - (nowMs - supportChatState.lastThreadFetchAt)
+        : 0;
+      if (remainingMs > 0) {
+        if (!supportChatState.markReadTimer) {
+          supportChatState.markReadTimer = setTimeout(function(){
+            supportChatState.markReadTimer = 0;
+            markSupportThreadReadFromRealtime();
+          }, remainingMs);
+        }
+        return;
+      }
+      supportChatState.lastThreadFetchAt = nowMs;
       supportChatState.markReadInFlight = true;
       callSupportApi('support-thread', {
         method: 'GET',
@@ -13074,9 +13583,66 @@ function wirePageBalanceBox(){
       supportChatState.realtimeReady = false;
     }
 
+    function supportShouldPollFallback(){
+      return supportChatState.realtimeDisabled === true && isSupportThreadTicketOpen(supportChatState.thread);
+    }
+
+    function stopSupportPolling(){
+      if (!supportChatState.pollTimer) return;
+      clearTimeout(supportChatState.pollTimer);
+      supportChatState.pollTimer = 0;
+    }
+
+    function scheduleSupportPolling(delayMs){
+      stopSupportPolling();
+      if (!isSupportChatActive() || !supportShouldPollFallback()) return;
+      var delay = Number(delayMs);
+      if (!Number.isFinite(delay) || delay < 0) delay = Number(supportChatState.pollDelayMs || 0);
+      delay = Math.max(15000, delay || 15000);
+      supportChatState.pollTimer = setTimeout(function(){
+        supportRunPollingCycle();
+      }, delay);
+    }
+
+    function supportRunPollingCycle(){
+      if (!isSupportChatActive() || !supportShouldPollFallback()) {
+        stopSupportPolling();
+        return;
+      }
+      supportChatState.pollTimer = 0;
+      Promise.resolve(loadSupportThread(true, { markRead: true, notify: false, force: true }))
+        .catch(function(){})
+        .finally(function(){
+          if (!isSupportChatActive()) {
+            stopSupportPolling();
+            return;
+          }
+          if (supportShouldPollFallback()) scheduleSupportPolling();
+          else stopSupportPolling();
+        });
+    }
+
+    function startSupportPolling(){
+      if (!isSupportChatActive()) {
+        stopSupportPolling();
+        return false;
+      }
+      if (!supportShouldPollFallback()) {
+        stopSupportPolling();
+        return false;
+      }
+      if (supportChatState.pollTimer) return true;
+      scheduleSupportPolling(supportChatState.pollDelayMs);
+      return true;
+    }
+
     async function startSupportRealtime(){
       if (!isSupportChatActive()) {
         stopSupportRealtime();
+        return false;
+      }
+      if (supportChatState.realtimeDisabled) {
+        if (supportShouldPollFallback()) startSupportPolling();
         return false;
       }
       if (supportChatState.realtimeUnsubscribe || supportChatState.realtimeStarting) return true;
@@ -13109,24 +13675,26 @@ function wirePageBalanceBox(){
           }, function(err){
             if (supportChatState.realtimeRunId !== runId) return;
             supportChatState.realtimeError = err && err.message ? err.message : 'realtime_failed';
-            try { console.warn('support_realtime_failed', supportChatState.realtimeError); } catch (_) {}
-            if (isSupportChatActive()) {
-              setSupportChatStatus('تعذر تشغيل التحديث الفوري. افتح المحادثة مجددًا أو حدّث الصفحة.');
+            if (!supportIsRealtimePermissionError(err)) {
+              try { console.warn('support_realtime_failed', supportChatState.realtimeError); } catch (_) {}
             }
             stopSupportRealtime();
+            if (supportShouldPollFallback()) startSupportPolling();
           });
         if (!isSupportChatActive() || supportChatState.realtimeRunId !== runId) {
           try { if (typeof unsubscribe === 'function') unsubscribe(); } catch (_) {}
           return false;
         }
+        supportChatState.realtimeDisabled = false;
         supportChatState.realtimeUnsubscribe = unsubscribe;
         return true;
       } catch (err) {
         supportChatState.realtimeError = err && err.message ? err.message : 'realtime_failed';
-        try { console.warn('support_realtime_start_failed', supportChatState.realtimeError); } catch (_) {}
-        if (isSupportChatActive()) {
-          setSupportChatStatus('تعذر تشغيل التحديث الفوري. افتح المحادثة مجددًا أو حدّث الصفحة.');
+        supportChatState.realtimeDisabled = true;
+        if (!supportIsRealtimePermissionError(err)) {
+          try { console.warn('support_realtime_start_failed', supportChatState.realtimeError); } catch (_) {}
         }
+        if (supportShouldPollFallback()) startSupportPolling();
         return false;
       } finally {
         if (supportChatState.realtimeRunId === runId) {
@@ -13141,6 +13709,12 @@ function wirePageBalanceBox(){
         return { success: true, ok: true, skipped: true, inactive: true };
       }
       if (supportChatState.loading) return;
+      var minThreadFetchMs = Math.max(15000, Number(supportChatState.pollDelayMs || 0) || 15000);
+      var nowMs = Date.now();
+      if (silent && supportChatState.lastThreadFetchAt && (nowMs - supportChatState.lastThreadFetchAt) < minThreadFetchMs) {
+        return { success: true, ok: true, skipped: true, throttled: true };
+      }
+      supportChatState.lastThreadFetchAt = nowMs;
       supportChatState.loading = true;
       if (!silent) setSupportChatStatus('جاري تحميل المحادثة...');
       var usePageLoader = !silent && isSupportChatActive();
@@ -13172,24 +13746,6 @@ function wirePageBalanceBox(){
         supportChatState.loading = false;
         if (usePageLoader) hideSupportChatPageLoader();
       }
-    }
-
-    function stopSupportPolling(){
-      if (!supportChatState.pollTimer) return;
-      clearTimeout(supportChatState.pollTimer);
-      supportChatState.pollTimer = 0;
-    }
-
-    function scheduleSupportPolling(delayMs){
-      stopSupportPolling();
-      if (!isSupportChatActive()) return;
-      startSupportRealtime().catch(function(){});
-    }
-
-    function startSupportPolling(){
-      stopSupportPolling();
-      if (!isSupportChatActive()) return;
-      startSupportRealtime().catch(function(){});
     }
 
     function stopSupportBadgePolling(){
@@ -13357,8 +13913,23 @@ function wirePageBalanceBox(){
       }
       syncSupportChatViewportHeight();
       supportChatState.open = !!open;
+      if (!supportChatState.open) {
+        try {
+          var focused = document.activeElement;
+          if (focused && panel.contains(focused)) {
+            if (!fab.hidden && typeof fab.focus === 'function') fab.focus({ preventScroll: true });
+            else if (typeof focused.blur === 'function') focused.blur();
+          }
+        } catch (_) {}
+      } else {
+        try { panel.removeAttribute('inert'); } catch (_) {}
+      }
       panel.hidden = !supportChatState.open;
       panel.setAttribute('aria-hidden', supportChatState.open ? 'false' : 'true');
+      try {
+        if (supportChatState.open) panel.removeAttribute('inert');
+        else panel.setAttribute('inert', '');
+      } catch (_) {}
       fab.setAttribute('aria-expanded', supportChatState.open ? 'true' : 'false');
       try {
         document.documentElement.classList.toggle('site-support-page-open', supportChatState.open);
@@ -13376,11 +13947,10 @@ function wirePageBalanceBox(){
           if (supportChatState.titleBase) document.title = supportChatState.titleBase;
         } catch (_) {}
         ensureSupportNotificationPermission();
-        startSupportRealtime().catch(function(){});
         loadSupportThread(false, { markRead: true, notify: false, force: true }).catch(function(){});
         startSupportPolling();
         setTimeout(function(){
-          scrollSupportMessagesToBottom();
+          scrollSupportMessagesToBottom({ force: true, defer: false });
         }, 80);
       } else {
         closeSupportImageViewer();
@@ -13427,10 +13997,22 @@ function wirePageBalanceBox(){
       setSupportSelectedImage(null);
     }
 
+    function setSupportSendButtonBusy(busy){
+      var sendBtn = document.getElementById('siteSupportChatSend');
+      if (!sendBtn) return;
+      sendBtn.disabled = !!busy;
+      sendBtn.classList.toggle('is-sending', !!busy);
+      sendBtn.setAttribute('aria-busy', busy ? 'true' : 'false');
+      sendBtn.setAttribute('aria-label', 'إرسال');
+      sendBtn.innerHTML = busy
+        ? '<span class="site-support-chat__send-loader" aria-hidden="true"><span></span><span></span><span></span></span>'
+        : '<i class="fa-solid fa-paper-plane" aria-hidden="true"></i>';
+      syncSupportTicketCloseButton();
+    }
+
     async function submitSupportMessage(){
       if (supportChatState.sending) return;
       var input = document.getElementById('siteSupportChatInput');
-      var sendBtn = document.getElementById('siteSupportChatSend');
       var text = input ? String(input.value || '').trim() : '';
       var imageFile = supportChatState.imageFile || null;
       if (!text && !imageFile) {
@@ -13438,19 +14020,27 @@ function wirePageBalanceBox(){
         return;
       }
       supportChatState.sending = true;
-      if (sendBtn) sendBtn.disabled = true;
+      setSupportSendButtonBusy(true);
       try {
-        setSupportChatStatus(imageFile ? 'جاري رفع الصورة...' : 'جاري الإرسال...');
+        setSupportChatStatus('');
         var imageUrl = imageFile ? await uploadSupportImageFile(imageFile) : '';
-        if (imageUrl) setSupportChatStatus('جاري إرسال الرسالة...');
         var payload = await callSupportApi('support-message', {
           method: 'POST',
-          body: { text: text, imageUrl: imageUrl }
+          body: {
+            text: text,
+            message: text,
+            chatId: String((supportChatAuthUser && supportChatAuthUser.uid) || (supportChatState.thread && supportChatState.thread.userUid) || ''),
+            imageUrl: imageUrl
+          }
         });
         if (input) input.value = '';
         clearSupportSelectedImage();
         clearSupportMessageSelection({ render: false });
-        renderSupportThread(payload.thread || null, { notify: false });
+        if (payload && Array.isArray(payload.messages)) {
+          renderSupportThread(mergeSupportThreadMessages(payload.thread || null, payload.messages), { notify: false });
+        } else {
+          renderSupportThread(payload.thread || null, { notify: false });
+        }
         if (payload && payload.realtime === false) {
           setSupportChatStatus('تم الإرسال، لكن التحديث الفوري غير جاهز للطرف الآخر.');
         } else {
@@ -13460,7 +14050,234 @@ function wirePageBalanceBox(){
         setSupportChatStatus(err && err.message ? err.message : 'تعذر إرسال الرسالة.');
       } finally {
         supportChatState.sending = false;
-        if (sendBtn) sendBtn.disabled = false;
+        setSupportSendButtonBusy(false);
+      }
+    }
+
+    async function submitSupportCloseTicket(){
+      if (supportChatState.sending) return;
+      if (!isSupportThreadTicketOpen(supportChatState.thread)) {
+        syncSupportTicketCloseButton();
+        return;
+      }
+      supportChatState.sending = true;
+      setSupportSendButtonBusy(true);
+      try {
+        setSupportChatStatus('');
+        var payload = await callSupportApi('support-message', {
+          method: 'POST',
+          body: {
+            action: 'close_ticket',
+            type: 'close_ticket',
+            chatId: String((supportChatAuthUser && supportChatAuthUser.uid) || (supportChatState.thread && supportChatState.thread.userUid) || '')
+          }
+        });
+        clearSupportMessageSelection({ render: false });
+        if (payload && Array.isArray(payload.messages)) {
+          renderSupportThread(mergeSupportThreadMessages(payload.thread || null, payload.messages), { notify: false });
+        } else {
+          renderSupportThread(payload.thread || null, { notify: false });
+        }
+        setSupportChatStatus(payload && payload.message ? payload.message : 'تم إغلاق التذكرة.');
+      } catch (err) {
+        setSupportChatStatus(err && err.message ? err.message : 'تعذر إغلاق التذكرة.');
+      } finally {
+        supportChatState.sending = false;
+        setSupportSendButtonBusy(false);
+        syncSupportTicketCloseButton();
+      }
+    }
+
+    function navigateSupportRoute(routeKey, hashValue){
+      var route = String(routeKey || '').trim();
+      var hash = String(hashValue || (route ? '#/' + route : '')).trim();
+      try {
+        if (route && typeof navigate === 'function') {
+          navigate(route);
+          return true;
+        }
+      } catch (_) {}
+      try {
+        if (hash && typeof window.navigateHomeHash === 'function') {
+          window.navigateHomeHash(hash, route || hash.replace(/^#\/?/, ''));
+          return true;
+        }
+      } catch (_) {}
+      try {
+        if (hash) {
+          if (String(location.hash || '') !== hash) location.hash = hash;
+          else if (route && typeof window.__reloadInlineRoute === 'function') window.__reloadInlineRoute(route);
+          return true;
+        }
+      } catch (_) {}
+      return false;
+    }
+
+    function openSupportProductCard(button){
+      var productId = String(button && (button.getAttribute('data-product-id') || button.getAttribute('data-card-id')) || '').trim();
+      var gameSlug = String(button && button.getAttribute('data-game-slug') || '').trim();
+      if (!productId && !gameSlug) {
+        setSupportChatStatus('تعذر فتح المنتج من الكرت.');
+        return;
+      }
+      try { if (button && typeof button.blur === 'function') button.blur(); } catch (_) {}
+      try { setSupportChatOpen(false); } catch (_) {}
+      try {
+        window.__CATALOG_INLINE_ITEM_ID__ = productId || '';
+        window.__CATALOG_INLINE_ITEM_SLUG__ = gameSlug || productId || '';
+        window.__CATALOG_INLINE_FORCE_MODAL__ = productId ? '1' : '';
+        window.__CATALOG_INLINE_MODAL_ONLY__ = '';
+        window.__CATALOG_INLINE_MODAL_ONLY_SOURCE__ = 'support';
+        window.__CATALOG_INLINE_KEEP_PAGE_FOR_FORCE_MODAL__ = productId ? '1' : '';
+        window.__CATALOG_SUPPRESS_CATEGORY_FETCH_UNTIL__ = Date.now() + 20000;
+        window.__CATALOG_PRODUCT_CLICK_LOCK_UNTIL__ = Date.now() + 30000;
+        window.__CATALOG_PRODUCT_CLICK_LOCK_SLUG__ = gameSlug || productId || '';
+      } catch (_) {}
+      try {
+        if (gameSlug && typeof window.__openCatalogInline === 'function') {
+          window.__openCatalogInline(gameSlug, 'games');
+          return;
+        }
+      } catch (_) {}
+      if (gameSlug) {
+        navigateSupportRoute('games', '#/games/' + encodeURIComponent(gameSlug));
+      } else {
+        navigateSupportRoute('games', '#/games');
+      }
+    }
+
+    function tryOpenSupportDepositMethod(methodId, country, attempt){
+      var id = String(methodId || '').trim();
+      var tries = Number(attempt || 0);
+      if (!id) return;
+      try {
+        if (typeof window.__depositInlineOpenMethodById === 'function') {
+          Promise.resolve(window.__depositInlineOpenMethodById(id, { country: country || '', source: 'support_chat' }))
+            .then(function(ok){
+              if (ok) return;
+              if (tries < 18) setTimeout(function(){ tryOpenSupportDepositMethod(id, country, tries + 1); }, 350);
+            })
+            .catch(function(){
+              if (tries < 18) setTimeout(function(){ tryOpenSupportDepositMethod(id, country, tries + 1); }, 350);
+            });
+          return;
+        }
+      } catch (_) {}
+      try {
+        var escaped = (window.CSS && CSS.escape) ? CSS.escape(id) : id.replace(/"/g, '\\"');
+        var card = document.querySelector('#depositInlineApp [data-method-id="' + escaped + '"]');
+        if (card && typeof card.click === 'function') {
+          card.click();
+          return;
+        }
+      } catch (_) {}
+      if (tries < 18) setTimeout(function(){ tryOpenSupportDepositMethod(id, country, tries + 1); }, 350);
+    }
+
+    function openSupportDepositCard(button){
+      var methodId = String(button && (button.getAttribute('data-method-id') || button.getAttribute('data-card-id')) || '').trim();
+      var country = String(button && button.getAttribute('data-country') || '').trim();
+      try {
+        window.__SUPPORT_PENDING_DEPOSIT_METHOD__ = { methodId: methodId, country: country, ts: Date.now() };
+        sessionStorage.setItem('support:pendingDepositMethod', JSON.stringify(window.__SUPPORT_PENDING_DEPOSIT_METHOD__));
+      } catch (_) {}
+      try { setSupportChatOpen(false); } catch (_) {}
+      navigateSupportRoute('deposit', '#/deposit');
+      if (methodId) setTimeout(function(){ tryOpenSupportDepositMethod(methodId, country, 0); }, 450);
+    }
+
+    async function submitSupportObjection(orderCode, reason){
+      if (supportChatState.sending) return;
+      var code = String(orderCode || '').trim();
+      var cleanReason = String(reason || '').trim();
+      if (!cleanReason) return;
+      supportChatState.sending = true;
+      try {
+        setSupportChatStatus('جاري رفع الاعتراض...');
+        var text = (code ? ('اعتراض على الطلب ' + code) : 'اعتراض على طلب') + '\nالسبب: ' + cleanReason;
+        var payload = await callSupportApi('support-message', {
+          method: 'POST',
+          body: {
+            action: 'order_objection',
+            text: text,
+            message: text,
+            chatId: String((supportChatAuthUser && supportChatAuthUser.uid) || (supportChatState.thread && supportChatState.thread.userUid) || ''),
+            objection: {
+              orderCode: code,
+              reason: cleanReason
+            }
+          }
+        });
+        clearSupportMessageSelection({ render: false });
+        if (payload && Array.isArray(payload.messages)) {
+          renderSupportThread(mergeSupportThreadMessages(payload.thread || null, payload.messages), { notify: false });
+        } else {
+          renderSupportThread(payload.thread || null, { notify: false });
+        }
+        setSupportChatStatus('تم رفع الاعتراض للإدارة.');
+      } catch (err) {
+        setSupportChatStatus(err && err.message ? err.message : 'تعذر رفع الاعتراض.');
+      } finally {
+        supportChatState.sending = false;
+      }
+    }
+
+    async function submitSupportOpenTicket(){
+      if (supportChatState.sending) return;
+      supportChatState.sending = true;
+      setSupportSendButtonBusy(true);
+      try {
+        setSupportChatStatus('جاري فتح تذكرة الدعم...');
+        var payload = await callSupportApi('support-message', {
+          method: 'POST',
+          body: {
+            action: 'open_ticket',
+            type: 'open_ticket',
+            chatId: String((supportChatAuthUser && supportChatAuthUser.uid) || (supportChatState.thread && supportChatState.thread.userUid) || '')
+          }
+        });
+        clearSupportMessageSelection({ render: false });
+        if (payload && Array.isArray(payload.messages)) {
+          renderSupportThread(mergeSupportThreadMessages(payload.thread || null, payload.messages), { notify: false });
+        } else {
+          renderSupportThread(payload.thread || null, { notify: false });
+        }
+        setSupportChatStatus(payload && payload.message ? payload.message : 'تم فتح تذكرة الدعم.');
+      } catch (err) {
+        setSupportChatStatus(err && err.message ? err.message : 'تعذر فتح تذكرة الدعم.');
+      } finally {
+        supportChatState.sending = false;
+        setSupportSendButtonBusy(false);
+      }
+    }
+
+    function handleSupportCardAction(button){
+      var action = String(button && button.getAttribute('data-support-card-action') || '').trim();
+      if (action === 'open_ticket') {
+        submitSupportOpenTicket().catch(function(){});
+        return;
+      }
+      if (action === 'open_product') {
+        openSupportProductCard(button);
+        return;
+      }
+      if (action === 'open_deposit') {
+        openSupportDepositCard(button);
+        return;
+      }
+      if (action === 'start_objection') {
+        var orderCode = String(button && button.getAttribute('data-order-code') || '').trim();
+        var promptText = orderCode
+          ? 'اكتب سبب الاعتراض على الطلب ' + orderCode + ':'
+          : 'اكتب سبب الاعتراض لو سمحت:';
+        var reason = '';
+        try { reason = window.prompt(promptText) || ''; } catch (_) { reason = ''; }
+        reason = String(reason || '').trim();
+        if (!reason) {
+          setSupportChatStatus('اكتب سبب الاعتراض حتى نقدر نرفعه للإدارة.');
+          return;
+        }
+        submitSupportObjection(orderCode, reason).catch(function(){});
       }
     }
 
@@ -13584,6 +14401,7 @@ function wirePageBalanceBox(){
           align-items:center;
           gap:10px;
           min-width:0;
+          flex:1 1 auto;
         }
         .site-support-chat__icon{
           width:42px;
@@ -13638,15 +14456,59 @@ function wirePageBalanceBox(){
         }
         .site-support-chat__title strong{display:block;font-size:.98rem}
         .site-support-chat__title span{display:block;color:#9ca3af;font-size:.76rem;margin-top:2px}
+        .site-support-chat__head-actions{
+          display:flex;
+          align-items:center;
+          gap:8px;
+          flex:0 0 auto;
+        }
+        .site-support-chat__close-ticket{
+          min-height:40px;
+          border:1px solid rgba(248,113,113,.38);
+          border-radius:999px;
+          background:linear-gradient(180deg,rgba(127,29,29,.42),rgba(69,10,10,.34));
+          color:#fee2e2;
+          display:inline-flex;
+          align-items:center;
+          justify-content:center;
+          gap:8px;
+          padding:0 14px;
+          font-size:.78rem;
+          font-weight:900;
+          line-height:1;
+          white-space:nowrap;
+          cursor:pointer;
+          box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 22px rgba(127,29,29,.22);
+          transition:background .16s ease,border-color .16s ease,transform .16s ease,color .16s ease;
+        }
+        .site-support-chat__close-ticket:hover{
+          border-color:rgba(252,165,165,.62);
+          background:linear-gradient(180deg,rgba(153,27,27,.56),rgba(91,12,12,.44));
+          transform:translateY(-1px);
+        }
+        .site-support-chat__close-ticket[hidden]{
+          display:none!important;
+        }
+        .site-support-chat__close-ticket:disabled{
+          opacity:.58;
+          cursor:not-allowed;
+        }
         .site-support-chat__close{
           width:40px;
           height:40px;
-          border:1px solid rgba(255,255,255,.12);
-          border-radius:14px;
-          background:#111820;
+          border:1px solid rgba(148,163,184,.22);
+          border-radius:999px;
+          background:rgba(15,23,42,.58);
           color:#f8fafc;
           display:grid;
           place-items:center;
+          box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 20px rgba(0,0,0,.2);
+          transition:background .16s ease,border-color .16s ease,transform .16s ease;
+        }
+        .site-support-chat__close:hover{
+          border-color:rgba(226,232,240,.38);
+          background:rgba(30,41,59,.74);
+          transform:translateY(-1px);
         }
         .site-support-chat__selection-bar{
           min-height:54px;
@@ -13711,6 +14573,35 @@ function wirePageBalanceBox(){
           background-position:0 0,0 17px,17px -17px,-17px 0;
           overscroll-behavior:contain;
         }
+        .site-support-chat__jump{
+          position:absolute;
+          left:50%;
+          bottom:calc(102px + max(10px,env(safe-area-inset-bottom,0px)));
+          width:42px;
+          height:42px;
+          border:0;
+          border-radius:999px;
+          display:grid;
+          place-items:center;
+          z-index:3;
+          color:#f8fafc;
+          background:rgba(15,23,42,.92);
+          box-shadow:0 16px 32px rgba(0,0,0,.28);
+          cursor:pointer;
+          opacity:0;
+          pointer-events:none;
+          transform:translate(-50%,8px) scale(.94);
+          transition:opacity .16s ease,transform .16s ease,background .16s ease;
+        }
+        .site-support-chat__jump.is-visible:not([hidden]){
+          opacity:1;
+          pointer-events:auto;
+          transform:translate(-50%,0) scale(1);
+        }
+        .site-support-chat__jump:hover{
+          background:#111827;
+        }
+        .site-support-chat__jump[hidden]{display:none!important}
         html[data-theme="dark"] .site-support-chat__messages,
         body.dark-mode .site-support-chat__messages{
           background-color:#0b141a;
@@ -13745,15 +14636,30 @@ function wirePageBalanceBox(){
           color:#cbd5e1;
         }
         .site-support-chat__spinner{
-          width:42px;
-          height:42px;
+          width:52px;
+          height:26px;
           border-radius:999px;
-          border:3px solid rgba(34,197,94,.2);
-          border-top-color:#22c55e;
-          animation:siteSupportChatSpin .8s linear infinite;
+          display:inline-flex;
+          align-items:center;
+          justify-content:center;
+          gap:6px;
+          background:rgba(34,197,94,.14);
         }
-        @keyframes siteSupportChatSpin{
-          to{transform:rotate(360deg)}
+        .site-support-chat__spinner::before,
+        .site-support-chat__spinner::after,
+        .site-support-chat__spinner span{
+          content:"";
+          width:6px;
+          height:6px;
+          border-radius:999px;
+          background:#22c55e;
+          animation:siteSupportTypingDots 1s ease-in-out infinite;
+        }
+        .site-support-chat__spinner span{animation-delay:.12s}
+        .site-support-chat__spinner::after{animation-delay:.24s}
+        @keyframes siteSupportTypingDots{
+          0%,80%,100%{transform:translateY(0);opacity:.45}
+          40%{transform:translateY(-4px);opacity:1}
         }
         .site-support-chat__bubble{
           position:relative;
@@ -13806,6 +14712,43 @@ function wirePageBalanceBox(){
           color:#eef2f7;
           border-bottom-right-radius:6px;
         }
+        .site-support-chat__text{
+          white-space:pre-wrap;
+        }
+        .site-support-chat__bubble.is-ai.is-typing .site-support-chat__text::after{
+          content:"";
+          display:inline-block;
+          width:2px;
+          height:1em;
+          margin-inline-start:2px;
+          vertical-align:-0.12em;
+          background:currentColor;
+          opacity:.8;
+          animation:siteSupportTypingCaret .7s steps(2,end) infinite;
+        }
+        @keyframes siteSupportTypingCaret{
+          0%,45%{opacity:.85}
+          46%,100%{opacity:.12}
+        }
+        .site-support-chat__system{
+          align-self:center;
+          max-width:min(86%,520px);
+          padding:6px 12px;
+          border-radius:999px;
+          background:rgba(148,163,184,.12);
+          color:#94a3b8;
+          font-size:.78rem;
+          line-height:1.65;
+          text-align:center;
+          box-shadow:none;
+        }
+        .site-support-chat__system span{
+          display:block;
+          margin-top:2px;
+          color:rgba(148,163,184,.78);
+          font-size:.66rem;
+          direction:ltr;
+        }
         .site-support-chat__bubble span{
           color:rgba(255,255,255,.72);
           font-size:.7rem;
@@ -13815,6 +14758,247 @@ function wirePageBalanceBox(){
           max-width:210px;
           border-radius:14px;
           display:block;
+        }
+        .site-support-chat__cards{
+          width:min(620px,100%);
+          max-width:100%;
+          display:flex;
+          gap:14px;
+          overflow-x:auto;
+          overflow-y:hidden;
+          padding:6px 2px 12px;
+          margin-top:4px;
+          scroll-snap-type:x proximity;
+          scrollbar-width:thin;
+        }
+        .site-support-chat__cards.is-ticket-prompt{
+          width:100%;
+          display:block;
+          overflow:visible;
+          padding:8px 0 0;
+          margin-top:6px;
+          scroll-snap-type:none;
+        }
+        .site-support-chat__bubble:has(.site-support-chat__cards){
+          max-width:min(96%,680px);
+        }
+        .site-support-chat__bubble:has(.site-support-chat__cards.is-ticket-prompt){
+          max-width:min(88%,360px);
+        }
+        .site-support-chat__ticket-btn{
+          width:100%;
+          min-height:38px;
+          border:0;
+          border-radius:12px;
+          display:grid;
+          place-items:center;
+          padding:0 14px;
+          background:#229ed9;
+          color:#fff;
+          font-size:.86rem;
+          font-weight:900;
+          line-height:1.2;
+          box-shadow:none;
+          cursor:pointer;
+          direction:rtl;
+          text-align:center;
+        }
+        .site-support-chat__ticket-btn:hover{
+          transform:none;
+          filter:brightness(1.05);
+        }
+        .site-support-chat__contact-links{
+          width:100%;
+          max-width:100%;
+          display:flex;
+          flex-wrap:wrap;
+          gap:8px;
+          margin-top:8px;
+          direction:rtl;
+        }
+        .site-support-chat__contact-btn{
+          min-width:0;
+          min-height:38px;
+          border-radius:999px;
+          display:inline-flex;
+          align-items:center;
+          gap:8px;
+          padding:6px 10px 6px 14px;
+          background:rgba(37,211,102,.14);
+          border:1px solid rgba(37,211,102,.28);
+          color:#dcfce7;
+          text-decoration:none;
+          font-size:.82rem;
+          font-weight:900;
+          line-height:1.2;
+          box-shadow:none;
+          max-width:100%;
+          transition:transform .16s ease,filter .16s ease,border-color .16s ease;
+        }
+        .site-support-chat__contact-btn:hover{
+          transform:translateY(-1px);
+          filter:brightness(1.08);
+          border-color:rgba(37,211,102,.5);
+          text-decoration:none;
+        }
+        .site-support-chat__bubble .site-support-chat__contact-icon{
+          position:relative;
+          width:28px;
+          height:28px;
+          border-radius:999px;
+          display:grid;
+          place-items:center;
+          flex:0 0 auto;
+          background:#25d366;
+          color:#fff;
+          box-shadow:0 8px 18px rgba(37,211,102,.24);
+        }
+        .site-support-chat__bubble .site-support-chat__contact-icon i{
+          font-size:1rem;
+          line-height:1;
+        }
+        .site-support-chat__bubble .site-support-chat__contact-badge{
+          position:absolute;
+          right:-3px;
+          bottom:-3px;
+          width:14px;
+          height:14px;
+          border-radius:999px;
+          display:grid;
+          place-items:center;
+          background:#0f172a;
+          color:#bbf7d0;
+          border:1px solid rgba(255,255,255,.34);
+          font-size:.48rem;
+        }
+        .site-support-chat__bubble .site-support-chat__contact-label{
+          min-width:0;
+          overflow:hidden;
+          text-overflow:ellipsis;
+          white-space:nowrap;
+          direction:rtl;
+          color:inherit;
+          font-size:.82rem;
+        }
+        .site-support-chat__contact-btn.is-telegram{
+          background:rgba(34,158,217,.14);
+          border-color:rgba(34,158,217,.28);
+          color:#e0f2fe;
+        }
+        .site-support-chat__contact-btn.is-telegram .site-support-chat__contact-icon{background:#229ed9}
+        .site-support-chat__contact-btn.is-facebook .site-support-chat__contact-icon{background:#1877f2}
+        .site-support-chat__contact-btn.is-instagram .site-support-chat__contact-icon{background:#e4405f}
+        .site-support-chat__contact-btn.is-email .site-support-chat__contact-icon{background:#64748b}
+        .site-support-chat__card{
+          flex:0 0 clamp(132px,28vw,174px);
+          width:clamp(132px,28vw,174px);
+          min-height:0;
+          border:0;
+          border-radius:0;
+          background:transparent;
+          color:#f8fafc;
+          display:flex;
+          flex-direction:column;
+          align-items:stretch;
+          gap:8px;
+          padding:0;
+          text-align:center;
+          direction:rtl;
+          line-height:1.45;
+          cursor:pointer;
+          box-shadow:none;
+          scroll-snap-align:start;
+        }
+        .site-support-chat__card:hover{
+          transform:translateY(-2px);
+        }
+        .site-support-chat__card-media{
+          width:100%;
+          aspect-ratio:1 / 1;
+          height:auto;
+          border-radius:14px;
+          overflow:hidden;
+          display:grid;
+          place-items:center;
+          background:linear-gradient(135deg,rgba(34,197,94,.14),rgba(15,23,42,.94));
+          color:#86efac;
+          border:1px solid rgba(148,163,184,.18);
+          box-shadow:0 14px 28px rgba(0,0,0,.22);
+        }
+        .site-support-chat__bubble .site-support-chat__card-media,
+        .site-support-chat__bubble .site-support-chat__card-body,
+        .site-support-chat__bubble .site-support-chat__card-cta{
+          direction:rtl;
+          font-size:inherit;
+        }
+        .site-support-chat__card-media img{
+          width:100%;
+          height:100%;
+          max-width:none;
+          border-radius:0;
+          object-fit:cover;
+        }
+        .site-support-chat__card-body{
+          min-width:0;
+          display:grid;
+          align-content:center;
+          gap:2px;
+          direction:rtl;
+          padding:0 2px;
+        }
+        .site-support-chat__card-body strong,
+        .site-support-chat__card-body small,
+        .site-support-chat__card-body em{
+          display:block;
+          min-width:0;
+          overflow:hidden;
+          text-overflow:ellipsis;
+          white-space:nowrap;
+        }
+        .site-support-chat__card-body strong{
+          color:#fff;
+          font-size:.84rem;
+          line-height:1.45;
+        }
+        .site-support-chat__card-body small{
+          color:#cbd5e1;
+          font-size:.72rem;
+          line-height:1.45;
+        }
+        .site-support-chat__card-body em{
+          color:#bbf7d0;
+          font-size:.74rem;
+          font-style:normal;
+          font-weight:900;
+        }
+        .site-support-chat__card-cta{
+          align-self:center;
+          min-width:62px;
+          min-height:30px;
+          padding:0 14px;
+          border-radius:999px;
+          display:grid;
+          place-items:center;
+          background:#22c55e;
+          color:#052e16;
+          font-size:.74rem;
+          font-weight:900;
+          white-space:nowrap;
+        }
+        .site-support-chat__bubble .site-support-chat__card-cta{
+          color:#052e16;
+          font-size:.78rem;
+        }
+        @media (max-width:520px){
+          .site-support-chat__cards{
+            width:100%;
+            gap:12px;
+            padding-bottom:10px;
+          }
+          .site-support-chat__card{
+            flex-basis:136px;
+            width:136px;
+          }
         }
         .site-support-chat__image-btn{
           padding:0;
@@ -13902,7 +15086,7 @@ function wirePageBalanceBox(){
           cursor:zoom-out;
         }
         .site-support-chat__form{
-          padding:12px max(16px,calc((100vw - 820px)/2));
+          padding:12px max(16px,calc((100vw - 820px)/2)) 10px;
           border-top:1px solid rgba(148,163,184,.18);
           background:#0b0f14;
           display:grid;
@@ -13919,7 +15103,7 @@ function wirePageBalanceBox(){
           width:46px;
           height:46px;
           border:1px solid rgba(255,255,255,.12);
-          border-radius:16px;
+          border-radius:999px;
           display:grid;
           place-items:center;
           color:#d1d5db;
@@ -13941,12 +15125,12 @@ function wirePageBalanceBox(){
         .site-support-chat__preview[hidden]{display:none!important}
         .site-support-chat__form input{
           width:100%;
-          height:52px;
-          border-radius:18px;
+          height:50px;
+          border-radius:999px;
           border:1px solid #293240;
           background:#111820;
           color:#f8fafc;
-          padding:0 14px;
+          padding:0 18px;
           outline:none;
           font:inherit;
         }
@@ -13955,21 +15139,66 @@ function wirePageBalanceBox(){
           width:52px;
           height:52px;
           border:0;
-          border-radius:18px;
+          border-radius:999px;
           display:grid;
           place-items:center;
           color:#fff;
           background:#22c55e;
           cursor:pointer;
+          transition:transform .16s ease,filter .16s ease,background .16s ease;
         }
-        .site-support-chat__form button:disabled{opacity:.6;cursor:not-allowed}
+        .site-support-chat__form button:not(.site-support-chat__attach):not(:disabled):hover{
+          transform:translateY(-1px);
+          filter:brightness(1.05);
+        }
+        .site-support-chat__form button:disabled{opacity:.72;cursor:not-allowed}
+        .site-support-chat__form button.is-sending{
+          background:#16a34a;
+        }
+        .site-support-chat__send-loader{
+          width:26px;
+          height:14px;
+          display:inline-flex;
+          align-items:center;
+          justify-content:center;
+          gap:4px;
+        }
+        .site-support-chat__send-loader span{
+          width:5px;
+          height:5px;
+          border-radius:999px;
+          background:#fff;
+          animation:siteSupportTypingDots .9s ease-in-out infinite;
+        }
+        .site-support-chat__send-loader span:nth-child(2){animation-delay:.12s}
+        .site-support-chat__send-loader span:nth-child(3){animation-delay:.24s}
+        .site-support-chat__status-loader{
+          display:inline-flex;
+          align-items:center;
+          justify-content:center;
+          gap:4px;
+          margin-inline-end:8px;
+          vertical-align:middle;
+        }
+        .site-support-chat__status-loader span{
+          width:5px;
+          height:5px;
+          border-radius:999px;
+          background:#9ca3af;
+          animation:siteSupportTypingDots .9s ease-in-out infinite;
+        }
+        .site-support-chat__status-loader span:nth-child(2){animation-delay:.12s}
+        .site-support-chat__status-loader span:nth-child(3){animation-delay:.24s}
         #siteSupportChatStatus{
-          min-height:18px;
+          min-height:0;
           padding:0 max(16px,calc((100vw - 820px)/2)) max(10px,env(safe-area-inset-bottom,0px));
           color:#9ca3af;
           background:#0b0f14;
           font-size:.74rem;
           text-align:center;
+        }
+        #siteSupportChatStatus:empty{
+          display:none;
         }
         html.pre-login-route #siteSupportChatFab,
         html.pre-login-route #siteSupportChatPanel,
@@ -14000,6 +15229,11 @@ function wirePageBalanceBox(){
           .site-support-chat__head{
             padding-right:16px;
             padding-left:16px;
+          }
+          .site-support-chat__close-ticket{
+            min-height:38px;
+            padding:0 10px;
+            font-size:.74rem;
           }
           .site-support-chat__selection-bar{
             padding-right:14px;
@@ -14032,6 +15266,7 @@ function wirePageBalanceBox(){
       var panel = document.createElement('section');
       panel.id = 'siteSupportChatPanel';
       panel.hidden = true;
+      panel.setAttribute('inert', '');
       panel.setAttribute('aria-label', 'محادثة الدعم الفني');
       panel.setAttribute('role', 'main');
       panel.innerHTML = [
@@ -14040,7 +15275,10 @@ function wirePageBalanceBox(){
             '<span class="site-support-chat__icon"><img id="siteSupportChatSiteImage" class="site-support-chat__site-image" alt="" hidden><i class="fa-solid fa-headset site-support-chat__support-mark" aria-hidden="true"></i></span>',
           '<div><strong>الدعم الفني</strong><span>فريق الدعم</span></div>',
           '</div>',
-          '<button class="site-support-chat__close" id="siteSupportChatClose" type="button" aria-label="رجوع"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>',
+          '<div class="site-support-chat__head-actions">',
+            '<button class="site-support-chat__close-ticket" id="siteSupportChatCloseTicket" type="button" hidden aria-hidden="true" aria-label="قفل التذكرة"><i class="fa-solid fa-lock" aria-hidden="true"></i><span>قفل التذكرة</span></button>',
+            '<button class="site-support-chat__close" id="siteSupportChatClose" type="button" aria-label="رجوع"><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i></button>',
+          '</div>',
         '</header>',
         '<div id="siteSupportChatSelectionBar" class="site-support-chat__selection-bar" hidden>',
           '<button class="site-support-chat__selection-clear" type="button" data-support-clear-selection aria-label="إلغاء التحديد"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>',
@@ -14050,6 +15288,7 @@ function wirePageBalanceBox(){
         '<div id="siteSupportChatMessages" class="site-support-chat__messages">',
           '<div class="site-support-chat__empty">لا توجد رسائل بعد.</div>',
         '</div>',
+        '<button id="siteSupportChatJump" class="site-support-chat__jump" type="button" hidden aria-label="النزول إلى آخر الرسائل"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>',
         '<div class="site-support-chat__composer">',
           '<div id="siteSupportChatPreview" class="site-support-chat__preview" hidden></div>',
           '<form id="siteSupportChatForm" class="site-support-chat__form">',
@@ -14079,6 +15318,16 @@ function wirePageBalanceBox(){
         });
       }
       applySupportChatSiteImage();
+      var supportMessagesList = panel.querySelector('#siteSupportChatMessages');
+      var supportJumpButton = panel.querySelector('#siteSupportChatJump');
+      if (supportMessagesList) {
+        supportMessagesList.addEventListener('scroll', updateSupportJumpButton, { passive: true });
+      }
+      if (supportJumpButton) {
+        supportJumpButton.addEventListener('click', function(){
+          scrollSupportMessagesToBottom({ force: true, defer: false });
+        });
+      }
       syncSupportChatVisibility(window.__AUTH_LAST_USER__ || null);
       try {
         if (typeof window.__refreshWaJoinShortcutLayout === 'function') {
@@ -14093,7 +15342,23 @@ function wirePageBalanceBox(){
       panel.querySelector('#siteSupportChatClose').addEventListener('click', function(){
         setSupportChatOpen(false);
       });
+      var supportCloseTicketButton = panel.querySelector('#siteSupportChatCloseTicket');
+      if (supportCloseTicketButton) {
+        supportCloseTicketButton.addEventListener('click', function(ev){
+          if (ev) ev.preventDefault();
+          submitSupportCloseTicket().catch(function(){});
+        });
+      }
       panel.addEventListener('click', function(ev){
+        var supportCard = ev && ev.target && ev.target.closest
+          ? ev.target.closest('[data-support-card-action]')
+          : null;
+        if (supportCard) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          handleSupportCardAction(supportCard);
+          return;
+        }
         var clearSelection = ev && ev.target && ev.target.closest
           ? ev.target.closest('[data-support-clear-selection]')
           : null;
@@ -14110,6 +15375,10 @@ function wirePageBalanceBox(){
           copySupportSelectedMessages().catch(function(){});
           return;
         }
+        var contactLink = ev && ev.target && ev.target.closest
+          ? ev.target.closest('[data-support-contact-link]')
+          : null;
+        if (contactLink) return;
         var row = ev && ev.target && ev.target.closest
           ? ev.target.closest('[data-support-message-key]')
           : null;
@@ -14130,6 +15399,8 @@ function wirePageBalanceBox(){
       });
       panel.addEventListener('keydown', function(ev){
         if (!ev || (ev.key !== 'Enter' && ev.key !== ' ')) return;
+        if (ev.target && ev.target.closest && ev.target.closest('[data-support-card-action]')) return;
+        if (ev.target && ev.target.closest && ev.target.closest('[data-support-contact-link]')) return;
         var row = ev.target && ev.target.closest
           ? ev.target.closest('[data-support-message-key]')
           : null;
@@ -14192,7 +15463,10 @@ function wirePageBalanceBox(){
           return;
         }
         if (supportChatState.open) {
-          startSupportRealtime().catch(function(){});
+          if (isSupportThreadTicketOpen(supportChatState.thread)) {
+            if (supportChatState.realtimeDisabled) startSupportPolling();
+            else startSupportRealtime().catch(function(){});
+          }
           loadSupportThread(true, { markRead: true, notify: false, force: true }).catch(function(){});
         }
       });
@@ -17299,7 +18573,7 @@ function wirePageBalanceBox(){
         const el=document.createElement("div");
         if(kind==="leaf"){
           el.className="leaf";
-          el.textContent="🍁";
+          el.textContent="ًںچپ";
           el.style.top=`-${5+Math.random()*15}%`;
           el.style.left=`${Math.random()*100}vw`;
           el.style.animationDelay=`${Math.random()*1.2}s`;
@@ -17308,7 +18582,7 @@ function wirePageBalanceBox(){
           el.style.transform=`rotate(${Math.random()*40-20}deg)`;
         } else if(kind==="snow"){
           el.className="snowflake";
-          el.textContent="❄";
+          el.textContent="â‌„";
           const durationSec = 14 + Math.random() * 9;
           el.style.top=`-${5+Math.random()*15}%`;
           el.style.left=`${Math.random()*100}vw`;
@@ -17854,7 +19128,6 @@ html[data-theme="dark"] #wa-join-modal .wa-modal-content{
   box-shadow: none !important;
 }
 .settings-page .info-card,
-.settings-page .theme-toggle,
 .settings-page #resetBtn,
 .settings-page .telegram-link-input,
 .settings-page .telegram-link-btn{
@@ -17864,7 +19137,6 @@ html[data-theme="dark"] #wa-join-modal .wa-modal-content{
   box-shadow: none !important;
 }
 .settings-page .info-card:hover,
-.settings-page .theme-toggle:hover,
 .settings-page #resetBtn:hover,
 .settings-page .telegram-link-input:focus,
 .settings-page .telegram-link-btn:hover,
@@ -19190,7 +20462,7 @@ body.inline-view #inlinePage .categories[data-catalog-target="favorites"] > .car
     }
 
     function buildHeaderSeoStoreTitle(value){
-      const storeName = normalizeSiteStoreNameValue(value, DEFAULT_SITE_STORE_NAME) || DEFAULT_SITE_STORE_NAME || "wa7shstore.com";
+      const storeName = normalizeSiteStoreNameValue(value, DEFAULT_SITE_STORE_NAME) || DEFAULT_SITE_STORE_NAME || "Wa7sh Store";
       return /\u0648\u062d\u0634 \u0633\u062a\u0648\u0631/.test(storeName)
         ? storeName
         : `${storeName} | ${SITE_ARABIC_STORE_NAME}`;
@@ -19817,10 +21089,10 @@ body.inline-view #inlinePage .categories[data-catalog-target="favorites"] > .car
       setMetaContent('meta[property="og:image"]', sharePreview);
       setMetaContent('meta[property="og:image:secure_url"]', sharePreview);
       setMetaContent('meta[property="og:image:type"]', guessSiteMediaMimeType(sharePreview));
-      setMetaContent('meta[property="og:image:alt"]', window.__getCurrentStoreName ? window.__getCurrentStoreName() : "wa7shstore.com");
+      setMetaContent('meta[property="og:image:alt"]', window.__getCurrentStoreName ? window.__getCurrentStoreName() : "Wa7sh Store");
       setMetaContent('meta[name="twitter:image"]', sharePreview);
       setMetaContent('meta[name="twitter:image:src"]', sharePreview);
-      setMetaContent('meta[name="twitter:image:alt"]', window.__getCurrentStoreName ? window.__getCurrentStoreName() : "wa7shstore.com");
+      setMetaContent('meta[name="twitter:image:alt"]', window.__getCurrentStoreName ? window.__getCurrentStoreName() : "Wa7sh Store");
       setMetaContent('meta[name="msapplication-TileImage"]', next);
       setMetaContent('meta[itemprop="image"]', sharePreview);
       preloadImageAsset(next);
@@ -19979,19 +21251,7 @@ body.inline-view #inlinePage .categories[data-catalog-target="favorites"] > .car
         siteLockRedirected = false;
         return;
       }
-      if (is404RouteActive() || siteLockRedirected) return;
-      siteLockRedirected = true;
-      try {
-        const targetUrl = new URL(window.location.href);
-        targetUrl.pathname = "/404.html";
-        targetUrl.search = "";
-        targetUrl.hash = "";
-        window.location.replace(targetUrl.toString());
-        return;
-      } catch (_) {}
-      try {
-        window.location.replace("/404.html");
-      } catch (_) {}
+      siteLockRedirected = false;
     }
 
     function decodeFirestoreValue(val){
@@ -20541,22 +21801,23 @@ body.inline-view #inlinePage .categories[data-catalog-target="favorites"] > .car
         const pid = window.__getSiteFirebaseProjectId
           ? String(window.__getSiteFirebaseProjectId() || "").trim()
           : String(opts.projectId || "").trim();
-        if (!pid) {
-          devCreditLog('warn', 'REST siteState fetch skipped because projectId is missing.');
-          return fetchSiteStateViaFirestoreClient({
-            projectId: opts.projectId || ''
-          }).then((ok) => {
-            if (!ok && !opts.hasUsableCache) applySiteWaJoin({ enabled: false });
-            return ok;
-          });
+        let requestUrl;
+        try {
+          const workerBase = window.__getSiteWorkerBaseDefault
+            ? String(window.__getSiteWorkerBaseDefault({ trailingSlash: true }) || "").trim()
+            : "";
+          requestUrl = new URL("site-state.json", workerBase || window.location.href);
+        } catch (_) {
+          requestUrl = new URL("/site-state.json", window.location.href);
         }
-        const requestUrl = `https://firestore.googleapis.com/v1/projects/${pid}/databases/(default)/documents/config/siteState`;
-        return fetch(requestUrl, {
-          cache: "no-store"
+        requestUrl.searchParams.set("_", String(Date.now()));
+        return fetch(requestUrl.toString(), {
+          cache: "no-store",
+          headers: { "accept": "application/json" }
         })
           .then(r => {
             if (!r.ok) {
-              devCreditLog('error', 'REST siteState fetch failed.', {
+              devCreditLog('error', 'Server siteState fetch failed.', {
                 projectId: pid,
                 status: r.status || 0
               });
@@ -20564,19 +21825,25 @@ body.inline-view #inlinePage .categories[data-catalog-target="favorites"] > .car
             }
             return r.json();
           })
-          .then(doc => {
-            if (!doc || doc.error || !doc.fields || typeof doc.fields !== 'object') {
-              devCreditLog('warn', 'REST siteState payload was invalid.', {
+          .then(payload => {
+            let data = null;
+            if (payload && payload.siteState && typeof payload.siteState === 'object') data = payload.siteState;
+            else if (payload && payload.data && typeof payload.data === 'object') data = payload.data;
+            else if (payload && payload.fields && typeof payload.fields === 'object') {
+              data = decodeFirestoreValue({ mapValue: { fields: payload.fields } }) || {};
+            } else if (payload && typeof payload === 'object' && !payload.error) {
+              data = payload;
+            }
+            if (!data || typeof data !== 'object' || (payload && payload.error)) {
+              devCreditLog('warn', 'Server siteState payload was invalid.', {
                 projectId: pid,
-                hasError: !!(doc && doc.error),
-                hasFields: !!(doc && doc.fields)
+                hasError: !!(payload && payload.error),
+                hasSiteState: !!(payload && payload.siteState)
               });
               if (!opts.hasUsableCache) applySiteWaJoin({ enabled: false });
               return false;
             }
-            const fields = (doc && doc.fields) ? doc.fields : {};
-            const data = decodeFirestoreValue({ mapValue: { fields } }) || {};
-            devCreditLog('info', 'REST siteState payload fetched successfully.', {
+            devCreditLog('info', 'Server siteState payload fetched successfully.', {
               projectId: pid,
               hasDeveloperCredit: hasDeveloperCreditPayload(data),
               developerCredit: readDeveloperCreditPreview(data)
@@ -20585,7 +21852,7 @@ body.inline-view #inlinePage .categories[data-catalog-target="favorites"] > .car
             return applyResolvedSiteStateData(data);
           })
           .catch((err) => {
-            devCreditLog('error', 'REST siteState fetch crashed.', {
+            devCreditLog('error', 'Server siteState fetch crashed.', {
               projectId: pid,
               error: err && err.message ? err.message : String(err || '')
             });
@@ -20763,8 +22030,3 @@ body.inline-view #inlinePage .categories[data-catalog-target="favorites"] > .car
     log("siteState listener failed", err?.message||err);
   }
 })();
-
-
-
-
-
